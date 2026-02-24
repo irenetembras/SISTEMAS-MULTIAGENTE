@@ -7,6 +7,7 @@ public class MovimientoTopDown : MonoBehaviour
     [Header("Movimiento")]
     public float velocidadCaminar = 6f;
     public float velocidadCorrer = 12f;  
+    public float velocidadGiro = 150f; // NUEVO: Velocidad a la que gira sobre sí mismo
     public float gravedad = -9.8f;
 
     [Header("Cámara")]
@@ -42,11 +43,11 @@ public class MovimientoTopDown : MonoBehaviour
         }
 
         // --- 2. DETECTAR SPRINTAR (SHIFT) ---
-        float velocidadActual = velocidadCaminar; // Por defecto caminamos
+        float velocidadActual = velocidadCaminar; 
         
         if (Keyboard.current != null && Keyboard.current.leftShiftKey.isPressed)
         {
-            velocidadActual = velocidadCorrer; // Si pulsas Shift, sprintamos
+            velocidadActual = velocidadCorrer; 
         }
 
         // --- 3. ROTACIÓN (Clic Derecho) ---
@@ -73,34 +74,25 @@ public class MovimientoTopDown : MonoBehaviour
             }
         }
 
-        // --- 5. MOVER AL PERSONAJE ---
-        Vector3 movimiento = transform.right * input.x + transform.forward * input.y;
-        if (movimiento.magnitude > 1) movimiento.Normalize();
+        // --- 5. GIRAR AL PERSONAJE (A y D) ---
+        // Ahora A y D giran TODO el cuerpo del personaje de forma real
+        transform.Rotate(Vector3.up * input.x * velocidadGiro * Time.deltaTime);
 
+        // --- 6. MOVER HACIA ADELANTE/ATRÁS (W y S) ---
+        // La W siempre te moverá exactamente hacia donde esté apuntando tu cara/cámara
+        Vector3 movimiento = transform.forward * input.y;
         controller.Move(movimiento * velocidadActual * Time.deltaTime);
 
-        // --- 6. GRAVEDAD ---
+        // --- 7. GRAVEDAD ---
         if (controller.isGrounded && velocidadVertical.y < 0) velocidadVertical.y = -2f;
         velocidadVertical.y += gravedad * Time.deltaTime;
         controller.Move(velocidadVertical * Time.deltaTime);
 
-        // --- 7. ROTAR EL CUERPO Y ANIMAR ---
-        float velocidadFinal = movimiento.magnitude * velocidadActual;
-
+        // --- 8. ANIMAR ---
         if (animator != null)
         {
-            // 1. Le pasamos la velocidad a la animación
-            animator.SetFloat("Velocidad", velocidadFinal, 0.1f, Time.deltaTime);
-
-            // 2. NUEVO: Giramos el cuerpo hacia la dirección del movimiento
-            if (movimiento.magnitude > 0.1f)
-            {
-                // Calculamos hacia dónde tiene que mirar
-                Quaternion rotacionDestino = Quaternion.LookRotation(movimiento);
-                
-                // Giramos SOLO el transform del animator (el modelo 3D visual)
-                animator.transform.rotation = Quaternion.Slerp(animator.transform.rotation, rotacionDestino, 15f * Time.deltaTime);
-            }
+            // Usamos Mathf.Abs para que camine tanto si le das a la W como a la S
+            animator.SetFloat("Velocidad", Mathf.Abs(input.y) * velocidadActual, 0.1f, Time.deltaTime);
         }
     }
 }
