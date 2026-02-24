@@ -84,14 +84,23 @@ public class MovimientoTopDown : MonoBehaviour
         velocidadVertical.y += gravedad * Time.deltaTime;
         controller.Move(velocidadVertical * Time.deltaTime);
 
-
-
-        Vector3 direccion = transform.right * input.x + transform.forward * input.y;
-        float velocidadFinal = direccion.magnitude * velocidadActual;
+        // --- 7. ROTAR EL CUERPO Y ANIMAR ---
+        float velocidadFinal = movimiento.magnitude * velocidadActual;
 
         if (animator != null)
         {
+            // 1. Le pasamos la velocidad a la animación
             animator.SetFloat("Velocidad", velocidadFinal, 0.1f, Time.deltaTime);
+
+            // 2. NUEVO: Giramos el cuerpo hacia la dirección del movimiento
+            if (movimiento.magnitude > 0.1f)
+            {
+                // Calculamos hacia dónde tiene que mirar
+                Quaternion rotacionDestino = Quaternion.LookRotation(movimiento);
+                
+                // Giramos SOLO el transform del animator (el modelo 3D visual)
+                animator.transform.rotation = Quaternion.Slerp(animator.transform.rotation, rotacionDestino, 15f * Time.deltaTime);
+            }
         }
     }
 }

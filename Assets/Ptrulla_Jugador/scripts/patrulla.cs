@@ -1,9 +1,14 @@
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.SceneManagement; // <-- AÑADE ESTO (Para recargar el nivel)
+using System.Collections;
 
 [RequireComponent(typeof(NavMeshAgent))]
 public class CerebroIA_PatrullaCorregida : MonoBehaviour
 {
+    [Header("Game Over")]
+    public GameObject pantallaGameOver; // <--- NUEVA VARIABLE PARA EL TEXTO
+
     [Header("Patrulla")]
     public Transform[] puntosPatrulla;
     public float radioLlegada = 0.5f; // cuando se considera "llegado" al punto
@@ -43,7 +48,6 @@ public class CerebroIA_PatrullaCorregida : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>();
 
-
         // Busca el jugador por tag
         GameObject go = GameObject.FindGameObjectWithTag("Player");
         if (go != null)
@@ -73,7 +77,6 @@ public class CerebroIA_PatrullaCorregida : MonoBehaviour
         // --- 2) Chequeamos sentidos
         bool visto = PuedeVerAlJugador();
         bool oido = PuedeOirAlJugador();
-
 
         if (visto || oido)
         {
@@ -191,9 +194,6 @@ public class CerebroIA_PatrullaCorregida : MonoBehaviour
         float ang = Vector3.Angle(transform.forward, dirH.normalized);
         if (ang > anguloVision / 2f) return false;
 
-        Debug.DrawLine(ojos, objetivo, Color.red);
-        Debug.DrawRay(transform.position, transform.forward * 2f, Color.green);
-
         // RaycastAll ordenado por distancia para evitar autocolisión
         RaycastHit[] hits = Physics.RaycastAll(ojos, dir.normalized, distancia, ~0, QueryTriggerInteraction.Ignore);
         System.Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
@@ -239,5 +239,46 @@ public class CerebroIA_PatrullaCorregida : MonoBehaviour
         }
 
         return false;
+    }
+
+    // ---------------------------------------------------------
+    //  NUEVO: LÓGICA PARA ATRAPAR AL JUGADOR
+    // ---------------------------------------------------------
+    // ---------------------------------------------------------
+    //  LÓGICA PARA ATRAPAR AL JUGADOR
+    // ---------------------------------------------------------
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            // 1. Detenemos al guardia
+            if (agent != null) agent.isStopped = true;
+
+            // 2. Encendemos la pantalla de Game Over
+            if (pantallaGameOver != null)
+            {
+                pantallaGameOver.SetActive(true);
+            }
+
+            // 3. Pausamos el tiempo del juego
+            Time.timeScale = 0f;
+
+            // 4. NUEVO: Empezamos la cuenta atrás para reiniciar
+            StartCoroutine(ReiniciarJuego());
+        }
+    }
+
+    // NUEVO: Temporizador para recargar la escena
+    IEnumerator ReiniciarJuego()
+    {
+        // Esperamos 3 segundos reales (usamos Realtime porque Time.timeScale es 0)
+        yield return new WaitForSecondsRealtime(3f);
+
+        // ¡Súper importante! Volvemos a poner el tiempo a la velocidad normal (1)
+        // Si no hacemos esto, el juego empezará pero todo estará congelado.
+        Time.timeScale = 1f;
+
+        // Recargamos el mapa en el que estamos ahora mismo
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }
