@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class RecogerBotin : MonoBehaviour
+public class RecogerObjetivo : MonoBehaviour
 {
     [Header("Configuración")]
     public GameObject objetoParaOcultar; // La mesa visual
