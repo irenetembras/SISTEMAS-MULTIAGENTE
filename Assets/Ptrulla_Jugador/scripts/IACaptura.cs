@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections;
 
+// Esta clase se encarga de detectar si un jugador ha sido atrapado, mostrando el Game Over y reiniciando el juego después de unos segundos.
 public class IACaptura : MonoBehaviour
 {
     [Header("Game Over")]
@@ -14,7 +15,7 @@ public class IACaptura : MonoBehaviour
         movimiento = GetComponent<IAMovimiento>();
     }
 
-    // 1. Si el guardia tiene un collider normal (Físico - El que usaba tu compi)
+    // 1. Si el guardia tiene un collider normal (Físico)
     private void OnCollisionEnter(Collision choque)
     {
         if (choque.gameObject.CompareTag("Player"))
@@ -32,26 +33,21 @@ public class IACaptura : MonoBehaviour
         }
     }
 
-    // Esta es la función principal que hace la magia, unificada para no repetir código
+    // Esta es la función que se encarga de atrapar al jugador, mostrar el Game Over y reiniciar el juego después de unos segundos
     private void AtraparJugador()
     {
-        // 1. Paramos las piernas
         if (movimiento != null) movimiento.Detener();
 
-        // 2. Mostramos el cartel
         if (pantallaGameOver != null) pantallaGameOver.SetActive(true);
-
-        // 3. Congelamos el tiempo (Como hacía el de tu compi)
         Time.timeScale = 0f;
-
-        // 4. Iniciamos la cuenta atrás para reiniciar
         StartCoroutine(ReiniciarJuego());
     }
 
+    // funcion para reiniciar el juego después de unos segundos, descongelando el tiempo y recargando la escena actual
     IEnumerator ReiniciarJuego()
     {
-        yield return new WaitForSecondsRealtime(3f); // Espera 3 segundos
-        Time.timeScale = 1f; // Descongela el tiempo
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name); // Recarga el nivel
+        yield return new WaitForSecondsRealtime(3f); 
+        Time.timeScale = 1f; 
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name); 
     }
 }

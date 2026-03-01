@@ -2,8 +2,11 @@ using UnityEngine;
 using UnityEngine.AI;
 
 [RequireComponent(typeof(NavMeshAgent))]
+
+// Esta clase se encarga de mover al agente, ya sea patrullando, persiguiendo o buscando
 public class IAMovimiento : MonoBehaviour
 {
+     // Variables Públicas
     [Header("Ruta de Patrulla")]
     public Transform[] puntosPatrulla;
     public float radioLlegada = 0.5f;
@@ -15,6 +18,7 @@ public class IAMovimiento : MonoBehaviour
     [Header("Animador (opcional)")]
     public Animator animator;
 
+    // Variables Internas
     private NavMeshAgent agent;
     private int indicePatrulla = 0;
 
@@ -23,6 +27,7 @@ public class IAMovimiento : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
     }
 
+    // Inicializamos el agente para que empiece patrullando
     void Start()
     {
         if (puntosPatrulla != null && puntosPatrulla.Length > 0)
@@ -30,7 +35,7 @@ public class IAMovimiento : MonoBehaviour
             agent.SetDestination(puntosPatrulla[indicePatrulla].position);
         }
     }
-
+    // Actualizamos el parámetro de velocidad en el animador para que las animaciones respondan al movimiento
     void Update()
     {
         if (animator != null)
@@ -39,7 +44,6 @@ public class IAMovimiento : MonoBehaviour
         }
     }
 
-    // --- NUEVAS HERRAMIENTAS ---
 
     // Nos dice si el agente ya ha llegado a su destino
     public bool HaLlegadoAlDestino()
@@ -74,13 +78,13 @@ public class IAMovimiento : MonoBehaviour
         return centro; // Si falla, se queda en el centro
     }
 
-    // --- HERRAMIENTAS ANTIGUAS ---
-
+    // Función para perseguir al jugador
     public void Perseguir(Vector3 destino)
     {
         MoverA(destino, velocidadPersecucion);
     }
 
+    // Función para patrullar entre puntos
     public void Patrullar()
     {
         agent.isStopped = false;
@@ -99,6 +103,7 @@ public class IAMovimiento : MonoBehaviour
         }
     }
 
+    // Función para ir al punto de patrulla más cercano (usada al perder al jugador por completo)
     public void IrAlPuntoMasCercano()
     {
         if (puntosPatrulla == null || puntosPatrulla.Length == 0) return;
@@ -117,6 +122,7 @@ public class IAMovimiento : MonoBehaviour
         agent.SetDestination(puntosPatrulla[indicePatrulla].position);
     }
 
+    // Función para detener al agente (usada al morir o al desactivar)
     public void Detener()
     {
         agent.isStopped = true;

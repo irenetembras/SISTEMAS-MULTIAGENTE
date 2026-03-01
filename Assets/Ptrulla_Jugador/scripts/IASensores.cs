@@ -1,7 +1,9 @@
 using UnityEngine;
 
+// Este script se encarga de detectar al jugador mediante visión y oído.
 public class IASensores : MonoBehaviour
 {
+    // Variables Públicas
     [Header("Visión")]
     public float distanciaVision = 15f;
     [Range(90f, 250f)] public float anguloVision = 90f;
@@ -12,8 +14,6 @@ public class IASensores : MonoBehaviour
     public float distanciaOidoAndar = 4f;
     public float distanciaOidoCorrer = 12f;
     public float umbralVelocidadCorrer = 7f;
-
-    // Variables Públicas (El Cerebro leerá esto)
     public bool JugadorDetectado { get; private set; }
     public Transform TransformJugador { get; private set; }
 
@@ -51,6 +51,10 @@ public class IASensores : MonoBehaviour
         JugadorDetectado = visto || oido;
     }
 
+    // Función que determina si puede ver al jugador:
+    //      Calcula matemáticamente si el jugador está dentro del cono de visión y a una distancia válida.
+    //      Si cumple ambas, lanza un Raycast ordenado para asegurar que no hay paredes bloqueando la vista,
+    //      filtrando colisiones propias (Triggers o su propio cuerpo) para evitar falsos positivos.
     private bool PuedeVerAlJugador()
     {
         Vector3 ojos = transform.position + Vector3.up * alturaOjos;
@@ -83,6 +87,10 @@ public class IASensores : MonoBehaviour
         return false;
     }
 
+    // Función que determina si puede oír al jugador:
+    //      Evalúa si el agente puede escuchar al jugador basándose en la distancia y el ruido que emite.
+    //      Para ello, compara la velocidad real del jugador contra dos umbrales de audición distintos:
+    //      un radio amplio si el jugador está corriendo, y un radio más corto si solo está caminando.
     private bool PuedeOirAlJugador()
     {
         float distancia = Vector3.Distance(transform.position, TransformJugador.position);

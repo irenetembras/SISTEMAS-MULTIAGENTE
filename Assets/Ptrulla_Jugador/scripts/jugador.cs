@@ -2,12 +2,14 @@ using UnityEngine;
 using UnityEngine.InputSystem; 
 
 [RequireComponent(typeof(CharacterController))]
+
+// Gestiona el movimiento del jugador, incluyendo caminar, correr, rotar, zoom y gravedad.
 public class MovimientoTopDown : MonoBehaviour
 {
     [Header("Movimiento")]
     public float velocidadCaminar = 6f;
     public float velocidadCorrer = 12f;  
-    public float velocidadGiro = 150f; // NUEVO: Velocidad a la que gira sobre sí mismo
+    public float velocidadGiro = 150f; 
     public float gravedad = -9.8f;
 
     [Header("Cámara")]
@@ -75,11 +77,9 @@ public class MovimientoTopDown : MonoBehaviour
         }
 
         // --- 5. GIRAR AL PERSONAJE (A y D) ---
-        // Ahora A y D giran TODO el cuerpo del personaje de forma real
         transform.Rotate(Vector3.up * input.x * velocidadGiro * Time.deltaTime);
 
         // --- 6. MOVER HACIA ADELANTE/ATRÁS (W y S) ---
-        // La W siempre te moverá exactamente hacia donde esté apuntando tu cara/cámara
         Vector3 movimiento = transform.forward * input.y;
         controller.Move(movimiento * velocidadActual * Time.deltaTime);
 
@@ -91,7 +91,6 @@ public class MovimientoTopDown : MonoBehaviour
         // --- 8. ANIMAR ---
         if (animator != null)
         {
-            // Usamos Mathf.Abs para que camine tanto si le das a la W como a la S
             animator.SetFloat("Velocidad", Mathf.Abs(input.y) * velocidadActual, 0.1f, Time.deltaTime);
         }
     }

@@ -4,21 +4,19 @@ using UnityEngine;
 [RequireComponent(typeof(IAMovimiento))]
 public class IACerebro : MonoBehaviour
 {
+    // Variables Públicas
     [Header("Tiempos y Zonas")]
     public float tiempoRecordarPerseguir = 0.5f;
     public float radioExploracion = 15f; 
     public int puntosAExplorar = 3;     
-
-    // --- NUEVA VARIABLE ---
-    public float tiempoMaximoBuscandoUnPunto = 10f; // Si tarda más de 10s en llegar, se rinde y pasa al siguiente
-    // ----------------------
+    public float tiempoMaximoBuscandoUnPunto = 10f;
 
     [Header("Puntos Estratégicos")]
-    public Transform puntoObjetivo; // Baldosa/Horno
-    // botin se quitó, ya no hace falta
+    public Transform puntoObjetivo; 
     public Transform puntoMeta;     
     public float distanciaParaVerBotin = 5f; 
 
+    // Variables Internas
     private IASensores sensores;
     private IAMovimiento movimiento;
 
@@ -37,10 +35,7 @@ public class IACerebro : MonoBehaviour
     private Vector3 ultimaPosicionConocida;
     private int puntosExploradosActuales = 0;
     private Vector3 puntoExploracionActual;
-
-    // --- NUEVA VARIABLE INTERNA ---
     private float tiempoEnExploracionActual = 0f;
-    // ------------------------------
 
     void Awake()
     {
@@ -48,48 +43,49 @@ public class IACerebro : MonoBehaviour
         movimiento = GetComponent<IAMovimiento>();
     }
 
+    // Reacciona cada frame a los cambios en el entorno
     void Update()
     {
-        // 1. SENSE
+        // 1. SENSORES (Detectar al jugador y el estado del botín)
         bool objetivoDetectado = sensores.JugadorDetectado;
         bool botinRobado = RecogerObjetivo.tieneElBotin;
         bool estoyCercaDelBotin = botinRobado && (puntoObjetivo != null && Vector3.Distance(transform.position, puntoObjetivo.position) < distanciaParaVerBotin);
 
-        // 2. THINK (La Máquina de Estados)
+
+
+        // 2. CEREBRO (Decidir qué hacer según lo que detecto y actualizar el estado acual)
         
-        // REGLA 1: Prioridad Absoluta -> Si te veo, te persigo (tengas el botín o no)
+        // REGLA 1: Prioridad Absoluta --> Si te veo, te persigo (tengas el botín o no)
         if (objetivoDetectado)
         {
             estadoActual = Estado.PERSIGUIENDO;
             tiempoDesdePerdido = 0f;
             ultimaPosicionConocida = sensores.TransformJugador.position; 
         }
-        // REGLA 2: Si NO te veo, pero sé que el botín ha sido robado...
-        // (Lo sé porque pasé cerca del pedestal vacío, o porque ya estaba en la salida)
+
+        // REGLA 2: Si NO te veo, pero sé que el botín ha sido robado --> voy a la salida a intentar cortarte el paso
         else if (botinRobado && (estoyCercaDelBotin || estadoActual == Estado.EMBOSCADA || estadoActual == Estado.PERSIGUIENDO))
         {
             if (estadoActual == Estado.PERSIGUIENDO)
             {
-                // Si te estaba persiguiendo y te escondes, espero un segundito...
                 tiempoDesdePerdido += Time.deltaTime;
                 if (tiempoDesdePerdido >= tiempoRecordarPerseguir)
                 {
-                    // ...y en vez de buscarte por la zona, voy directo a la salida a cortarte el paso
                     estadoActual = Estado.EMBOSCADA;
                 }
             }
             else
             {
-                // Si pasé por el pedestal vacío, voy directo a la salida
                 estadoActual = Estado.EMBOSCADA;
             }
         }
+
         // REGLA 3: Comportamiento Normal (Si el botín sigue a salvo y no te veo)
         else
         {
             switch (estadoActual)
             {
-                case Estado.PERSIGUIENDO:
+                case Estado.PERSIGUIENDO:  
                     tiempoDesdePerdido += Time.deltaTime;
                     if (tiempoDesdePerdido >= tiempoRecordarPerseguir)
                     {
@@ -139,7 +135,9 @@ public class IACerebro : MonoBehaviour
             }
         }
 
-        // 3. ACT (Ejecutar las órdenes según el estado)
+
+
+        // 3. ACTUADORES (Moverse según el estado actual)
         switch (estadoActual)
         {
             case Estado.PATRULLANDO:
