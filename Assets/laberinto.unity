@@ -299,8 +299,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6347361ccf04a2b48b73cad02a8ce377, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PuertaGiratoria
-  Conector1: {fileID: 1222934741}
-  estaAbierto: 0
+  estaAbierto: 1
   tiempoEspera: 8
   anguloDeApertura: 90
   velocidadGiro: 3
@@ -318,7 +317,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 94371791}
-  - {fileID: 1222934740}
   m_Father: {fileID: 1949240333}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &3314647
@@ -3343,7 +3341,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6347361ccf04a2b48b73cad02a8ce377, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PuertaGiratoria
-  Conector1: {fileID: 745464620}
   estaAbierto: 1
   tiempoEspera: 4
   anguloDeApertura: 90
@@ -3985,7 +3982,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 156480, guid: 7ab4f1759c4498a44ae5e8bd46e7e4ef, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 571670105}
   m_SourcePrefab: {fileID: 100100000, guid: 7ab4f1759c4498a44ae5e8bd46e7e4ef, type: 3}
 --- !u!1001 &68320624
 PrefabInstance:
@@ -13466,7 +13466,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 702256256}
-  - {fileID: 2063910259}
   m_Father: {fileID: 1949240333}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &179583245
@@ -13481,12 +13480,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1426e8f02ac0f1f4ea780ee962abef0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PuertaCorredera
-  conector: {fileID: 2063910261}
   distanciaDesplazamiento: 80
   velocidad: 30
   tiempoEspera: 7
   direccionMover: {x: -1, y: 0, z: 0}
-  estaCerrado: 1
+  estaCerrado: 0
 --- !u!23 &179641371
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -16107,8 +16105,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6347361ccf04a2b48b73cad02a8ce377, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PuertaGiratoria
-  Conector1: {fileID: 962728327}
-  estaAbierto: 0
+  estaAbierto: 1
   tiempoEspera: 8
   anguloDeApertura: -90
   velocidadGiro: 3
@@ -16125,9 +16122,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1163352811}
-  - {fileID: 1824683385}
-  - {fileID: 962728326}
+  - {fileID: 610596777}
   m_Father: {fileID: 1949240333}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &202236470
@@ -18594,63 +18589,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 432974, guid: fb0c0b748de48f948978dd8dc3b53aae, type: 3}
   m_PrefabInstance: {fileID: 81388696}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &246644529
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 246644530}
-  - component: {fileID: 246644531}
-  m_Layer: 0
-  m_Name: LinkFenceCorrediza
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &246644530
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 246644529}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1367797259}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &246644531
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 246644529}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6eeb5dc026fdf4b488bc7ae0138ab719, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshLink
-  m_SerializedVersion: 1
-  m_AgentTypeID: 0
-  m_StartPoint: {x: 0, y: 0, z: -2.5}
-  m_EndPoint: {x: 0, y: 0, z: 2.5}
-  m_StartTransform: {fileID: 0}
-  m_EndTransform: {fileID: 0}
-  m_Activated: 1
-  m_Width: 0
-  m_CostModifier: 1
-  m_IsOverridingCost: 0
-  m_Bidirectional: 1
-  m_AutoUpdatePosition: 0
-  m_Area: 0
 --- !u!4 &247256033 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 484606, guid: 66ce2554d943ab14db051b408dc948ed, type: 3}
@@ -23017,7 +22955,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 201544497}
+    m_TransformParent: {fileID: 610596777}
     m_Modifications:
     - target: {fileID: 117854, guid: fb0c0b748de48f948978dd8dc3b53aae, type: 3}
       propertyPath: m_Name
@@ -27649,12 +27587,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1426e8f02ac0f1f4ea780ee962abef0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PuertaCorredera
-  conector: {fileID: 2107230539}
   distanciaDesplazamiento: 40
   velocidad: 20
   tiempoEspera: 14
   direccionMover: {x: 1, y: 0, z: 0}
   estaCerrado: 1
+--- !u!208 &394968384
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 394968378}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 3.0000002, y: 1.5000001, z: 1.35}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 0
+  m_Center: {x: -3.0000002, y: 1.5000001, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1001 &395995602
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -29978,6 +29931,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 462829788}
+  - component: {fileID: 462829790}
+  - component: {fileID: 462829789}
   m_Layer: 0
   m_Name: 4vallas (40)
   m_TagString: Untagged
@@ -30004,6 +29959,39 @@ Transform:
   - {fileID: 128564840}
   m_Father: {fileID: 1949240333}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &462829789
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 462829787}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1426e8f02ac0f1f4ea780ee962abef0a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PuertaCorredera
+  distanciaDesplazamiento: 25
+  velocidad: 4
+  tiempoEspera: 8
+  direccionMover: {x: 1, y: 0, z: 0}
+  estaCerrado: 0
+--- !u!208 &462829790
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 462829787}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 12.5, y: 0.5, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 0
+  m_Center: {x: 6, y: 0, z: 12}
+  m_TimeToStationary: 0.5
 --- !u!4 &463469703 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 456142, guid: 2b0bf804c6d79704d8c705b94af63855, type: 3}
@@ -32780,7 +32768,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 156480, guid: 7ab4f1759c4498a44ae5e8bd46e7e4ef, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1518215897}
   m_SourcePrefab: {fileID: 100100000, guid: 7ab4f1759c4498a44ae5e8bd46e7e4ef, type: 3}
 --- !u!4 &546912423 stripped
 Transform:
@@ -33305,6 +33296,27 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 484606, guid: 66ce2554d943ab14db051b408dc948ed, type: 3}
   m_PrefabInstance: {fileID: 50396498}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &571670101 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 156480, guid: 7ab4f1759c4498a44ae5e8bd46e7e4ef, type: 3}
+  m_PrefabInstance: {fileID: 66547453}
+  m_PrefabAsset: {fileID: 0}
+--- !u!208 &571670105
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 571670101}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 3, y: 1.5000001, z: 1.4}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: -3.0000002, y: 1.5000001, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!4 &571941868 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 484606, guid: 66ce2554d943ab14db051b408dc948ed, type: 3}
@@ -35563,6 +35575,56 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 484606, guid: 66ce2554d943ab14db051b408dc948ed, type: 3}
   m_PrefabInstance: {fileID: 832458150}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &610596776
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 610596777}
+  - component: {fileID: 610596778}
+  m_Layer: 0
+  m_Name: bisagradue
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &610596777
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 610596776}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1163352811}
+  - {fileID: 1824683385}
+  m_Father: {fileID: 201544497}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!208 &610596778
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 610596776}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 3.5, y: 25, z: 12.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 0
+  m_Center: {x: -3, y: 4, z: -12}
+  m_TimeToStationary: 0.5
 --- !u!1001 &612847058
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -42340,63 +42402,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 744291385}
   m_Mesh: {fileID: 4300000, guid: a6ecdd39a95d03c488f94bcc3d9105bf, type: 3}
---- !u!1 &745464617
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 745464618}
-  - component: {fileID: 745464620}
-  m_Layer: 0
-  m_Name: LInkLILfenceunique
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &745464618
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 745464617}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 0.6998374, z: -0, w: 0.7143022}
-  m_LocalPosition: {x: -2.56, y: 0, z: -5.96}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 827009545}
-  m_LocalEulerAnglesHint: {x: 0, y: 88.828, z: 0}
---- !u!114 &745464620
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 745464617}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6eeb5dc026fdf4b488bc7ae0138ab719, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshLink
-  m_SerializedVersion: 1
-  m_AgentTypeID: 0
-  m_StartPoint: {x: 0, y: 0, z: -2.5}
-  m_EndPoint: {x: 0, y: 0, z: 2.5}
-  m_StartTransform: {fileID: 0}
-  m_EndTransform: {fileID: 0}
-  m_Activated: 1
-  m_Width: 0
-  m_CostModifier: 1
-  m_IsOverridingCost: 0
-  m_Bidirectional: 1
-  m_AutoUpdatePosition: 0
-  m_Area: 0
 --- !u!33 &745520907
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -44204,6 +44209,7 @@ Transform:
   - {fileID: 1269110698}
   - {fileID: 359557261}
   - {fileID: 1036660213}
+  - {fileID: 1859557610}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &766364043 stripped
@@ -47118,6 +47124,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 827009545}
+  - component: {fileID: 827009546}
   m_Layer: 0
   m_Name: uniquelittlefenceaabertura
   m_TagString: Untagged
@@ -47140,9 +47147,24 @@ Transform:
   m_Children:
   - {fileID: 1592267545}
   - {fileID: 673789622}
-  - {fileID: 745464618}
   m_Father: {fileID: 48286741}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!208 &827009546
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 827009544}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 1, y: 3.5, z: 1.75}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 0
+  m_Center: {x: -2, y: 4, z: -5}
+  m_TimeToStationary: 0.5
 --- !u!1 &828596443
 GameObject:
   m_ObjectHideFlags: 0
@@ -47174,7 +47196,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 951269080}
-  - {fileID: 1212914517}
   m_Father: {fileID: 1949240333}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &828596446
@@ -47189,8 +47210,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6347361ccf04a2b48b73cad02a8ce377, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PuertaGiratoria
-  Conector1: {fileID: 1212914518}
-  estaAbierto: 0
+  estaAbierto: 1
   tiempoEspera: 8
   anguloDeApertura: -90
   velocidadGiro: 3
@@ -50233,7 +50253,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 1715490149}
+    m_TransformParent: {fileID: 1033719853}
     m_Modifications:
     - target: {fileID: 186954, guid: 66ce2554d943ab14db051b408dc948ed, type: 3}
       propertyPath: m_Name
@@ -54567,63 +54587,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 764694750}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &962728325
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 962728326}
-  - component: {fileID: 962728327}
-  m_Layer: 0
-  m_Name: LinkBisagraDual
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &962728326
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 962728325}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -1.95, y: 0, z: -5.48}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 201544497}
-  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
---- !u!114 &962728327
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 962728325}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6eeb5dc026fdf4b488bc7ae0138ab719, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshLink
-  m_SerializedVersion: 1
-  m_AgentTypeID: 0
-  m_StartPoint: {x: 0.000000368992, y: 0, z: -5.275418}
-  m_EndPoint: {x: 0, y: 0, z: 2.5}
-  m_StartTransform: {fileID: 0}
-  m_EndTransform: {fileID: 0}
-  m_Activated: 1
-  m_Width: 0
-  m_CostModifier: 1
-  m_IsOverridingCost: 0
-  m_Bidirectional: 1
-  m_AutoUpdatePosition: 0
-  m_Area: 0
 --- !u!1001 &963212445
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -56562,7 +56525,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 201544497}
+    m_TransformParent: {fileID: 610596777}
     m_Modifications:
     - target: {fileID: 117854, guid: fb0c0b748de48f948978dd8dc3b53aae, type: 3}
       propertyPath: m_Name
@@ -57432,6 +57395,56 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 66ce2554d943ab14db051b408dc948ed, type: 3}
+--- !u!1 &1033719852
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1033719853}
+  - component: {fileID: 1033719854}
+  m_Layer: 0
+  m_Name: FenceBisagra3
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1033719853
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1033719852}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 84877195}
+  - {fileID: 119770542}
+  m_Father: {fileID: 1715490149}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!208 &1033719854
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1033719852}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 3, z: 4.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 0
+  m_Center: {x: 0.75, y: 5, z: 6}
+  m_TimeToStationary: 0.5
 --- !u!1001 &1034960867
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -59493,63 +59506,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 432974, guid: fb0c0b748de48f948978dd8dc3b53aae, type: 3}
   m_PrefabInstance: {fileID: 1275847515}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1067194293
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1067194294}
-  - component: {fileID: 1067194295}
-  m_Layer: 0
-  m_Name: LinkLilFence
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1067194294
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1067194293}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: -2.123, z: 2.47}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1583785467}
-  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
---- !u!114 &1067194295
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1067194293}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6eeb5dc026fdf4b488bc7ae0138ab719, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshLink
-  m_SerializedVersion: 1
-  m_AgentTypeID: 0
-  m_StartPoint: {x: -0.000008817828, y: 0, z: -0.8578082}
-  m_EndPoint: {x: -0.000009095631, y: 0, z: 1.4725748}
-  m_StartTransform: {fileID: 0}
-  m_EndTransform: {fileID: 0}
-  m_Activated: 1
-  m_Width: 0
-  m_CostModifier: 1
-  m_IsOverridingCost: 0
-  m_Bidirectional: 1
-  m_AutoUpdatePosition: 0
-  m_Area: 0
 --- !u!4 &1068196844 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 432974, guid: fb0c0b748de48f948978dd8dc3b53aae, type: 3}
@@ -67567,63 +67523,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 66ce2554d943ab14db051b408dc948ed, type: 3}
---- !u!1 &1212914516
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1212914517}
-  - component: {fileID: 1212914518}
-  m_Layer: 0
-  m_Name: PuertaLink1
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1212914517
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1212914516}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -29.303833, y: 0, z: -0.5499878}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 828596445}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1212914518
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1212914516}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6eeb5dc026fdf4b488bc7ae0138ab719, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshLink
-  m_SerializedVersion: 1
-  m_AgentTypeID: 0
-  m_StartPoint: {x: -0.21292114, y: 0, z: -1.8518677}
-  m_EndPoint: {x: 0.09933472, y: -0.0019435883, z: 18.560272}
-  m_StartTransform: {fileID: 0}
-  m_EndTransform: {fileID: 0}
-  m_Activated: 1
-  m_Width: 0
-  m_CostModifier: 1
-  m_IsOverridingCost: 0
-  m_Bidirectional: 1
-  m_AutoUpdatePosition: 0
-  m_Area: 0
 --- !u!1001 &1214471765
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -67712,63 +67611,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 484606, guid: 66ce2554d943ab14db051b408dc948ed, type: 3}
   m_PrefabInstance: {fileID: 636470265}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1222934739
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1222934740}
-  - component: {fileID: 1222934741}
-  m_Layer: 0
-  m_Name: PuertaPasadizo
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1222934740
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1222934739}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 26.68, y: 0, z: 7.57}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 2209267}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1222934741
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1222934739}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6eeb5dc026fdf4b488bc7ae0138ab719, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshLink
-  m_SerializedVersion: 1
-  m_AgentTypeID: 0
-  m_StartPoint: {x: 0, y: 0, z: -9.525818}
-  m_EndPoint: {x: 0, y: 0, z: 10.689163}
-  m_StartTransform: {fileID: 0}
-  m_EndTransform: {fileID: 0}
-  m_Activated: 1
-  m_Width: 0
-  m_CostModifier: 1
-  m_IsOverridingCost: 0
-  m_Bidirectional: 1
-  m_AutoUpdatePosition: 0
-  m_Area: 0
 --- !u!4 &1224662176 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 425192, guid: d16f3d50bed5cc5489da9033dd814415, type: 3}
@@ -71175,63 +71017,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 432974, guid: fb0c0b748de48f948978dd8dc3b53aae, type: 3}
   m_PrefabInstance: {fileID: 1311910341}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1313890970
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1313890971}
-  - component: {fileID: 1313890973}
-  m_Layer: 0
-  m_Name: LinkDeslizanteMuro3
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1313890971
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1313890970}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.231, y: 0, z: -0.04}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 2087880396}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1313890973
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1313890970}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6eeb5dc026fdf4b488bc7ae0138ab719, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshLink
-  m_SerializedVersion: 1
-  m_AgentTypeID: 0
-  m_StartPoint: {x: -0.0000049889327, y: 0, z: -9.350317}
-  m_EndPoint: {x: -0.000014997613, y: 0, z: 10.608588}
-  m_StartTransform: {fileID: 0}
-  m_EndTransform: {fileID: 0}
-  m_Activated: 1
-  m_Width: 0
-  m_CostModifier: 1
-  m_IsOverridingCost: 0
-  m_Bidirectional: 1
-  m_AutoUpdatePosition: 0
-  m_Area: 0
 --- !u!1001 &1314995002
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -73010,6 +72795,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: DeslizanteMuro4
       objectReference: {fileID: 0}
+    - target: {fileID: 156480, guid: 7ab4f1759c4498a44ae5e8bd46e7e4ef, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 458844, guid: 7ab4f1759c4498a44ae5e8bd46e7e4ef, type: 3}
       propertyPath: m_LocalScale.x
       value: 7
@@ -73064,14 +72853,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: 458844, guid: 7ab4f1759c4498a44ae5e8bd46e7e4ef, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 2107230537}
+    m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 156480, guid: 7ab4f1759c4498a44ae5e8bd46e7e4ef, type: 3}
       insertIndex: -1
       addedObject: {fileID: 394968380}
+    - targetCorrespondingSourceObject: {fileID: 156480, guid: 7ab4f1759c4498a44ae5e8bd46e7e4ef, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 394968384}
   m_SourcePrefab: {fileID: 100100000, guid: 7ab4f1759c4498a44ae5e8bd46e7e4ef, type: 3}
 --- !u!4 &1350809550 stripped
 Transform:
@@ -73723,34 +73512,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 484606, guid: 66ce2554d943ab14db051b408dc948ed, type: 3}
   m_PrefabInstance: {fileID: 123304838}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1367797258 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 186954, guid: 66ce2554d943ab14db051b408dc948ed, type: 3}
-  m_PrefabInstance: {fileID: 1888971024}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1367797259 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 484606, guid: 66ce2554d943ab14db051b408dc948ed, type: 3}
   m_PrefabInstance: {fileID: 1888971024}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1367797260
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1367797258}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1426e8f02ac0f1f4ea780ee962abef0a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PuertaCorredera
-  conector: {fileID: 246644531}
-  distanciaDesplazamiento: 15
-  velocidad: 2
-  tiempoEspera: 10
-  direccionMover: {x: 1, y: 0, z: 0}
-  estaCerrado: 1
 --- !u!1001 &1368789659
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -79032,6 +78798,27 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 484606, guid: 66ce2554d943ab14db051b408dc948ed, type: 3}
   m_PrefabInstance: {fileID: 993702179}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1474662110 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 156480, guid: 7ab4f1759c4498a44ae5e8bd46e7e4ef, type: 3}
+  m_PrefabInstance: {fileID: 1714527217}
+  m_PrefabAsset: {fileID: 0}
+--- !u!208 &1474662114
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1474662110}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 3.0000002, y: 1.5000001, z: 1.35}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 0
+  m_Center: {x: -3.0000002, y: 1.5000001, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!4 &1475025258 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 410372, guid: cc10b75b54f47374e851a3ca77445068, type: 3}
@@ -79935,63 +79722,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 009f3267815df7c429057d2154dfd4b1, type: 3}
---- !u!1 &1495381728
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1495381729}
-  - component: {fileID: 1495381730}
-  m_Layer: 0
-  m_Name: LinkSectorfinal
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1495381729
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1495381728}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0.65, y: 0, z: 6.84}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1715490149}
-  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
---- !u!114 &1495381730
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1495381728}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6eeb5dc026fdf4b488bc7ae0138ab719, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshLink
-  m_SerializedVersion: 1
-  m_AgentTypeID: 0
-  m_StartPoint: {x: 0, y: 0, z: -2.5}
-  m_EndPoint: {x: 0, y: 0, z: 2.5}
-  m_StartTransform: {fileID: 0}
-  m_EndTransform: {fileID: 0}
-  m_Activated: 1
-  m_Width: 0
-  m_CostModifier: 1
-  m_IsOverridingCost: 0
-  m_Bidirectional: 1
-  m_AutoUpdatePosition: 0
-  m_Area: 0
 --- !u!4 &1496737505 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 432974, guid: fb0c0b748de48f948978dd8dc3b53aae, type: 3}
@@ -80735,6 +80465,27 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 484606, guid: 66ce2554d943ab14db051b408dc948ed, type: 3}
   m_PrefabInstance: {fileID: 1855259367}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1518215893 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 156480, guid: 7ab4f1759c4498a44ae5e8bd46e7e4ef, type: 3}
+  m_PrefabInstance: {fileID: 546786363}
+  m_PrefabAsset: {fileID: 0}
+--- !u!208 &1518215897
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1518215893}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 2, y: 1.5000001, z: 1.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 0
+  m_Center: {x: -5, y: 1.5000001, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1001 &1519126661
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -86688,7 +86439,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1809826489}
-  - {fileID: 1067194294}
   m_Father: {fileID: 1949240333}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1583785468
@@ -86703,8 +86453,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6347361ccf04a2b48b73cad02a8ce377, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PuertaGiratoria
-  Conector1: {fileID: 1067194295}
-  estaAbierto: 0
+  estaAbierto: 1
   tiempoEspera: 4
   anguloDeApertura: -90
   velocidadGiro: 3
@@ -88935,6 +88684,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: DeslizanteMuro5
       objectReference: {fileID: 0}
+    - target: {fileID: 156480, guid: 7ab4f1759c4498a44ae5e8bd46e7e4ef, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 458844, guid: 7ab4f1759c4498a44ae5e8bd46e7e4ef, type: 3}
       propertyPath: m_LocalScale.x
       value: 7
@@ -88989,14 +88742,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: 458844, guid: 7ab4f1759c4498a44ae5e8bd46e7e4ef, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1678064079}
+    m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 156480, guid: 7ab4f1759c4498a44ae5e8bd46e7e4ef, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2103291005}
+    - targetCorrespondingSourceObject: {fileID: 156480, guid: 7ab4f1759c4498a44ae5e8bd46e7e4ef, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2103291009}
   m_SourcePrefab: {fileID: 100100000, guid: 7ab4f1759c4498a44ae5e8bd46e7e4ef, type: 3}
 --- !u!4 &1654449206 stripped
 Transform:
@@ -90100,63 +89853,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 66ce2554d943ab14db051b408dc948ed, type: 3}
---- !u!1 &1678064078
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1678064079}
-  - component: {fileID: 1678064081}
-  m_Layer: 0
-  m_Name: LinkDeslizanteMuro5
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1678064079
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1678064078}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.963, y: 0, z: 0.082}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 2103291004}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1678064081
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1678064078}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6eeb5dc026fdf4b488bc7ae0138ab719, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshLink
-  m_SerializedVersion: 1
-  m_AgentTypeID: 0
-  m_StartPoint: {x: -0.0000019146466, y: 0, z: -10.725715}
-  m_EndPoint: {x: -0.0000043112136, y: 0, z: 9.378149}
-  m_StartTransform: {fileID: 0}
-  m_EndTransform: {fileID: 0}
-  m_Activated: 1
-  m_Width: 0
-  m_CostModifier: 1
-  m_IsOverridingCost: 0
-  m_Bidirectional: 1
-  m_AutoUpdatePosition: 0
-  m_Area: 0
 --- !u!4 &1678851967 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 425192, guid: d16f3d50bed5cc5489da9033dd814415, type: 3}
@@ -91080,7 +90776,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 156480, guid: 7ab4f1759c4498a44ae5e8bd46e7e4ef, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1474662114}
   m_SourcePrefab: {fileID: 100100000, guid: 7ab4f1759c4498a44ae5e8bd46e7e4ef, type: 3}
 --- !u!1001 &1715016888
 PrefabInstance:
@@ -91341,9 +91040,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 119770542}
-  - {fileID: 84877195}
-  - {fileID: 1495381729}
+  - {fileID: 1033719853}
   m_Father: {fileID: 1949240333}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1715490150
@@ -91358,8 +91055,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6347361ccf04a2b48b73cad02a8ce377, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PuertaGiratoria
-  Conector1: {fileID: 1495381730}
-  estaAbierto: 0
+  estaAbierto: 1
   tiempoEspera: 8
   anguloDeApertura: -90
   velocidadGiro: 3
@@ -95844,6 +95540,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1809826489}
+  - component: {fileID: 1809826490}
   m_Layer: 0
   m_Name: littlefenceabertura1
   m_TagString: Untagged
@@ -95868,6 +95565,22 @@ Transform:
   - {fileID: 985300358}
   m_Father: {fileID: 1583785467}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!208 &1809826490
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1809826488}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.00001, y: 2.5, z: 1.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 0
+  m_Center: {x: -6.2, y: -1, z: -4}
+  m_TimeToStationary: 0.5
 --- !u!4 &1811994502 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 484606, guid: 66ce2554d943ab14db051b408dc948ed, type: 3}
@@ -100335,7 +100048,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 324548168}
-  m_Father: {fileID: 1949240333}
+  m_Father: {fileID: 764694750}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1859665775
 GameObject:
@@ -103314,14 +103027,8 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: 484606, guid: 66ce2554d943ab14db051b408dc948ed, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 246644530}
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 186954, guid: 66ce2554d943ab14db051b408dc948ed, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1367797260}
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 66ce2554d943ab14db051b408dc948ed, type: 3}
 --- !u!4 &1889750426 stripped
 Transform:
@@ -105917,7 +105624,6 @@ Transform:
   - {fileID: 2087880396}
   - {fileID: 2103291004}
   - {fileID: 394968379}
-  - {fileID: 1859557610}
   - {fileID: 201544497}
   - {fileID: 462829788}
   - {fileID: 1715490149}
@@ -107590,7 +107296,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 1715490149}
+    m_TransformParent: {fileID: 1033719853}
     m_Modifications:
     - target: {fileID: 186954, guid: 66ce2554d943ab14db051b408dc948ed, type: 3}
       propertyPath: m_Name
@@ -107610,7 +107316,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 484606, guid: 66ce2554d943ab14db051b408dc948ed, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.78
+      value: 0.7799988
       objectReference: {fileID: 0}
     - target: {fileID: 484606, guid: 66ce2554d943ab14db051b408dc948ed, type: 3}
       propertyPath: m_LocalPosition.y
@@ -107618,7 +107324,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 484606, guid: 66ce2554d943ab14db051b408dc948ed, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 8.35
+      value: 8.350006
       objectReference: {fileID: 0}
     - target: {fileID: 484606, guid: 66ce2554d943ab14db051b408dc948ed, type: 3}
       propertyPath: m_LocalRotation.w
@@ -108792,6 +108498,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: DeslizanteMuro3
       objectReference: {fileID: 0}
+    - target: {fileID: 156480, guid: 7ab4f1759c4498a44ae5e8bd46e7e4ef, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 458844, guid: 7ab4f1759c4498a44ae5e8bd46e7e4ef, type: 3}
       propertyPath: m_LocalScale.x
       value: 7
@@ -108846,14 +108556,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: 458844, guid: 7ab4f1759c4498a44ae5e8bd46e7e4ef, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1313890971}
+    m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 156480, guid: 7ab4f1759c4498a44ae5e8bd46e7e4ef, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2087880397}
+    - targetCorrespondingSourceObject: {fileID: 156480, guid: 7ab4f1759c4498a44ae5e8bd46e7e4ef, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2087880401}
   m_SourcePrefab: {fileID: 100100000, guid: 7ab4f1759c4498a44ae5e8bd46e7e4ef, type: 3}
 --- !u!1001 &2019808844
 PrefabInstance:
@@ -111578,63 +111288,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fb0c0b748de48f948978dd8dc3b53aae, type: 3}
---- !u!1 &2063910258
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2063910259}
-  - component: {fileID: 2063910261}
-  m_Layer: 0
-  m_Name: Puertacorredera2
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2063910259
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2063910258}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 13, y: 0, z: 7.71}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 179583244}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2063910261
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2063910258}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6eeb5dc026fdf4b488bc7ae0138ab719, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshLink
-  m_SerializedVersion: 1
-  m_AgentTypeID: 0
-  m_StartPoint: {x: 0, y: 0, z: -9.338348}
-  m_EndPoint: {x: 0, y: 0, z: 10.6592865}
-  m_StartTransform: {fileID: 0}
-  m_EndTransform: {fileID: 0}
-  m_Activated: 1
-  m_Width: 0
-  m_CostModifier: 1
-  m_IsOverridingCost: 0
-  m_Bidirectional: 1
-  m_AutoUpdatePosition: 0
-  m_Area: 0
 --- !u!1001 &2064342546
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -112535,12 +112188,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1426e8f02ac0f1f4ea780ee962abef0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PuertaCorredera
-  conector: {fileID: 1313890973}
   distanciaDesplazamiento: 40
   velocidad: 30
   tiempoEspera: 7
   direccionMover: {x: -1, y: 0, z: 0}
   estaCerrado: 1
+--- !u!208 &2087880401
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2087880395}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 3.0000002, y: 1.5000001, z: 1.35}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 0
+  m_Center: {x: -3.0000002, y: 1.5000001, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1001 &2088658781
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -113286,12 +112954,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1426e8f02ac0f1f4ea780ee962abef0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PuertaCorredera
-  conector: {fileID: 1678064081}
   distanciaDesplazamiento: 40
   velocidad: 20
   tiempoEspera: 7
   direccionMover: {x: -1, y: 0, z: 0}
   estaCerrado: 1
+--- !u!208 &2103291009
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2103291003}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 3.0000002, y: 1.5000001, z: 1.35}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 0
+  m_Center: {x: -3.0000002, y: 1.5000001, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1001 &2105239669
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -113370,63 +113053,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 484606, guid: 66ce2554d943ab14db051b408dc948ed, type: 3}
   m_PrefabInstance: {fileID: 347218880}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &2107230536
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2107230537}
-  - component: {fileID: 2107230539}
-  m_Layer: 0
-  m_Name: LinkDeslizanteMuro4
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2107230537
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2107230536}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.576, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 394968379}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2107230539
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2107230536}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6eeb5dc026fdf4b488bc7ae0138ab719, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshLink
-  m_SerializedVersion: 1
-  m_AgentTypeID: 0
-  m_StartPoint: {x: 0, y: 0, z: -9.702652}
-  m_EndPoint: {x: 0, y: 0, z: 10.594903}
-  m_StartTransform: {fileID: 0}
-  m_EndTransform: {fileID: 0}
-  m_Activated: 1
-  m_Width: 0
-  m_CostModifier: 1
-  m_IsOverridingCost: 0
-  m_Bidirectional: 1
-  m_AutoUpdatePosition: 0
-  m_Area: 0
 --- !u!1001 &2107455454
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -113915,7 +113541,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3453840741311942035, guid: 003c3c590c145a44fbc5b13e49b99d27, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 177.4
+      value: 230.8
       objectReference: {fileID: 0}
     - target: {fileID: 3453840741311942035, guid: 003c3c590c145a44fbc5b13e49b99d27, type: 3}
       propertyPath: m_LocalRotation.w

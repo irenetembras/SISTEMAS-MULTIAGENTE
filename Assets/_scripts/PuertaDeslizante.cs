@@ -1,12 +1,8 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.AI; 
-using Unity.AI.Navigation; 
 
 public class PuertaCorredera : MonoBehaviour
 {
-    [Header("Configuración de IA")]
-    public NavMeshLink conector;
    
     [Header("Configuración")]
     public float distanciaDesplazamiento = 3.0f; // Cuántos metros se mueve
@@ -21,19 +17,8 @@ public class PuertaCorredera : MonoBehaviour
 
     private Vector3 posicionCerrada;
     private Vector3 posicionAbierta;
-    public bool estaCerrado = true;
+    public bool estaCerrado = false;
 
-    void TogglePuerta()
-    {
-        estaCerrado = !estaCerrado;
-
-        if (conector != null)
-        {
-            // OJO AQUÍ: Si "estaCerrado" es TRUE, el link debe ser FALSE (apagado)
-            // Por eso le ponemos el símbolo "!" delante, que significa "lo contrario"
-            conector.enabled = !estaCerrado; 
-        }
-    }
     void Start()
     {
         // 1. Guardamos dónde está el muro ahora mismo (Cerrado)
@@ -63,7 +48,7 @@ public class PuertaCorredera : MonoBehaviour
         while (true)
         {
             yield return new WaitForSeconds(tiempoEspera);
-            TogglePuerta();;
+            estaCerrado = !estaCerrado; 
         }
     }
 }
