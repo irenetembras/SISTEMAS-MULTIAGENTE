@@ -16401,6 +16401,7 @@ MonoBehaviour:
   busqueda: {fileID: 204152319}
   exploracion: {fileID: 204152316}
   comprobandoObjetivo: {fileID: 204152318}
+  tiempoPerdidoParaBuscar: 2
   puntoMeta: {fileID: 1987047908}
   puntoObjetivo: {fileID: 1999226362}
   objetivoDetectado: 0
@@ -16494,6 +16495,7 @@ MonoBehaviour:
   radioExploracion: 15
   puntosAExplorar: 3
   tiempoMaximoBuscandoUnPunto: 10
+  exploracionTerminada: 0
 --- !u!114 &204152317
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27604,7 +27606,7 @@ NavMeshObstacle:
   m_Shape: 1
   m_Extents: {x: 3.0000002, y: 1.5000001, z: 1.35}
   m_MoveThreshold: 0.1
-  m_Carve: 1
+  m_Carve: 0
   m_CarveOnlyStationary: 0
   m_Center: {x: -3.0000002, y: 1.5000001, z: 0}
   m_TimeToStationary: 0.5
@@ -29988,7 +29990,7 @@ NavMeshObstacle:
   m_Shape: 1
   m_Extents: {x: 12.5, y: 0.5, z: 0.5}
   m_MoveThreshold: 0.1
-  m_Carve: 1
+  m_Carve: 0
   m_CarveOnlyStationary: 0
   m_Center: {x: 6, y: 0, z: 12}
   m_TimeToStationary: 0.5
@@ -32419,6 +32421,7 @@ MonoBehaviour:
   radioExploracion: 15
   puntosAExplorar: 3
   tiempoMaximoBuscandoUnPunto: 10
+  exploracionTerminada: 0
 --- !u!114 &535698032
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -33313,7 +33316,7 @@ NavMeshObstacle:
   m_Shape: 1
   m_Extents: {x: 3, y: 1.5000001, z: 1.4}
   m_MoveThreshold: 0.1
-  m_Carve: 1
+  m_Carve: 0
   m_CarveOnlyStationary: 1
   m_Center: {x: -3.0000002, y: 1.5000001, z: 0}
   m_TimeToStationary: 0.5
@@ -35621,7 +35624,7 @@ NavMeshObstacle:
   m_Shape: 1
   m_Extents: {x: 3.5, y: 25, z: 12.5}
   m_MoveThreshold: 0.1
-  m_Carve: 1
+  m_Carve: 0
   m_CarveOnlyStationary: 0
   m_Center: {x: -3, y: 4, z: -12}
   m_TimeToStationary: 0.5
@@ -57441,7 +57444,7 @@ NavMeshObstacle:
   m_Shape: 1
   m_Extents: {x: 0.5, y: 3, z: 4.5}
   m_MoveThreshold: 0.1
-  m_Carve: 1
+  m_Carve: 0
   m_CarveOnlyStationary: 0
   m_Center: {x: 0.75, y: 5, z: 6}
   m_TimeToStationary: 0.5
@@ -68909,7 +68912,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 156480, guid: 7ab4f1759c4498a44ae5e8bd46e7e4ef, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2010356061}
   m_SourcePrefab: {fileID: 100100000, guid: 7ab4f1759c4498a44ae5e8bd46e7e4ef, type: 3}
 --- !u!4 &1267081465 stripped
 Transform:
@@ -75368,6 +75374,7 @@ MonoBehaviour:
   busqueda: {fileID: 1404333697}
   exploracion: {fileID: 1404333694}
   comprobandoObjetivo: {fileID: 1404333696}
+  tiempoPerdidoParaBuscar: 2
   puntoMeta: {fileID: 1987047908}
   puntoObjetivo: {fileID: 1999226362}
   objetivoDetectado: 0
@@ -75474,6 +75481,7 @@ MonoBehaviour:
   radioExploracion: 15
   puntosAExplorar: 3
   tiempoMaximoBuscandoUnPunto: 10
+  exploracionTerminada: 0
 --- !u!114 &1404333695
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -78815,7 +78823,7 @@ NavMeshObstacle:
   m_Shape: 1
   m_Extents: {x: 3.0000002, y: 1.5000001, z: 1.35}
   m_MoveThreshold: 0.1
-  m_Carve: 1
+  m_Carve: 0
   m_CarveOnlyStationary: 0
   m_Center: {x: -3.0000002, y: 1.5000001, z: 0}
   m_TimeToStationary: 0.5
@@ -80482,7 +80490,7 @@ NavMeshObstacle:
   m_Shape: 1
   m_Extents: {x: 2, y: 1.5000001, z: 1.5}
   m_MoveThreshold: 0.1
-  m_Carve: 1
+  m_Carve: 0
   m_CarveOnlyStationary: 0
   m_Center: {x: -5, y: 1.5000001, z: 0}
   m_TimeToStationary: 0.5
@@ -95074,6 +95082,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 66ce2554d943ab14db051b408dc948ed, type: 3}
+--- !u!1 &1794246148 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 156480, guid: 7ab4f1759c4498a44ae5e8bd46e7e4ef, type: 3}
+  m_PrefabInstance: {fileID: 1266850523}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1794383187
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -99465,6 +99478,7 @@ MonoBehaviour:
   busqueda: {fileID: 1848543032}
   exploracion: {fileID: 1848543029}
   comprobandoObjetivo: {fileID: 1848543031}
+  tiempoPerdidoParaBuscar: 2
   puntoMeta: {fileID: 1987047908}
   puntoObjetivo: {fileID: 1999226362}
   objetivoDetectado: 0
@@ -99558,6 +99572,7 @@ MonoBehaviour:
   radioExploracion: 15
   puntosAExplorar: 3
   tiempoMaximoBuscandoUnPunto: 10
+  exploracionTerminada: 0
 --- !u!114 &1848543030
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -107980,6 +107995,22 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 458844, guid: 7ab4f1759c4498a44ae5e8bd46e7e4ef, type: 3}
   m_PrefabInstance: {fileID: 1266850523}
   m_PrefabAsset: {fileID: 0}
+--- !u!208 &2010356061
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1794246148}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 1.5000001, z: 1.4}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: -2, y: 1.5000001, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!4 &2011651721 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 484606, guid: 66ce2554d943ab14db051b408dc948ed, type: 3}
@@ -112205,7 +112236,7 @@ NavMeshObstacle:
   m_Shape: 1
   m_Extents: {x: 3.0000002, y: 1.5000001, z: 1.35}
   m_MoveThreshold: 0.1
-  m_Carve: 1
+  m_Carve: 0
   m_CarveOnlyStationary: 0
   m_Center: {x: -3.0000002, y: 1.5000001, z: 0}
   m_TimeToStationary: 0.5
@@ -112971,7 +113002,7 @@ NavMeshObstacle:
   m_Shape: 1
   m_Extents: {x: 3.0000002, y: 1.5000001, z: 1.35}
   m_MoveThreshold: 0.1
-  m_Carve: 1
+  m_Carve: 0
   m_CarveOnlyStationary: 0
   m_Center: {x: -3.0000002, y: 1.5000001, z: 0}
   m_TimeToStationary: 0.5
@@ -115021,6 +115052,7 @@ MonoBehaviour:
   radioExploracion: 15
   puntosAExplorar: 3
   tiempoMaximoBuscandoUnPunto: 10
+  exploracionTerminada: 0
 --- !u!114 &9158451565529013541
 MonoBehaviour:
   m_ObjectHideFlags: 0

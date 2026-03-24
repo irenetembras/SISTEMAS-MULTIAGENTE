@@ -11,6 +11,10 @@ public class IACerebro : MonoBehaviour
     public EstadoIA busqueda;              
     public EstadoIA exploracion;           
     public EstadoIA comprobandoObjetivo;   
+
+    [Header("Ajustes de Tiempo")]
+    public float tiempoPerdidoParaBuscar = 2.0f; // Tiempo de duda al perder al jugador
+    private float cronometroPerdido = 0f;
     
     [Header("Memoria Global")]
     public Transform puntoMeta;
@@ -54,6 +58,65 @@ public class IACerebro : MonoBehaviour
         CambiarEstado(patrulla); // Siempre empezamos patrullando
     }
 
+    void Update()
+{
+    if (estadoActual == null) return;
+
+    // --- TRANSICIONES SEGÚN EL ESTADO ACTUAL ---
+    // 1. Si estamos patrullando y roban el botín, vamos a emboscada
+    if (estadoActual == patrulla && RecogerObjetivo.tieneElBotin)
+    {
+        CambiarEstado(emboscada);
+    }
+
+    else if (estadoActual == persecucion)
+    {
+        // Si perdemos al jugador, esperamos un tiempo antes de buscar
+        if (!objetivoDetectado)
+        {
+            cronometroPerdido += Time.deltaTime;
+            if (cronometroPerdido >= tiempoPerdidoParaBuscar)
+            {
+                // Decisión: ¿Emboscada o Búsqueda?
+                if (RecogerObjetivo.tieneElBotin) CambiarEstado(emboscada);
+                else CambiarEstado(busqueda);
+            }
+        }
+        else cronometroPerdido = 0f;
+    }
+    
+    else if (estadoActual == busqueda)
+    {
+        // Si termina de buscar en la última posición conocida...
+        if (movimiento.HaLlegadoAlDestino())
+        {
+            CambiarEstado(exploracion);
+        }
+    }
+
+
+    else if (estadoActual == exploracion)
+    {
+        // 3. Y cuando termine de dar vueltas explorando, ENTONCES va a por el botín
+        if (((EstadoExploracion)exploracion).exploracionTerminada)
+        {
+            CambiarEstado(comprobandoObjetivo);
+        }
+    }
+    
+    else if (estadoActual == comprobandoObjetivo)
+    {
+        // El estado que fallaba: comprobamos si el botín sigue ahí
+        float distAlBotin = Vector3.Distance(transform.position, puntoObjetivo.position);
+        
+        // Si llega físicamente o lo ve de cerca (ej: 4 metros)
+        if (movimiento.HaLlegadoAlDestino() || distAlBotin < 4.0f)
+        {
+            CambiarEstado(patrulla);
+        }
+    }
+}
+
     // --- RESPUESTA A LOS EVENTOS DE LOS SENSORES ---
     private void AlDetectar(Vector3 pos)
     {
@@ -75,5 +138,7 @@ public class IACerebro : MonoBehaviour
         if (estadoActual != null) estadoActual.AlSalir(); // Apaga el viejo
         estadoActual = nuevoEstado;
         estadoActual.AlEntrar(); // Enciende el nuevo
+
+        Debug.Log("<color=yellow>CEREBRO: Cambiando al estado -> " + nuevoEstado.GetType().Name + "</color>");
     }
 }

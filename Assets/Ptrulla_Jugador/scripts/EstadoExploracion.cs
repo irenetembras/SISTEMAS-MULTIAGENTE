@@ -7,14 +7,16 @@ public class EstadoExploracion : EstadoIA
     public int puntosAExplorar = 3;     
     public float tiempoMaximoBuscandoUnPunto = 10f;
 
+    [HideInInspector] public bool exploracionTerminada = false;
+
     private int puntosExploradosActuales = 0;
-    private Vector3 puntoExploracionActual;
     private float tiempoEnExploracionActual = 0f;
 
     public override void AlEntrar()
     {
         base.AlEntrar();
         puntosExploradosActuales = 0;
+        exploracionTerminada=false;
         GenerarNuevoPunto(); // Generamos el primer punto nada más empezar
     }
 
@@ -27,15 +29,13 @@ public class EstadoExploracion : EstadoIA
 
         if (haLlegado || seAcaboElTiempo)
         {
-            if (seAcaboElTiempo) movimiento.Detener(); // Failsafe por si se atasca
-            
+                      
             puntosExploradosActuales++;
 
             if (puntosExploradosActuales >= puntosAExplorar)
             {
                 // Ya he mirado en 3 sitios distintos y no está. Me rindo y voy a ver el botín.
-                cerebro.CambiarEstado(cerebro.comprobandoObjetivo);
-            }
+                exploracionTerminada = true;            }
             else
             {
                 // Aún me quedan sitios por mirar
@@ -46,7 +46,7 @@ public class EstadoExploracion : EstadoIA
 
     private void GenerarNuevoPunto()
     {
-        puntoExploracionActual = movimiento.ObtenerPuntoAleatorioCercano(cerebro.ultimaPosJugador, radioExploracion);
+        Vector3 puntoExploracionActual = movimiento.ObtenerPuntoAleatorioCercano(cerebro.ultimaPosJugador, radioExploracion);
         movimiento.MoverA(puntoExploracionActual, movimiento.velocidadPatrulla);
         tiempoEnExploracionActual = 0f; // Reseteamos el cronómetro de atascos
     }

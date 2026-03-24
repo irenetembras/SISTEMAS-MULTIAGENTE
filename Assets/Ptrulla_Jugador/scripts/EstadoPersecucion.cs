@@ -15,36 +15,13 @@ public class EstadoPersecucion : EstadoIA
         jugador = GameObject.FindGameObjectWithTag("Player").transform;
     }
 
-    public override void AlEntrar()
+void Update()
     {
-        base.AlEntrar();
-        tiempoDesdePerdido = 0f; 
-    }
-
-    void Update()
-    {
-        // EL TRUCO: Le mandamos tu posición REAL actual. 
-        // Así, si le haces la 13-60, girará en redondo al instante persiguiendo tu espalda.
-        if (jugador != null)
+        // ACCIÓN FÍSICA PURA: 
+        // Mientras estemos en este estado y el cerebro diga que lo detecta, corremos.
+        if (jugador != null && cerebro.objetivoDetectado)
         {
             movimiento.Perseguir(jugador.position);
-        }
-
-        if (!cerebro.objetivoDetectado)
-        {
-            tiempoDesdePerdido += Time.deltaTime;
-            
-            if (tiempoDesdePerdido >= tiempoRecordarPerseguir)
-            {
-                if (RecogerObjetivo.tieneElBotin)
-                    cerebro.CambiarEstado(cerebro.emboscada);
-                else
-                    cerebro.CambiarEstado(cerebro.busqueda); 
-            }
-        }
-        else
-        {
-            tiempoDesdePerdido = 0f;
         }
     }
 }

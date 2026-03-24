@@ -48,7 +48,7 @@ public class IAMovimiento : MonoBehaviour
     // Nos dice si el agente ya ha llegado a su destino
     public bool HaLlegadoAlDestino()
     {
-        if (!agent.pathPending && agent.remainingDistance <= Mathf.Max(agent.stoppingDistance, radioLlegada))
+        if (!agent.pathPending && agent.hasPath && agent.remainingDistance <= Mathf.Max(agent.stoppingDistance, radioLlegada))
         {
             return true;
         }
