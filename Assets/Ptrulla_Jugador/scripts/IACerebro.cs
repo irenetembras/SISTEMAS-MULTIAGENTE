@@ -1,10 +1,12 @@
 using UnityEngine;
+using System.Collections.Generic;
+using System.Collections;
 
 [RequireComponent(typeof(GestorSensores))]
 [RequireComponent(typeof(IAMovimiento))]
 public class IACerebro : MonoBehaviour
 {
-    [Header("Cartuchos de Comportamiento (Arrastra tus scripts aquí)")]
+    [Header("Cartuchos de Comportamiento")]
     public EstadoIA patrulla;
     public EstadoIA persecucion;
     public EstadoIA emboscada;
@@ -28,17 +30,30 @@ public class IACerebro : MonoBehaviour
     public bool objetivoDetectado = false; 
     public Vector3 ultimaPosJugador;
 
+    // --- VARIABLES DE COMUNICACIÓN MULTIAXENTE (TU CÓDIGO) ---
+    private BuzonMensajes miBuzon;
+    private IACerebro[] todosLosGuardias;
+
+    private struct Oferta
+    {
+        public GameObject guardia;
+        public float distancia;
+    }
+    private List<Oferta> listaDeOfertas = new List<Oferta>();
+
     void Awake()
     {
         sensores = GetComponent<GestorSensores>();
         movimiento = GetComponent<IAMovimiento>();
+        miBuzon = GetComponent<BuzonMensajes>();
+        todosLosGuardias = FindObjectsOfType<IACerebro>(); 
 
         if(patrulla) patrulla.Configurar(this, movimiento);
         if(persecucion) persecucion.Configurar(this, movimiento);
         if(emboscada) emboscada.Configurar(this, movimiento);
-        if(busqueda) busqueda.Configurar(this, movimiento);                       // <-- NUEVO
-        if(exploracion) exploracion.Configurar(this, movimiento);                 // <-- NUEVO
-        if(comprobandoObjetivo) comprobandoObjetivo.Configurar(this, movimiento); // <-- NUEVO
+        if(busqueda) busqueda.Configurar(this, movimiento);                       
+        if(exploracion) exploracion.Configurar(this, movimiento);                 
+        if(comprobandoObjetivo) comprobandoObjetivo.Configurar(this, movimiento); 
     }
 
     void OnEnable()
@@ -59,67 +74,70 @@ public class IACerebro : MonoBehaviour
     }
 
     void Update()
-{
-    if (estadoActual == null) return;
-
-    // --- TRANSICIONES SEGÚN EL ESTADO ACTUAL ---
-    // 1. Si estamos patrullando y roban el botín, vamos a emboscada
-    if (estadoActual == patrulla && RecogerObjetivo.tieneElBotin)
     {
-        CambiarEstado(emboscada);
-    }
+        if (estadoActual == null) return;
 
-    else if (estadoActual == persecucion)
-    {
-        // Si perdemos al jugador, esperamos un tiempo antes de buscar
-        if (!objetivoDetectado)
+        // 1. MIRAMOS EL BUZÓN CONTINUAMENTE (TU CÓDIGO)
+        if (miBuzon != null && miBuzon.HayMensajesNuevos())
         {
-            cronometroPerdido += Time.deltaTime;
-            if (cronometroPerdido >= tiempoPerdidoParaBuscar)
+            ProcesarBuzon();
+        }
+
+        // --- TRANSICIONES SEGÚN EL ESTADO ACTUAL (EL CÓDIGO DE TU COMPAÑERO) ---
+        if (estadoActual == patrulla && RecogerObjetivo.tieneElBotin)
+        {
+            CambiarEstado(emboscada);
+        }
+        else if (estadoActual == persecucion)
+        {
+            if (!objetivoDetectado)
             {
-                // Decisión: ¿Emboscada o Búsqueda?
-                if (RecogerObjetivo.tieneElBotin) CambiarEstado(emboscada);
-                else CambiarEstado(busqueda);
+                cronometroPerdido += Time.deltaTime;
+                if (cronometroPerdido >= tiempoPerdidoParaBuscar)
+                {
+                    if (RecogerObjetivo.tieneElBotin) CambiarEstado(emboscada);
+                    else CambiarEstado(busqueda);
+                }
+            }
+            else cronometroPerdido = 0f;
+        }
+        else if (estadoActual == busqueda)
+        {
+            if (movimiento.HaLlegadoAlDestino())
+            {
+                CambiarEstado(exploracion);
             }
         }
-        else cronometroPerdido = 0f;
-    }
-    
-    else if (estadoActual == busqueda)
-    {
-        // Si termina de buscar en la última posición conocida...
-        if (movimiento.HaLlegadoAlDestino())
+        else if (estadoActual == exploracion)
         {
-            CambiarEstado(exploracion);
+            // Ojo aquí: Si en tu script exploracion no tienes "exploracionTerminada", 
+            // asegúrate de que el código de tu compañero coincide con tus scripts de estado.
+            if (((EstadoExploracion)exploracion).exploracionTerminada)
+            {
+                CambiarEstado(comprobandoObjetivo);
+            }
+        }
+        else if (estadoActual == comprobandoObjetivo)
+        {
+            float distAlBotin = Vector3.Distance(transform.position, puntoObjetivo.position);
+            if (movimiento.HaLlegadoAlDestino() || distAlBotin < 4.0f)
+            {
+                CambiarEstado(patrulla);
+            }
         }
     }
 
-
-    else if (estadoActual == exploracion)
-    {
-        // 3. Y cuando termine de dar vueltas explorando, ENTONCES va a por el botín
-        if (((EstadoExploracion)exploracion).exploracionTerminada)
-        {
-            CambiarEstado(comprobandoObjetivo);
-        }
-    }
-    
-    else if (estadoActual == comprobandoObjetivo)
-    {
-        // El estado que fallaba: comprobamos si el botín sigue ahí
-        float distAlBotin = Vector3.Distance(transform.position, puntoObjetivo.position);
-        
-        // Si llega físicamente o lo ve de cerca (ej: 4 metros)
-        if (movimiento.HaLlegadoAlDestino() || distAlBotin < 4.0f)
-        {
-            CambiarEstado(patrulla);
-        }
-    }
-}
-
-    // --- RESPUESTA A LOS EVENTOS DE LOS SENSORES ---
+    // --- RESPUESTA A LOS EVENTOS DE LOS SENSORES (FUSIONADO) ---
     private void AlDetectar(Vector3 pos)
     {
+        // TU CÓDIGO (APRETAR EL GATILLO Y ABRIR SUBASTA)
+        if (estadoActual != persecucion)
+        {
+            listaDeOfertas.Clear();
+            EnviarAvisoDeLadron(pos);
+            StartCoroutine(CerrarSubastaYAsignar(pos));
+        }
+
         objetivoDetectado = true;
         ultimaPosJugador = pos;
         CambiarEstado(persecucion); // Cambio inmediato de cartucho
@@ -134,11 +152,115 @@ public class IACerebro : MonoBehaviour
     public void CambiarEstado(EstadoIA nuevoEstado)
     {
         if (nuevoEstado == null) return;
-        
-        if (estadoActual != null) estadoActual.AlSalir(); // Apaga el viejo
+        if (estadoActual != null) estadoActual.AlSalir(); 
         estadoActual = nuevoEstado;
-        estadoActual.AlEntrar(); // Enciende el nuevo
-
+        estadoActual.AlEntrar(); 
         Debug.Log("<color=yellow>CEREBRO: Cambiando al estado -> " + nuevoEstado.GetType().Name + "</color>");
+    }
+
+    // --- MÉTODOS DE COMUNICACIÓN MULTIAXENTE (TU CÓDIGO) ---
+    private void EnviarAvisoDeLadron(Vector3 posLadron)
+    {
+        string contenido = posLadron.x.ToString(System.Globalization.CultureInfo.InvariantCulture) + "|" + 
+                           posLadron.y.ToString(System.Globalization.CultureInfo.InvariantCulture) + "|" + 
+                           posLadron.z.ToString(System.Globalization.CultureInfo.InvariantCulture);
+
+        foreach (IACerebro compañero in todosLosGuardias)
+        {
+            if (compañero != this)
+            {
+                MensajeFIPA aviso = new MensajeFIPA(PerformativaFIPA.CFP, this.gameObject, compañero.gameObject, contenido);
+                compañero.GetComponent<BuzonMensajes>().RecibirMensaje(aviso);
+            }
+        }
+        Debug.Log("📢 ¡" + gameObject.name + " pide voluntarios! Ladrón en: " + contenido);
+    }
+
+    private void ProcesarBuzon()
+    {
+        MensajeFIPA mensaje = miBuzon.ExtraerSiguienteMensaje();
+        if (mensaje == null) return;
+
+        if (mensaje.performativa == PerformativaFIPA.CFP)
+        {
+            string[] coordenadas = mensaje.contenido.Split('|'); 
+            if (coordenadas.Length == 3)
+            {
+                float x = float.Parse(coordenadas[0], System.Globalization.CultureInfo.InvariantCulture);
+                float y = float.Parse(coordenadas[1], System.Globalization.CultureInfo.InvariantCulture);
+                float z = float.Parse(coordenadas[2], System.Globalization.CultureInfo.InvariantCulture);
+                Vector3 posLadron = new Vector3(x, y, z);
+                
+                if (estadoActual == persecucion || estadoActual == emboscada) return;
+
+                float miDistancia = Vector3.Distance(transform.position, posLadron);
+                MensajeFIPA oferta = new MensajeFIPA(PerformativaFIPA.PROPOSE, this.gameObject, mensaje.emisor, miDistancia.ToString(System.Globalization.CultureInfo.InvariantCulture));
+                mensaje.emisor.GetComponent<BuzonMensajes>().RecibirMensaje(oferta);
+            }
+        }
+        else if (mensaje.performativa == PerformativaFIPA.PROPOSE)
+        {
+            float distancia = float.Parse(mensaje.contenido, System.Globalization.CultureInfo.InvariantCulture);
+            listaDeOfertas.Add(new Oferta { guardia = mensaje.emisor, distancia = distancia });
+        }
+        else if (mensaje.performativa == PerformativaFIPA.ACCEPT_PROPOSAL)
+        {
+            string[] coordenadas = mensaje.contenido.Split('|'); 
+            if (coordenadas.Length == 3)
+            {
+                float x = float.Parse(coordenadas[0], System.Globalization.CultureInfo.InvariantCulture);
+                float y = float.Parse(coordenadas[1], System.Globalization.CultureInfo.InvariantCulture);
+                float z = float.Parse(coordenadas[2], System.Globalization.CultureInfo.InvariantCulture);
+
+                Vector3 posicionTactica = new Vector3(x, y, z);
+                
+                // Le decimos a su memoria cuál es el punto de flanqueo
+                ultimaPosJugador = posicionTactica; 
+                
+                // ¡AQUÍ ESTÁ LA MAGIA! 
+                // Le mandamos a buscar. Gracias al código de tu compañero, 
+                // en cuanto llegue a ese punto, pasará a 'exploracion' automáticamente.
+                CambiarEstado(busqueda); 
+            }
+        }
+        else if (mensaje.performativa == PerformativaFIPA.REJECT_PROPOSAL)
+        {
+            // Ignorado, sigue con la patrulla de tu compañero
+        }
+    }
+
+    private IEnumerator CerrarSubastaYAsignar(Vector3 posLadron)
+    {
+        yield return new WaitForSeconds(0.5f);
+
+        listaDeOfertas.Sort((a, b) => a.distancia.CompareTo(b.distancia));
+
+        int guardiasAceptados = 0;
+        int maxGuardias = 2; 
+
+        Vector3[] puntosEstrategicos = new Vector3[] {
+            posLadron + new Vector3(15f, 0, 15f),  
+            posLadron + new Vector3(-15f, 0, -15f) 
+        };
+
+        foreach (Oferta oferta in listaDeOfertas)
+        {
+            if (guardiasAceptados < maxGuardias)
+            {
+                Vector3 punto = puntosEstrategicos[guardiasAceptados];
+                string contAceptar = punto.x.ToString(System.Globalization.CultureInfo.InvariantCulture) + "|" + 
+                                     punto.y.ToString(System.Globalization.CultureInfo.InvariantCulture) + "|" + 
+                                     punto.z.ToString(System.Globalization.CultureInfo.InvariantCulture);
+
+                MensajeFIPA respuesta = new MensajeFIPA(PerformativaFIPA.ACCEPT_PROPOSAL, this.gameObject, oferta.guardia, contAceptar);
+                oferta.guardia.GetComponent<BuzonMensajes>().RecibirMensaje(respuesta);
+                guardiasAceptados++;
+            }
+            else
+            {
+                MensajeFIPA respuesta = new MensajeFIPA(PerformativaFIPA.REJECT_PROPOSAL, this.gameObject, oferta.guardia, "Sigue patrullando");
+                oferta.guardia.GetComponent<BuzonMensajes>().RecibirMensaje(respuesta);
+            }
+        }
     }
 }
