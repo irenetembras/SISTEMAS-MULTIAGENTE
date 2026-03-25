@@ -5698,6 +5698,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1507857520026029105, guid: 36f8bff90ff06c94298f694f8d30a38a, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1404333692}
+    - targetCorrespondingSourceObject: {fileID: 1507857520026029105, guid: 36f8bff90ff06c94298f694f8d30a38a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1404333698}
   m_SourcePrefab: {fileID: 100100000, guid: 36f8bff90ff06c94298f694f8d30a38a, type: 3}
 --- !u!64 &109098168
 MeshCollider:
@@ -7939,6 +7942,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4349012345269211501, guid: fee9cbfea39a32d4db945ec3903d5351, type: 3}
       insertIndex: -1
       addedObject: {fileID: 535698028}
+    - targetCorrespondingSourceObject: {fileID: 4349012345269211501, guid: fee9cbfea39a32d4db945ec3903d5351, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 535698034}
   m_SourcePrefab: {fileID: 100100000, guid: fee9cbfea39a32d4db945ec3903d5351, type: 3}
 --- !u!4 &116851296 stripped
 Transform:
@@ -16537,6 +16543,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EstadoBusqueda
   cerebro: {fileID: 0}
   movimiento: {fileID: 0}
+--- !u!114 &204152320
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 204152294}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b0ccb2f9f90f404bb54cc1c2c8e789c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BuzonMensajes
 --- !u!1001 &204562433
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -32447,6 +32465,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EstadoBusqueda
   cerebro: {fileID: 0}
   movimiento: {fileID: 0}
+--- !u!114 &535698034
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 114396938}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b0ccb2f9f90f404bb54cc1c2c8e789c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BuzonMensajes
 --- !u!1001 &536596571
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -75517,6 +75547,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EstadoBusqueda
   cerebro: {fileID: 0}
   movimiento: {fileID: 0}
+--- !u!114 &1404333698
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1404333672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b0ccb2f9f90f404bb54cc1c2c8e789c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BuzonMensajes
 --- !u!1001 &1404857150
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -92119,6 +92161,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1507857520026029105, guid: 36f8bff90ff06c94298f694f8d30a38a, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1848543027}
+    - targetCorrespondingSourceObject: {fileID: 1507857520026029105, guid: 36f8bff90ff06c94298f694f8d30a38a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1848543033}
   m_SourcePrefab: {fileID: 100100000, guid: 36f8bff90ff06c94298f694f8d30a38a, type: 3}
 --- !u!4 &1738819489 stripped
 Transform:
@@ -95884,6 +95929,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1507857520026029105, guid: 36f8bff90ff06c94298f694f8d30a38a, type: 3}
       insertIndex: -1
       addedObject: {fileID: 204152314}
+    - targetCorrespondingSourceObject: {fileID: 1507857520026029105, guid: 36f8bff90ff06c94298f694f8d30a38a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 204152320}
   m_SourcePrefab: {fileID: 100100000, guid: 36f8bff90ff06c94298f694f8d30a38a, type: 3}
 --- !u!1001 &1814430466
 PrefabInstance:
@@ -99601,6 +99649,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EstadoBusqueda
   cerebro: {fileID: 0}
   movimiento: {fileID: 0}
+--- !u!114 &1848543033
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1848543007}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b0ccb2f9f90f404bb54cc1c2c8e789c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BuzonMensajes
 --- !u!1001 &1850274947
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -114866,6 +114926,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4349012345269211501, guid: fee9cbfea39a32d4db945ec3903d5351, type: 3}
       insertIndex: -1
       addedObject: {fileID: 9158451565529013539}
+    - targetCorrespondingSourceObject: {fileID: 4349012345269211501, guid: fee9cbfea39a32d4db945ec3903d5351, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 9158451565529013545}
   m_SourcePrefab: {fileID: 100100000, guid: fee9cbfea39a32d4db945ec3903d5351, type: 3}
 --- !u!1 &1385938970045944546 stripped
 GameObject:
@@ -115079,6 +115142,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   cerebro: {fileID: 0}
   movimiento: {fileID: 0}
+--- !u!114 &9158451565529013545
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1385938970045944546}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b0ccb2f9f90f404bb54cc1c2c8e789c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BuzonMensajes
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
