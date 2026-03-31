@@ -27,6 +27,7 @@ public class IACerebro : MonoBehaviour
     private IAMovimiento movimiento;
 
     // Memoria que usarán los cartuchos
+    public bool enMisionAsignada = false;
     public bool objetivoDetectado = false; 
     public Vector3 ultimaPosJugador;
 
@@ -76,6 +77,11 @@ public class IACerebro : MonoBehaviour
     void Update()
     {
         if (estadoActual == null) return;
+
+        if (objetivoDetectado && sensores.TransformJugador != null)
+        {
+            ultimaPosJugador = sensores.TransformJugador.position;
+        }
 
         // 1. MIRAMOS EL BUZÓN CONTINUAMENTE (TU CÓDIGO)
         if (miBuzon != null && miBuzon.HayMensajesNuevos())
@@ -130,17 +136,19 @@ public class IACerebro : MonoBehaviour
     // --- RESPUESTA A LOS EVENTOS DE LOS SENSORES (FUSIONADO) ---
     private void AlDetectar(Vector3 pos)
     {
-        // TU CÓDIGO (APRETAR EL GATILLO Y ABRIR SUBASTA)
-        if (estadoActual != persecucion)
+        objetivoDetectado = true;
+        ultimaPosJugador = pos;
+
+        // SOLO abro subasta si yo soy el primero en verlo y no estaba ya ocupado
+        if (estadoActual != persecucion && !enMisionAsignada)
         {
             listaDeOfertas.Clear();
             EnviarAvisoDeLadron(pos);
             StartCoroutine(CerrarSubastaYAsignar(pos));
         }
 
-        objetivoDetectado = true;
-        ultimaPosJugador = pos;
-        CambiarEstado(persecucion); // Cambio inmediato de cartucho
+        // Pase lo que pase, si lo tengo delante, ¡le persigo!
+        CambiarEstado(persecucion); 
     }
 
     private void AlPerder()
@@ -152,6 +160,10 @@ public class IACerebro : MonoBehaviour
     public void CambiarEstado(EstadoIA nuevoEstado)
     {
         if (nuevoEstado == null) return;
+
+        // Si vuelvo a la rutina, reseteo mi rol
+        if (nuevoEstado == patrulla) enMisionAsignada = false; 
+
         if (estadoActual != null) estadoActual.AlSalir(); 
         estadoActual = nuevoEstado;
         estadoActual.AlEntrar(); 
@@ -220,6 +232,7 @@ public class IACerebro : MonoBehaviour
                 // ¡AQUÍ ESTÁ LA MAGIA! 
                 // Le mandamos a buscar. Gracias al código de tu compañero, 
                 // en cuanto llegue a ese punto, pasará a 'exploracion' automáticamente.
+                enMisionAsignada = true;
                 CambiarEstado(busqueda); 
             }
         }
@@ -238,9 +251,18 @@ public class IACerebro : MonoBehaviour
         int guardiasAceptados = 0;
         int maxGuardias = 2; 
 
+       // Extraemos la rotación actual del jugador a través de los sensores
+        Transform jugador = GetComponent<GestorSensores>().TransformJugador;
+        
+        // Calculamos vectores relativos: hacia dónde mira y sus lados
+        Vector3 adelante = jugador.forward;
+        Vector3 derecha = jugador.right;
+        Vector3 izquierda = -jugador.right;
+
+        // Táctica de Pinza: 10 metros a los lados, y 5 metros hacia adelante para cortarle el paso
         Vector3[] puntosEstrategicos = new Vector3[] {
-            posLadron + new Vector3(15f, 0, 15f),  
-            posLadron + new Vector3(-15f, 0, -15f) 
+            posLadron + (derecha * 10f) + (adelante * 5f),  
+            posLadron + (izquierda * 10f) + (adelante * 5f) 
         };
 
         foreach (Oferta oferta in listaDeOfertas)

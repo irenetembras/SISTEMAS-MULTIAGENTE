@@ -12,6 +12,7 @@ public class GestorSensores : MonoBehaviour
     private SensorVision vision;
     private SensorOido oido;
 
+    // Mantenemos esta variable pública para que el oído y el Cerebro puedan leerla
     public Transform TransformJugador { get; private set; }
     private bool estabaDetectadoPreviamente = false;
 
@@ -23,6 +24,7 @@ public class GestorSensores : MonoBehaviour
 
     void Start()
     {
+        // Buscamos al jugador una vez para tener su referencia
         GameObject go = GameObject.FindGameObjectWithTag("Player");
         if (go != null) TransformJugador = go.transform;
     }
@@ -31,7 +33,11 @@ public class GestorSensores : MonoBehaviour
     {
         if (TransformJugador == null) return;
 
-        bool loVeo = vision.EvaluarVision(TransformJugador);
+        // VISIÓN "CIEGA": Ya no le pasamos el TransformJugador. Busca solo.
+        Transform jugadorVisto = vision.EvaluarVision();
+        bool loVeo = (jugadorVisto != null);
+        
+        // EL OÍDO: Sigue usando el Transform como lo tenías
         bool loOigo = oido.EvaluarOido(TransformJugador);
         
         bool detectadoAhora = loVeo || loOigo;
