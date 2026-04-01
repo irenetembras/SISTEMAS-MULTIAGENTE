@@ -259,6 +259,7 @@ public class IACerebro : MonoBehaviour
                 ultimaPosJugador = movimiento.ObtenerPuntoAleatorioCercano(posicionGPS, 4f); 
             }
 
+        }
 
     }
 
