@@ -16410,6 +16410,7 @@ MonoBehaviour:
   tiempoPerdidoParaBuscar: 2
   puntoMeta: {fileID: 1987047908}
   puntoObjetivo: {fileID: 1999226362}
+  enMisionAsignada: 0
   objetivoDetectado: 0
   ultimaPosJugador: {x: 0, y: 0, z: 0}
 --- !u!114 &204152311
@@ -16545,6 +16546,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EstadoBusqueda
   cerebro: {fileID: 0}
   movimiento: {fileID: 0}
+  tiempoMirandoElSitio: 2
+  busquedaTerminada: 0
 --- !u!114 &204152324
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27747,7 +27750,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1426e8f02ac0f1f4ea780ee962abef0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PuertaCorredera
-  distanciaDesplazamiento: 40
+  distanciaDesplazamiento: 45
   velocidad: 20
   tiempoEspera: 14
   direccionMover: {x: 1, y: 0, z: 0}
@@ -32608,6 +32611,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EstadoBusqueda
   cerebro: {fileID: 0}
   movimiento: {fileID: 0}
+  tiempoMirandoElSitio: 2
+  busquedaTerminada: 0
 --- !u!114 &535698045
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -75687,6 +75692,7 @@ MonoBehaviour:
   tiempoPerdidoParaBuscar: 2
   puntoMeta: {fileID: 1987047908}
   puntoObjetivo: {fileID: 1999226362}
+  enMisionAsignada: 0
   objetivoDetectado: 0
   ultimaPosJugador: {x: 0, y: 0, z: 0}
 --- !u!114 &1404333684
@@ -75835,6 +75841,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EstadoBusqueda
   cerebro: {fileID: 0}
   movimiento: {fileID: 0}
+  tiempoMirandoElSitio: 2
+  busquedaTerminada: 0
 --- !u!114 &1404333702
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -99949,6 +99957,7 @@ MonoBehaviour:
   tiempoPerdidoParaBuscar: 2
   puntoMeta: {fileID: 1987047908}
   puntoObjetivo: {fileID: 1999226362}
+  enMisionAsignada: 0
   objetivoDetectado: 0
   ultimaPosJugador: {x: 0, y: 0, z: 0}
 --- !u!114 &1848543024
@@ -100084,6 +100093,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EstadoBusqueda
   cerebro: {fileID: 0}
   movimiento: {fileID: 0}
+  tiempoMirandoElSitio: 2
+  busquedaTerminada: 0
 --- !u!114 &1848543037
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -115518,6 +115529,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   cerebro: {fileID: 0}
   movimiento: {fileID: 0}
+  tiempoMirandoElSitio: 2
+  busquedaTerminada: 0
 --- !u!114 &9158451565529013540
 MonoBehaviour:
   m_ObjectHideFlags: 0
