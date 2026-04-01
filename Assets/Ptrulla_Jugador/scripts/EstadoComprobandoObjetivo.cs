@@ -3,6 +3,7 @@ using UnityEngine;
 public class EstadoComprobandoObjetivo : EstadoIA
 {
     public float distanciaParaVerBotin = 3f;
+    private bool seDioCuenta = false; 
 
     public override void AlEntrar()
     {
@@ -11,6 +12,21 @@ public class EstadoComprobandoObjetivo : EstadoIA
         {
             // Corremos hacia la sala del tesoro
             movimiento.MoverA(cerebro.puntoObjetivo.position, movimiento.velocidadPersecucion);
+        }
+    }
+void Update()
+    {
+        if (cerebro.puntoObjetivo == null) return;
+
+        float dist = Vector3.Distance(transform.position, cerebro.puntoObjetivo.position);
+        
+        if (dist <= distanciaParaVerBotin && !seDioCuenta)
+        {
+            if (RecogerObjetivo.tieneElBotin) 
+            {
+                seDioCuenta = true;
+                Debug.Log("🧐 El guardia ha visto que falta el botín (A la espera de lo que diga el profesor).");
+            }
         }
     }
 
