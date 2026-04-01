@@ -48,13 +48,19 @@ public class IAMovimiento : MonoBehaviour
     // Nos dice si el agente ya ha llegado a su destino
     public bool HaLlegadoAlDestino()
     {
-        if (!agent.pathPending && agent.hasPath && agent.remainingDistance <= Mathf.Max(agent.stoppingDistance, radioLlegada))
+        if (agent.pathPending) return false;
+        if (!agent.hasPath) return false;
+
+        // LA MAGIA ANTI-ATASCOS DE PUERTAS
+        if (agent.pathStatus == NavMeshPathStatus.PathPartial) return false;
+
+        if (agent.remainingDistance <= Mathf.Max(agent.stoppingDistance, radioLlegada))
         {
             return true;
         }
         return false;
     }
-
+    
     // Va a un punto a la velocidad que le mande el cerebro
     public void MoverA(Vector3 destino, float velocidad)
     {
