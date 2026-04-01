@@ -109,7 +109,7 @@ public class IACerebro : MonoBehaviour
         }
         else if (estadoActual == busqueda)
         {
-            if (movimiento.HaLlegadoAlDestino())
+            if (((EstadoBusqueda)busqueda).busquedaTerminada)
             {
                 CambiarEstado(exploracion);
             }
@@ -227,8 +227,10 @@ public class IACerebro : MonoBehaviour
                 Vector3 posicionTactica = new Vector3(x, y, z);
                 
                 // Le decimos a su memoria cuál es el punto de flanqueo
-                ultimaPosJugador = posicionTactica; 
-                
+                // ¡EL SALVAVIDAS ANTI-MUROS! 
+                // Antes de ir al punto matemático, comprobamos que caiga en el suelo azul (NavMesh)
+                ultimaPosJugador = movimiento.ObtenerPuntoAleatorioCercano(posicionTactica, 4f);
+                                
                 // ¡AQUÍ ESTÁ LA MAGIA! 
                 // Le mandamos a buscar. Gracias al código de tu compañero, 
                 // en cuanto llegue a ese punto, pasará a 'exploracion' automáticamente.
@@ -240,6 +242,24 @@ public class IACerebro : MonoBehaviour
         {
             // Ignorado, sigue con la patrulla de tu compañero
         }
+
+        else if (mensaje.performativa == PerformativaFIPA.INFORM)
+        {
+            // Leemos las coordenadas del GPS que nos manda el Vigía
+            string[] coordenadas = mensaje.contenido.Split('|'); 
+            if (coordenadas.Length == 3)
+            {
+                float x = float.Parse(coordenadas[0], System.Globalization.CultureInfo.InvariantCulture);
+                float y = float.Parse(coordenadas[1], System.Globalization.CultureInfo.InvariantCulture);
+                float z = float.Parse(coordenadas[2], System.Globalization.CultureInfo.InvariantCulture);
+
+                Vector3 posicionGPS = new Vector3(x, y, z);
+                
+                // ¡Aplicamos tu salvavidas antimuros a las coordenadas del Vigía!
+                ultimaPosJugador = movimiento.ObtenerPuntoAleatorioCercano(posicionGPS, 4f); 
+            }
+
+
     }
 
     private IEnumerator CerrarSubastaYAsignar(Vector3 posLadron)
