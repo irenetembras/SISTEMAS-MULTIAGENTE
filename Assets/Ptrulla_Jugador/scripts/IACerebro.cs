@@ -238,9 +238,12 @@ public class IACerebro : MonoBehaviour
         int guardiasAceptados = 0;
         int maxGuardias = 2; 
 
+
+        // Usamos tu función de Movimiento para garantizar que los puntos tácticos
+        // caen obligatoriamente encima del suelo azul del NavMesh (radio de 5m para buscar)
         Vector3[] puntosEstrategicos = new Vector3[] {
-            posLadron + new Vector3(15f, 0, 15f),  
-            posLadron + new Vector3(-15f, 0, -15f) 
+            movimiento.ObtenerPuntoAleatorioCercano(posLadron + new Vector3(10f, 0, 10f), 5f),  
+            movimiento.ObtenerPuntoAleatorioCercano(posLadron + new Vector3(-10f, 0, -10f), 5f) 
         };
 
         foreach (Oferta oferta in listaDeOfertas)
