@@ -4,6 +4,7 @@ using System.Collections;
 
 [RequireComponent(typeof(GestorSensores))]
 [RequireComponent(typeof(IAMovimiento))]
+[RequireComponent(typeof(GestorSocial))]
 public class IACerebro : MonoBehaviour
 {
     [Header("Cartuchos de Comportamiento")]
@@ -31,29 +32,22 @@ public class IACerebro : MonoBehaviour
     public bool objetivoDetectado = false; 
     public Vector3 ultimaPosJugador;
 
-    // --- VARIABLES DE COMUNICACIÓN MULTIAXENTE (TU CÓDIGO) ---
-    private BuzonMensajes miBuzon;
-    private IACerebro[] todosLosGuardias;
 
-    private struct Oferta
-    {
-        public GameObject guardia;
-        public float distancia;
-    }
-    private List<Oferta> listaDeOfertas = new List<Oferta>();
+    private GestorSocial capaSocial;
 
-    void Awake()
+    void Awake() 
     {
+        // 1. Inicializamos las referencias a los otros scripts del guardia
         sensores = GetComponent<GestorSensores>();
         movimiento = GetComponent<IAMovimiento>();
-        miBuzon = GetComponent<BuzonMensajes>();
-        todosLosGuardias = FindObjectsOfType<IACerebro>(); 
+        capaSocial = GetComponent<GestorSocial>(); 
 
+        // 2. Configuramos los cartuchos de estado
         if(patrulla) patrulla.Configurar(this, movimiento);
         if(persecucion) persecucion.Configurar(this, movimiento);
         if(emboscada) emboscada.Configurar(this, movimiento);
-        if(busqueda) busqueda.Configurar(this, movimiento);                       
-        if(exploracion) exploracion.Configurar(this, movimiento);                 
+        if(busqueda) busqueda.Configurar(this, movimiento); 
+        if(exploracion) exploracion.Configurar(this, movimiento);
         if(comprobandoObjetivo) comprobandoObjetivo.Configurar(this, movimiento); 
     }
 
@@ -62,11 +56,13 @@ public class IACerebro : MonoBehaviour
         sensores.OnJugadorDetectado += AlDetectar;
         sensores.OnJugadorPerdido += AlPerder;
     }
-
     void OnDisable()
     {
-        sensores.OnJugadorDetectado -= AlDetectar;
-        sensores.OnJugadorPerdido -= AlPerder;
+        if (sensores != null)
+        {
+            sensores.OnJugadorDetectado -= AlDetectar;
+            sensores.OnJugadorPerdido -= AlPerder;
+        }
     }
 
     void Start()
@@ -78,15 +74,24 @@ public class IACerebro : MonoBehaviour
     {
         if (estadoActual == null) return;
 
+        // ACTUALIZACIÓN DE CAPA SOCIAL: Decimos si estamos libres para ayudar a otros
+        // Solo estamos disponibles si no estamos persiguiendo ni en una emboscada
+        capaSocial.estaDisponible = (estadoActual != persecucion && estadoActual != emboscada);
+
         if (objetivoDetectado && sensores.TransformJugador != null)
         {
             ultimaPosJugador = sensores.TransformJugador.position;
         }
 
-        // 1. MIRAMOS EL BUZÓN CONTINUAMENTE (TU CÓDIGO)
-        if (miBuzon != null && miBuzon.HayMensajesNuevos())
+        // 2.CAPA SOCIAL (Prioridad de comunicación)
+        // Solo aceptamos órdenes si no estamos ya en plena persecución (instinto primario)
+        if (capaSocial.tieneNuevaOrden && estadoActual != persecucion) 
         {
-            ProcesarBuzon();
+            ultimaPosJugador = movimiento.ObtenerPuntoAleatorioCercano(capaSocial.coordenadaOrdenada, 4f);
+            enMisionAsignada = true;
+            capaSocial.tieneNuevaOrden = false; 
+            CambiarEstado(busqueda);
+            return; // Salimos del Update este frame para empezar el nuevo estado limpios
         }
 
         // --- TRANSICIONES SEGÚN EL ESTADO ACTUAL (EL CÓDIGO DE TU COMPAÑERO) ---
@@ -142,9 +147,7 @@ public class IACerebro : MonoBehaviour
         // SOLO abro subasta si yo soy el primero en verlo y no estaba ya ocupado
         if (estadoActual != persecucion && !enMisionAsignada)
         {
-            listaDeOfertas.Clear();
-            EnviarAvisoDeLadron(pos);
-            StartCoroutine(CerrarSubastaYAsignar(pos));
+            capaSocial.IniciarSubasta(pos);
         }
 
         // Pase lo que pase, si lo tengo delante, ¡le persigo!
@@ -170,140 +173,4 @@ public class IACerebro : MonoBehaviour
         Debug.Log("<color=yellow>CEREBRO: Cambiando al estado -> " + nuevoEstado.GetType().Name + "</color>");
     }
 
-    // --- MÉTODOS DE COMUNICACIÓN MULTIAXENTE (TU CÓDIGO) ---
-    private void EnviarAvisoDeLadron(Vector3 posLadron)
-    {
-        string contenido = posLadron.x.ToString(System.Globalization.CultureInfo.InvariantCulture) + "|" + 
-                           posLadron.y.ToString(System.Globalization.CultureInfo.InvariantCulture) + "|" + 
-                           posLadron.z.ToString(System.Globalization.CultureInfo.InvariantCulture);
-
-        foreach (IACerebro compañero in todosLosGuardias)
-        {
-            if (compañero != this)
-            {
-                MensajeFIPA aviso = new MensajeFIPA(PerformativaFIPA.CFP, this.gameObject, compañero.gameObject, contenido);
-                compañero.GetComponent<BuzonMensajes>().RecibirMensaje(aviso);
-            }
-        }
-        Debug.Log("📢 ¡" + gameObject.name + " pide voluntarios! Ladrón en: " + contenido);
-    }
-
-    private void ProcesarBuzon()
-    {
-        MensajeFIPA mensaje = miBuzon.ExtraerSiguienteMensaje();
-        if (mensaje == null) return;
-
-        if (mensaje.performativa == PerformativaFIPA.CFP)
-        {
-            string[] coordenadas = mensaje.contenido.Split('|'); 
-            if (coordenadas.Length == 3)
-            {
-                float x = float.Parse(coordenadas[0], System.Globalization.CultureInfo.InvariantCulture);
-                float y = float.Parse(coordenadas[1], System.Globalization.CultureInfo.InvariantCulture);
-                float z = float.Parse(coordenadas[2], System.Globalization.CultureInfo.InvariantCulture);
-                Vector3 posLadron = new Vector3(x, y, z);
-                
-                if (estadoActual == persecucion || estadoActual == emboscada) return;
-
-                float miDistancia = Vector3.Distance(transform.position, posLadron);
-                MensajeFIPA oferta = new MensajeFIPA(PerformativaFIPA.PROPOSE, this.gameObject, mensaje.emisor, miDistancia.ToString(System.Globalization.CultureInfo.InvariantCulture));
-                mensaje.emisor.GetComponent<BuzonMensajes>().RecibirMensaje(oferta);
-            }
-        }
-        else if (mensaje.performativa == PerformativaFIPA.PROPOSE)
-        {
-            float distancia = float.Parse(mensaje.contenido, System.Globalization.CultureInfo.InvariantCulture);
-            listaDeOfertas.Add(new Oferta { guardia = mensaje.emisor, distancia = distancia });
-        }
-        else if (mensaje.performativa == PerformativaFIPA.ACCEPT_PROPOSAL)
-        {
-            string[] coordenadas = mensaje.contenido.Split('|'); 
-            if (coordenadas.Length == 3)
-            {
-                float x = float.Parse(coordenadas[0], System.Globalization.CultureInfo.InvariantCulture);
-                float y = float.Parse(coordenadas[1], System.Globalization.CultureInfo.InvariantCulture);
-                float z = float.Parse(coordenadas[2], System.Globalization.CultureInfo.InvariantCulture);
-
-                Vector3 posicionTactica = new Vector3(x, y, z);
-                
-                // Le decimos a su memoria cuál es el punto de flanqueo
-                // ¡EL SALVAVIDAS ANTI-MUROS! 
-                // Antes de ir al punto matemático, comprobamos que caiga en el suelo azul (NavMesh)
-                ultimaPosJugador = movimiento.ObtenerPuntoAleatorioCercano(posicionTactica, 4f);
-                                
-                // ¡AQUÍ ESTÁ LA MAGIA! 
-                // Le mandamos a buscar. Gracias al código de tu compañero, 
-                // en cuanto llegue a ese punto, pasará a 'exploracion' automáticamente.
-                enMisionAsignada = true;
-                CambiarEstado(busqueda); 
-            }
-        }
-        else if (mensaje.performativa == PerformativaFIPA.REJECT_PROPOSAL)
-        {
-            // Ignorado, sigue con la patrulla de tu compañero
-        }
-
-        else if (mensaje.performativa == PerformativaFIPA.INFORM)
-        {
-            // Leemos las coordenadas del GPS que nos manda el Vigía
-            string[] coordenadas = mensaje.contenido.Split('|'); 
-            if (coordenadas.Length == 3)
-            {
-                float x = float.Parse(coordenadas[0], System.Globalization.CultureInfo.InvariantCulture);
-                float y = float.Parse(coordenadas[1], System.Globalization.CultureInfo.InvariantCulture);
-                float z = float.Parse(coordenadas[2], System.Globalization.CultureInfo.InvariantCulture);
-
-                Vector3 posicionGPS = new Vector3(x, y, z);
-                
-                // ¡Aplicamos tu salvavidas antimuros a las coordenadas del Vigía!
-                ultimaPosJugador = movimiento.ObtenerPuntoAleatorioCercano(posicionGPS, 4f); 
-            }
-
-        }
-
-    }
-
-    private IEnumerator CerrarSubastaYAsignar(Vector3 posLadron)
-    {
-        yield return new WaitForSeconds(0.5f);
-
-        listaDeOfertas.Sort((a, b) => a.distancia.CompareTo(b.distancia));
-
-        int guardiasAceptados = 0;
-        int maxGuardias = 2; 
-
-       // Extraemos la rotación actual del jugador a través de los sensores
-        Transform jugador = GetComponent<GestorSensores>().TransformJugador;
-        
-        // Calculamos vectores relativos: hacia dónde mira y sus lados
-        Vector3 adelante = jugador.forward;
-        Vector3 derecha = jugador.right;
-        Vector3 izquierda = -jugador.right;
-
-        // Táctica de Pinza: 10 metros a los lados, y 5 metros hacia adelante para cortarle el paso
-        Vector3[] puntosEstrategicos = new Vector3[] {
-            posLadron + (derecha * 10f) + (adelante * 5f),  
-            posLadron + (izquierda * 10f) + (adelante * 5f) 
-        };
-
-        foreach (Oferta oferta in listaDeOfertas)
-        {
-            if (guardiasAceptados < maxGuardias)
-            {
-                Vector3 punto = puntosEstrategicos[guardiasAceptados];
-                string contAceptar = punto.x.ToString(System.Globalization.CultureInfo.InvariantCulture) + "|" + 
-                                     punto.y.ToString(System.Globalization.CultureInfo.InvariantCulture) + "|" + 
-                                     punto.z.ToString(System.Globalization.CultureInfo.InvariantCulture);
-
-                MensajeFIPA respuesta = new MensajeFIPA(PerformativaFIPA.ACCEPT_PROPOSAL, this.gameObject, oferta.guardia, contAceptar);
-                oferta.guardia.GetComponent<BuzonMensajes>().RecibirMensaje(respuesta);
-                guardiasAceptados++;
-            }
-            else
-            {
-                MensajeFIPA respuesta = new MensajeFIPA(PerformativaFIPA.REJECT_PROPOSAL, this.gameObject, oferta.guardia, "Sigue patrullando");
-                oferta.guardia.GetComponent<BuzonMensajes>().RecibirMensaje(respuesta);
-            }
-        }
-    }
 }
