@@ -14,7 +14,7 @@ public class EstadoComprobandoObjetivo : EstadoIA
             movimiento.MoverA(cerebro.puntoObjetivo.position, movimiento.velocidadPersecucion);
         }
     }
-void Update()
+    void Update()
     {
         if (cerebro.puntoObjetivo == null) return;
 
@@ -25,7 +25,18 @@ void Update()
             if (RecogerObjetivo.tieneElBotin) 
             {
                 seDioCuenta = true;
-                Debug.Log("🧐 El guardia ha visto que falta el botín (A la espera de lo que diga el profesor).");
+                Debug.Log("🧐 ¡El guardia ha visto el pedestal vacío! Dando la alarma...");
+                
+                // Le decimos a nuestra radio que avise a los demás
+                cerebro.capaSocial.DarAlarmaRobo(); 
+            }
+            else
+            {
+                // Si ha llegado y el botín SÍ está, se da la vuelta y sigue patrullando
+                if (movimiento.HaLlegadoAlDestino())
+                {
+                    cerebro.fsm.CambiarEstado(cerebro.fsm.patrulla);
+                }
             }
         }
     }

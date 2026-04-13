@@ -5701,6 +5701,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1507857520026029105, guid: 36f8bff90ff06c94298f694f8d30a38a, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1404333702}
+    - targetCorrespondingSourceObject: {fileID: 1507857520026029105, guid: 36f8bff90ff06c94298f694f8d30a38a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1404333703}
+    - targetCorrespondingSourceObject: {fileID: 1507857520026029105, guid: 36f8bff90ff06c94298f694f8d30a38a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1404333708}
   m_SourcePrefab: {fileID: 100100000, guid: 36f8bff90ff06c94298f694f8d30a38a, type: 3}
 --- !u!64 &109098168
 MeshCollider:
@@ -7887,6 +7893,30 @@ PrefabInstance:
       propertyPath: 'puntosPatrulla.Array.data[3]'
       value: 
       objectReference: {fileID: 1493613827}
+    - target: {fileID: 7252510713560753451, guid: fee9cbfea39a32d4db945ec3903d5351, type: 3}
+      propertyPath: busqueda
+      value: 
+      objectReference: {fileID: 535698033}
+    - target: {fileID: 7252510713560753451, guid: fee9cbfea39a32d4db945ec3903d5351, type: 3}
+      propertyPath: patrulla
+      value: 
+      objectReference: {fileID: 535698030}
+    - target: {fileID: 7252510713560753451, guid: fee9cbfea39a32d4db945ec3903d5351, type: 3}
+      propertyPath: emboscada
+      value: 
+      objectReference: {fileID: 535698032}
+    - target: {fileID: 7252510713560753451, guid: fee9cbfea39a32d4db945ec3903d5351, type: 3}
+      propertyPath: exploracion
+      value: 
+      objectReference: {fileID: 535698031}
+    - target: {fileID: 7252510713560753451, guid: fee9cbfea39a32d4db945ec3903d5351, type: 3}
+      propertyPath: persecucion
+      value: 
+      objectReference: {fileID: 535698029}
+    - target: {fileID: 7252510713560753451, guid: fee9cbfea39a32d4db945ec3903d5351, type: 3}
+      propertyPath: comprobandoObjetivo
+      value: 
+      objectReference: {fileID: 535698028}
     - target: {fileID: 8463722173398133382, guid: fee9cbfea39a32d4db945ec3903d5351, type: 3}
       propertyPath: busqueda
       value: 
@@ -16401,13 +16431,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b421ee579e5bc046b606411539ddd48, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::IACerebro
-  patrulla: {fileID: 204152315}
-  persecucion: {fileID: 204152314}
-  emboscada: {fileID: 204152317}
-  busqueda: {fileID: 204152319}
-  exploracion: {fileID: 204152316}
-  comprobandoObjetivo: {fileID: 204152318}
-  tiempoPerdidoParaBuscar: 2
   puntoMeta: {fileID: 1987047908}
   puntoObjetivo: {fileID: 1999226362}
   enMisionAsignada: 0
@@ -16560,6 +16583,41 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b0ccb2f9f90f404bb54cc1c2c8e789c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BuzonMensajes
+--- !u!114 &204152325
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 204152294}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f6768be134061f4b8f28e5f8fd58814, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GestorSocial
+  alarmaGeneralActivada: 0
+  estaDisponible: 1
+  tieneNuevaOrden: 0
+  coordenadaOrdenada: {x: 0, y: 0, z: 0}
+--- !u!114 &204152330
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 204152294}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3646f7cc607c114d91cd5aeccda7177, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MaquinaDeEstados
+  patrulla: {fileID: 204152315}
+  persecucion: {fileID: 204152314}
+  emboscada: {fileID: 204152317}
+  busqueda: {fileID: 204152319}
+  exploracion: {fileID: 204152316}
+  comprobandoObjetivo: {fileID: 204152318}
+  tiempoPerdidoParaBuscar: 2
 --- !u!1001 &204562433
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -75683,13 +75741,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b421ee579e5bc046b606411539ddd48, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::IACerebro
-  patrulla: {fileID: 1404333693}
-  persecucion: {fileID: 1404333692}
-  emboscada: {fileID: 1404333695}
-  busqueda: {fileID: 1404333697}
-  exploracion: {fileID: 1404333694}
-  comprobandoObjetivo: {fileID: 1404333696}
-  tiempoPerdidoParaBuscar: 2
   puntoMeta: {fileID: 1987047908}
   puntoObjetivo: {fileID: 1999226362}
   enMisionAsignada: 0
@@ -75855,6 +75906,41 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b0ccb2f9f90f404bb54cc1c2c8e789c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BuzonMensajes
+--- !u!114 &1404333703
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1404333672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f6768be134061f4b8f28e5f8fd58814, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GestorSocial
+  alarmaGeneralActivada: 0
+  estaDisponible: 1
+  tieneNuevaOrden: 0
+  coordenadaOrdenada: {x: 0, y: 0, z: 0}
+--- !u!114 &1404333708
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1404333672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3646f7cc607c114d91cd5aeccda7177, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MaquinaDeEstados
+  patrulla: {fileID: 1404333693}
+  persecucion: {fileID: 1404333692}
+  emboscada: {fileID: 1404333695}
+  busqueda: {fileID: 1404333697}
+  exploracion: {fileID: 1404333694}
+  comprobandoObjetivo: {fileID: 1404333696}
+  tiempoPerdidoParaBuscar: 2
 --- !u!1001 &1404857150
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -92600,6 +92686,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1507857520026029105, guid: 36f8bff90ff06c94298f694f8d30a38a, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1848543037}
+    - targetCorrespondingSourceObject: {fileID: 1507857520026029105, guid: 36f8bff90ff06c94298f694f8d30a38a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1848543038}
+    - targetCorrespondingSourceObject: {fileID: 1507857520026029105, guid: 36f8bff90ff06c94298f694f8d30a38a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1848543043}
   m_SourcePrefab: {fileID: 100100000, guid: 36f8bff90ff06c94298f694f8d30a38a, type: 3}
 --- !u!4 &1738819489 stripped
 Transform:
@@ -96373,6 +96465,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1507857520026029105, guid: 36f8bff90ff06c94298f694f8d30a38a, type: 3}
       insertIndex: -1
       addedObject: {fileID: 204152324}
+    - targetCorrespondingSourceObject: {fileID: 1507857520026029105, guid: 36f8bff90ff06c94298f694f8d30a38a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 204152325}
+    - targetCorrespondingSourceObject: {fileID: 1507857520026029105, guid: 36f8bff90ff06c94298f694f8d30a38a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 204152330}
   m_SourcePrefab: {fileID: 100100000, guid: 36f8bff90ff06c94298f694f8d30a38a, type: 3}
 --- !u!1001 &1814430466
 PrefabInstance:
@@ -99948,13 +100046,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b421ee579e5bc046b606411539ddd48, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::IACerebro
-  patrulla: {fileID: 1848543028}
-  persecucion: {fileID: 1848543027}
-  emboscada: {fileID: 1848543030}
-  busqueda: {fileID: 1848543032}
-  exploracion: {fileID: 1848543029}
-  comprobandoObjetivo: {fileID: 1848543031}
-  tiempoPerdidoParaBuscar: 2
   puntoMeta: {fileID: 1987047908}
   puntoObjetivo: {fileID: 1999226362}
   enMisionAsignada: 0
@@ -100107,6 +100198,41 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b0ccb2f9f90f404bb54cc1c2c8e789c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BuzonMensajes
+--- !u!114 &1848543038
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1848543007}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f6768be134061f4b8f28e5f8fd58814, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GestorSocial
+  alarmaGeneralActivada: 0
+  estaDisponible: 1
+  tieneNuevaOrden: 0
+  coordenadaOrdenada: {x: 0, y: 0, z: 0}
+--- !u!114 &1848543043
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1848543007}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3646f7cc607c114d91cd5aeccda7177, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MaquinaDeEstados
+  patrulla: {fileID: 1848543028}
+  persecucion: {fileID: 1848543027}
+  emboscada: {fileID: 1848543030}
+  busqueda: {fileID: 1848543032}
+  exploracion: {fileID: 1848543029}
+  comprobandoObjetivo: {fileID: 1848543031}
+  tiempoPerdidoParaBuscar: 2
 --- !u!1001 &1850274947
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -114055,7 +114181,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3453840741311942035, guid: 003c3c590c145a44fbc5b13e49b99d27, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -347.5
+      value: -179.1
       objectReference: {fileID: 0}
     - target: {fileID: 3453840741311942035, guid: 003c3c590c145a44fbc5b13e49b99d27, type: 3}
       propertyPath: m_LocalPosition.y
@@ -114063,7 +114189,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3453840741311942035, guid: 003c3c590c145a44fbc5b13e49b99d27, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 230.8
+      value: 174
       objectReference: {fileID: 0}
     - target: {fileID: 3453840741311942035, guid: 003c3c590c145a44fbc5b13e49b99d27, type: 3}
       propertyPath: m_LocalRotation.w
@@ -115329,6 +115455,30 @@ PrefabInstance:
       propertyPath: 'puntosPatrulla.Array.data[3]'
       value: 
       objectReference: {fileID: 1524771080}
+    - target: {fileID: 7252510713560753451, guid: fee9cbfea39a32d4db945ec3903d5351, type: 3}
+      propertyPath: busqueda
+      value: 
+      objectReference: {fileID: 9158451565529013539}
+    - target: {fileID: 7252510713560753451, guid: fee9cbfea39a32d4db945ec3903d5351, type: 3}
+      propertyPath: patrulla
+      value: 
+      objectReference: {fileID: 9158451565529013544}
+    - target: {fileID: 7252510713560753451, guid: fee9cbfea39a32d4db945ec3903d5351, type: 3}
+      propertyPath: emboscada
+      value: 
+      objectReference: {fileID: 9158451565529013542}
+    - target: {fileID: 7252510713560753451, guid: fee9cbfea39a32d4db945ec3903d5351, type: 3}
+      propertyPath: exploracion
+      value: 
+      objectReference: {fileID: 9158451565529013540}
+    - target: {fileID: 7252510713560753451, guid: fee9cbfea39a32d4db945ec3903d5351, type: 3}
+      propertyPath: persecucion
+      value: 
+      objectReference: {fileID: 9158451565529013543}
+    - target: {fileID: 7252510713560753451, guid: fee9cbfea39a32d4db945ec3903d5351, type: 3}
+      propertyPath: comprobandoObjetivo
+      value: 
+      objectReference: {fileID: 9158451565529013541}
     - target: {fileID: 8463722173398133382, guid: fee9cbfea39a32d4db945ec3903d5351, type: 3}
       propertyPath: busqueda
       value: 

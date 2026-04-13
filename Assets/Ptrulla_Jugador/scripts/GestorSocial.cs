@@ -11,6 +11,7 @@ public class GestorSocial : MonoBehaviour
     private Transform miTransform;
 
     [Header("Comunicación con el Cerebro")]
+    public bool alarmaGeneralActivada = false;
     public bool estaDisponible = true;   // El cerebro nos dirá si estamos ocupados
     public bool tieneNuevaOrden = false; // Nosotros le diremos al cerebro si hay órdenes
     public Vector3 coordenadaOrdenada;   // El GPS o punto táctico ya masticado
@@ -75,10 +76,16 @@ public class GestorSocial : MonoBehaviour
             listaDeOfertas.Add(new Oferta { guardia = mensaje.emisor, distancia = distancia });
         }
         // Juntamos el ACCEPT de la subasta y el INFORM del GPS porque ambos nos dan una meta
-        else if (mensaje.performativa == PerformativaFIPA.ACCEPT_PROPOSAL || mensaje.performativa == PerformativaFIPA.INFORM)
+        // Extraemos la lectura del buzón
+        else if (mensaje.performativa == PerformativaFIPA.INFORM && mensaje.contenido == "ALARMA_ROBO")
+        {
+            alarmaGeneralActivada = true; // ¡Nos avisaron del robo! Levantamos la bandera roja.
+            Debug.Log("📻 [" + gameObject.name + "] ¡Recibido CÓDIGO ROJO por radio! Voy a la emboscada.");
+        }
+        else if (mensaje.performativa == PerformativaFIPA.ACCEPT_PROPOSAL || (mensaje.performativa == PerformativaFIPA.INFORM && mensaje.contenido != "ALARMA_ROBO"))
         {
             coordenadaOrdenada = ParsearCoordenadas(mensaje.contenido);
-            tieneNuevaOrden = true; // ¡Levantamos la bandera para que el Cerebro la vea!
+            tieneNuevaOrden = true; 
         }
     }
 
@@ -129,6 +136,21 @@ public class GestorSocial : MonoBehaviour
             {
                 MensajeFIPA respuesta = new MensajeFIPA(PerformativaFIPA.REJECT_PROPOSAL, this.gameObject, oferta.guardia, "Sigue");
                 oferta.guardia.GetComponent<BuzonMensajes>().RecibirMensaje(respuesta);
+            }
+        }
+    }
+
+    public void DarAlarmaRobo()
+    {
+        alarmaGeneralActivada = true; // Me doy por enterado yo también
+
+        foreach (GestorSocial compañero in todosLosSociales)
+        {
+            if (compañero != this)
+            {
+                // Mandamos un INFORM a todos diciendo la palabra mágica
+                MensajeFIPA aviso = new MensajeFIPA(PerformativaFIPA.INFORM, this.gameObject, compañero.gameObject, "ALARMA_ROBO");
+                compañero.GetComponent<BuzonMensajes>().RecibirMensaje(aviso);
             }
         }
     }

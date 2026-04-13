@@ -68,6 +68,14 @@ public class IACerebroVigia : MonoBehaviour
     // --- EL VIGÍA VE AL LADRÓN ---
     private void AlDetectar(Vector3 pos)
     {
+        // NUEVO: Si le vemos y lleva el botín encima, chivatazo masivo
+        if (RecogerObjetivo.tieneElBotin)
+        {
+            DarAlarmaRobo();
+            return; // Cortamos aquí para que no haga subasta normal
+        }
+
+        // LO VIEJO: Si no ha robado nada aún, subasta normal para acorralarlo
         if (!subastaEnCurso)
         {
             subastaEnCurso = true;
@@ -75,6 +83,20 @@ public class IACerebroVigia : MonoBehaviour
             EnviarAvisoDeLadron(pos);
             StartCoroutine(CerrarSubastaYAsignar(pos));
         }
+    }
+
+    private void DarAlarmaRobo()
+    {
+        // Para no spamear mensajes 60 veces por segundo si le sigue viendo
+        if (subastaEnCurso) return; 
+        subastaEnCurso = true;
+
+        foreach (IACerebro compañero in guardiasTerrestres)
+        {
+            MensajeFIPA aviso = new MensajeFIPA(PerformativaFIPA.INFORM, this.gameObject, compañero.gameObject, "ALARMA_ROBO");
+            compañero.GetComponent<BuzonMensajes>().RecibirMensaje(aviso);
+        }
+        Debug.Log("🦅 [VIGÍA DE LA TORRE] ¡Veo al ladrón escapando con el botín! ¡CÓDIGO ROJO!");
     }
 
     // --- MÉTODOS DE COMUNICACIÓN MULTIAXENTE ---
