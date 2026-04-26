@@ -80,9 +80,8 @@ public class MaquinaDeEstados : MonoBehaviour
     {
         if (nuevoEstado == null) return;
 
-        if (estadoActual != null) estadoActual.AlSalir(); 
+        if (estadoActual != null) estadoActual.AlSalir();
         estadoActual = nuevoEstado;
-        estadoActual.AlEntrar(); 
-        Debug.Log("<color=cyan>FSM: Cambiando al estado -> " + nuevoEstado.GetType().Name + "</color>");
+        estadoActual.AlEntrar();
     }
 }

@@ -14,7 +14,7 @@ public class BuzonMensajes : MonoBehaviour
         bandejaDeEntrada.Enqueue(nuevoMensaje);
         // Opcional: Un chivato en la consola para ver que funciona
         // Debug.Log(gameObject.name + " ha recibido un mensaje de " + nuevoMensaje.emisor.name);
-        Debug.Log("📬 [BUZÓN DE " + gameObject.name + "] ¡Carta recibida! Remitente: " + nuevoMensaje.emisor.name);
+        
     }
 
     // 2. FUNCIÓN PARA SABER SI HAY CARTAS SIN LEER

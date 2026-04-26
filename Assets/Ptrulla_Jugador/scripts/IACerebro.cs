@@ -1,48 +1,55 @@
 using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
 
 [RequireComponent(typeof(GestorSensores))]
 [RequireComponent(typeof(IAMovimiento))]
 [RequireComponent(typeof(GestorSocial))]
-[RequireComponent(typeof(MaquinaDeEstados))] // <-- OBLIGAMOS A TENER LA FSM
+[RequireComponent(typeof(MaquinaDeEstados))]
+[RequireComponent(typeof(FSMTactica))]
 public class IACerebro : MonoBehaviour
 {
     [Header("Memoria Global")]
     public Transform puntoMeta;
     public Transform puntoObjetivo;
-    public bool objetivoDetectado = false; 
+    public bool objetivoDetectado = false;
     public Vector3 ultimaPosJugador;
 
     private GestorSensores sensores;
     private IAMovimiento movimiento;
-    
-    // Las referencias a los otros 2 bloques de la arquitectura
+    private RolTactico ultimoRolEjecutado = RolTactico.PatrullaNormal;
+
+    // FSM Ejecutora: controla el cuerpo (patrullar, perseguir, buscar...)
+    public MaquinaDeEstados fsm { get; private set; }
+
+    // FSM Táctica: controla la jerarquía (libre, comandante, subordinado)
+    public FSMTactica fsmTactica { get; private set; }
+
+    // Puente de lectura para que EjecutarRolTactico sepa qué hacer
     public GestorSocial capaSocial { get; private set; }
-    public MaquinaDeEstados fsm { get; private set; } 
 
-    void Awake() 
+    void Awake()
     {
-        sensores = GetComponent<GestorSensores>();
+        sensores   = GetComponent<GestorSensores>();
         movimiento = GetComponent<IAMovimiento>();
-        capaSocial = GetComponent<GestorSocial>(); 
-        fsm = GetComponent<MaquinaDeEstados>(); // Pillamos la FSM
+        capaSocial = GetComponent<GestorSocial>();
+        fsm        = GetComponent<MaquinaDeEstados>();
+        fsmTactica = GetComponent<FSMTactica>();
 
-        // Le damos los mandos a la Máquina de Estados para que cargue los cartuchos
         fsm.Inicializar(this, movimiento);
+        fsmTactica.Inicializar(this);
     }
 
     void OnEnable()
     {
         sensores.OnJugadorDetectado += AlDetectar;
-        sensores.OnJugadorPerdido += AlPerder;
+        sensores.OnJugadorPerdido   += AlPerder;
     }
+
     void OnDisable()
     {
         if (sensores != null)
         {
             sensores.OnJugadorDetectado -= AlDetectar;
-            sensores.OnJugadorPerdido -= AlPerder;
+            sensores.OnJugadorPerdido   -= AlPerder;
         }
     }
 
@@ -50,24 +57,25 @@ public class IACerebro : MonoBehaviour
     {
         if (fsm.estadoActual == null) return;
 
-        // 1. ACTUALIZAR MEMORIA VISUAL
         if (objetivoDetectado && sensores.TransformJugador != null)
-        {
             ultimaPosJugador = sensores.TransformJugador.position;
-        }
 
-        // 2. EL PUENTE ENTRE LA MENTE (Social) Y EL CUERPO (FSM)
-        // El cerebro traduce el Rol asignado a un estado físico real.
+        // Puente FSM Táctica → FSM Ejecutora: traduce rol social a estado físico
         EjecutarRolTactico();
 
-        // 3. DELEGAR EL TRABAJO NORMAL A LA MÁQUINA DE ESTADOS (Mover las piernas)
         fsm.ActualizarMaquina();
     }
 
     private void EjecutarRolTactico()
     {
-        // Dependiendo de lo que diga el GestorSocial, forzamos un estado físico u otro
-        switch (capaSocial.miRolAsignado)
+        RolTactico rolActual = capaSocial.miRolAsignado;
+        if (rolActual != ultimoRolEjecutado)
+        {
+            Debug.Log($"[CEREBRO {gameObject.name}] Rol cambiado: {ultimoRolEjecutado} → {rolActual}. Actualizando FSM Ejecutora.");
+            ultimoRolEjecutado = rolActual;
+        }
+
+        switch (rolActual)
         {
             case RolTactico.PatrullaNormal:
             case RolTactico.PatrullaSectorAdyacente:
@@ -83,34 +91,27 @@ public class IACerebro : MonoBehaviour
                 break;
 
             case RolTactico.ExplorarSectorSospechoso:
-                // Si me mandan a investigar, uso mis estados de búsqueda/exploración
-                if (fsm.estadoActual != fsm.busqueda && fsm.estadoActual != fsm.exploracion) 
-                {
+                if (fsm.estadoActual != fsm.busqueda && fsm.estadoActual != fsm.exploracion)
                     fsm.CambiarEstado(fsm.busqueda);
-                }
                 break;
         }
     }
 
-    // --- RESPUESTA INMEDIATA A SENSORES ---
     private void AlDetectar(Vector3 pos)
     {
         objetivoDetectado = true;
-        ultimaPosJugador = pos;
+        ultimaPosJugador  = pos;
+        Debug.Log($"[CEREBRO {gameObject.name}] Jugador DETECTADO en {pos}. Lanzando persecucion y asumiendo mando.");
 
-        // REFLEJO: Si veo al jugador con mis propios ojos, por instinto le persigo
         if (fsm.estadoActual != fsm.persecucion)
-        {
-            fsm.CambiarEstado(fsm.persecucion); 
-        }
+            fsm.CambiarEstado(fsm.persecucion);
 
-        // AVISO A LA MENTE: Le digo a mi Gestor Social que tome el mando y avise por radio
-        // (Nota: Crearemos esta función en la Fase 3 dentro de GestorSocial)
-        capaSocial.AsumirMandoYSubastar(pos); 
+        fsmTactica.AsumirMando(pos);
     }
 
     private void AlPerder()
     {
+        Debug.Log($"[CEREBRO {gameObject.name}] Jugador PERDIDO. objetivoDetectado = false.");
         objetivoDetectado = false;
     }
 }
