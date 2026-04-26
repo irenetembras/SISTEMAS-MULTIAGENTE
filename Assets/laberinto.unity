@@ -5714,6 +5714,21 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1507857520026029105, guid: 36f8bff90ff06c94298f694f8d30a38a, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1404333708}
+    - targetCorrespondingSourceObject: {fileID: 1507857520026029105, guid: 36f8bff90ff06c94298f694f8d30a38a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1404333713}
+    - targetCorrespondingSourceObject: {fileID: 1507857520026029105, guid: 36f8bff90ff06c94298f694f8d30a38a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1404333712}
+    - targetCorrespondingSourceObject: {fileID: 1507857520026029105, guid: 36f8bff90ff06c94298f694f8d30a38a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1404333711}
+    - targetCorrespondingSourceObject: {fileID: 1507857520026029105, guid: 36f8bff90ff06c94298f694f8d30a38a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1404333710}
+    - targetCorrespondingSourceObject: {fileID: 1507857520026029105, guid: 36f8bff90ff06c94298f694f8d30a38a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1404333709}
   m_SourcePrefab: {fileID: 100100000, guid: 36f8bff90ff06c94298f694f8d30a38a, type: 3}
 --- !u!64 &109098168
 MeshCollider:
@@ -7824,6 +7839,18 @@ PrefabInstance:
       propertyPath: distanciaVision
       value: 75
       objectReference: {fileID: 0}
+    - target: {fileID: 1817744945069958410, guid: fee9cbfea39a32d4db945ec3903d5351, type: 3}
+      propertyPath: libre
+      value: 
+      objectReference: {fileID: 535698049}
+    - target: {fileID: 1817744945069958410, guid: fee9cbfea39a32d4db945ec3903d5351, type: 3}
+      propertyPath: comandante
+      value: 
+      objectReference: {fileID: 535698050}
+    - target: {fileID: 1817744945069958410, guid: fee9cbfea39a32d4db945ec3903d5351, type: 3}
+      propertyPath: subordinado
+      value: 
+      objectReference: {fileID: 535698048}
     - target: {fileID: 4349012345269211501, guid: fee9cbfea39a32d4db945ec3903d5351, type: 3}
       propertyPath: m_Name
       value: Patrulla_SO
@@ -7985,7 +8012,13 @@ PrefabInstance:
       addedObject: {fileID: 535698028}
     - targetCorrespondingSourceObject: {fileID: 4349012345269211501, guid: fee9cbfea39a32d4db945ec3903d5351, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 535698045}
+      addedObject: {fileID: 535698050}
+    - targetCorrespondingSourceObject: {fileID: 4349012345269211501, guid: fee9cbfea39a32d4db945ec3903d5351, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 535698049}
+    - targetCorrespondingSourceObject: {fileID: 4349012345269211501, guid: fee9cbfea39a32d4db945ec3903d5351, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 535698048}
   m_SourcePrefab: {fileID: 100100000, guid: fee9cbfea39a32d4db945ec3903d5351, type: 3}
 --- !u!4 &116851296 stripped
 Transform:
@@ -16721,9 +16754,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f6768be134061f4b8f28e5f8fd58814, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GestorSocial
-  estadoTacticoActual: 0
   miRolAsignado: 0
-  faseActual: 0
 --- !u!114 &204152330
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16743,6 +16774,76 @@ MonoBehaviour:
   exploracion: {fileID: 204152316}
   comprobandoObjetivo: {fileID: 204152318}
   tiempoPerdidoParaBuscar: 2
+--- !u!114 &204152331
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 204152294}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6cd5af1d113aa564c9e7bedd4976c7c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlanificadorTactico
+  faseActual: 0
+--- !u!114 &204152332
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 204152294}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a653fcd8b478d14a9afabacde5b9a15, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FSMTactica
+  libre: {fileID: 204152334}
+  comandante: {fileID: 204152335}
+  subordinado: {fileID: 204152333}
+--- !u!114 &204152333
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 204152294}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f6b1c5355316de478cee7c12bf2751e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EstadoTactico_Subordinado
+  fsmTactica: {fileID: 0}
+  cerebro: {fileID: 0}
+--- !u!114 &204152334
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 204152294}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efd04b65ff0c6dd42a89250dcfc008e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EstadoTactico_Libre
+  fsmTactica: {fileID: 0}
+  cerebro: {fileID: 0}
+--- !u!114 &204152335
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 204152294}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 988773325cdb43e43b8a00e9e8c41871, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EstadoTactico_Comandante
+  fsmTactica: {fileID: 0}
+  cerebro: {fileID: 0}
 --- !u!1001 &204562433
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -32823,7 +32924,7 @@ MonoBehaviour:
   movimiento: {fileID: 0}
   tiempoMirandoElSitio: 2
   busquedaTerminada: 0
---- !u!114 &535698045
+--- !u!114 &535698048
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -32832,9 +32933,39 @@ MonoBehaviour:
   m_GameObject: {fileID: 114396938}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8b0ccb2f9f90f404bb54cc1c2c8e789c, type: 3}
+  m_Script: {fileID: 11500000, guid: 2f6b1c5355316de478cee7c12bf2751e, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BuzonMensajes
+  m_EditorClassIdentifier: Assembly-CSharp::EstadoTactico_Subordinado
+  fsmTactica: {fileID: 0}
+  cerebro: {fileID: 0}
+--- !u!114 &535698049
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 114396938}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efd04b65ff0c6dd42a89250dcfc008e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EstadoTactico_Libre
+  fsmTactica: {fileID: 0}
+  cerebro: {fileID: 0}
+--- !u!114 &535698050
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 114396938}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 988773325cdb43e43b8a00e9e8c41871, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EstadoTactico_Comandante
+  fsmTactica: {fileID: 0}
+  cerebro: {fileID: 0}
 --- !u!1001 &536596571
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -76257,9 +76388,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f6768be134061f4b8f28e5f8fd58814, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GestorSocial
-  estadoTacticoActual: 0
   miRolAsignado: 0
-  faseActual: 0
 --- !u!114 &1404333708
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -76279,6 +76408,76 @@ MonoBehaviour:
   exploracion: {fileID: 1404333694}
   comprobandoObjetivo: {fileID: 1404333696}
   tiempoPerdidoParaBuscar: 2
+--- !u!114 &1404333709
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1404333672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f6b1c5355316de478cee7c12bf2751e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EstadoTactico_Subordinado
+  fsmTactica: {fileID: 0}
+  cerebro: {fileID: 0}
+--- !u!114 &1404333710
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1404333672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efd04b65ff0c6dd42a89250dcfc008e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EstadoTactico_Libre
+  fsmTactica: {fileID: 0}
+  cerebro: {fileID: 0}
+--- !u!114 &1404333711
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1404333672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 988773325cdb43e43b8a00e9e8c41871, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EstadoTactico_Comandante
+  fsmTactica: {fileID: 0}
+  cerebro: {fileID: 0}
+--- !u!114 &1404333712
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1404333672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a653fcd8b478d14a9afabacde5b9a15, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FSMTactica
+  libre: {fileID: 1404333710}
+  comandante: {fileID: 1404333711}
+  subordinado: {fileID: 1404333709}
+--- !u!114 &1404333713
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1404333672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6cd5af1d113aa564c9e7bedd4976c7c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlanificadorTactico
+  faseActual: 0
 --- !u!1001 &1404857150
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -93073,6 +93272,21 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1507857520026029105, guid: 36f8bff90ff06c94298f694f8d30a38a, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1848543043}
+    - targetCorrespondingSourceObject: {fileID: 1507857520026029105, guid: 36f8bff90ff06c94298f694f8d30a38a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1848543048}
+    - targetCorrespondingSourceObject: {fileID: 1507857520026029105, guid: 36f8bff90ff06c94298f694f8d30a38a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1848543047}
+    - targetCorrespondingSourceObject: {fileID: 1507857520026029105, guid: 36f8bff90ff06c94298f694f8d30a38a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1848543046}
+    - targetCorrespondingSourceObject: {fileID: 1507857520026029105, guid: 36f8bff90ff06c94298f694f8d30a38a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1848543045}
+    - targetCorrespondingSourceObject: {fileID: 1507857520026029105, guid: 36f8bff90ff06c94298f694f8d30a38a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1848543044}
   m_SourcePrefab: {fileID: 100100000, guid: 36f8bff90ff06c94298f694f8d30a38a, type: 3}
 --- !u!4 &1738819489 stripped
 Transform:
@@ -96852,6 +97066,21 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1507857520026029105, guid: 36f8bff90ff06c94298f694f8d30a38a, type: 3}
       insertIndex: -1
       addedObject: {fileID: 204152330}
+    - targetCorrespondingSourceObject: {fileID: 1507857520026029105, guid: 36f8bff90ff06c94298f694f8d30a38a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 204152335}
+    - targetCorrespondingSourceObject: {fileID: 1507857520026029105, guid: 36f8bff90ff06c94298f694f8d30a38a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 204152334}
+    - targetCorrespondingSourceObject: {fileID: 1507857520026029105, guid: 36f8bff90ff06c94298f694f8d30a38a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 204152333}
+    - targetCorrespondingSourceObject: {fileID: 1507857520026029105, guid: 36f8bff90ff06c94298f694f8d30a38a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 204152332}
+    - targetCorrespondingSourceObject: {fileID: 1507857520026029105, guid: 36f8bff90ff06c94298f694f8d30a38a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 204152331}
   m_SourcePrefab: {fileID: 100100000, guid: 36f8bff90ff06c94298f694f8d30a38a, type: 3}
 --- !u!1001 &1814430466
 PrefabInstance:
@@ -100587,9 +100816,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f6768be134061f4b8f28e5f8fd58814, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GestorSocial
-  estadoTacticoActual: 0
   miRolAsignado: 0
-  faseActual: 0
 --- !u!114 &1848543043
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -100609,6 +100836,76 @@ MonoBehaviour:
   exploracion: {fileID: 1848543029}
   comprobandoObjetivo: {fileID: 1848543031}
   tiempoPerdidoParaBuscar: 2
+--- !u!114 &1848543044
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1848543007}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a653fcd8b478d14a9afabacde5b9a15, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FSMTactica
+  libre: {fileID: 1848543047}
+  comandante: {fileID: 1848543048}
+  subordinado: {fileID: 1848543046}
+--- !u!114 &1848543045
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1848543007}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6cd5af1d113aa564c9e7bedd4976c7c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlanificadorTactico
+  faseActual: 0
+--- !u!114 &1848543046
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1848543007}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f6b1c5355316de478cee7c12bf2751e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EstadoTactico_Subordinado
+  fsmTactica: {fileID: 0}
+  cerebro: {fileID: 0}
+--- !u!114 &1848543047
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1848543007}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efd04b65ff0c6dd42a89250dcfc008e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EstadoTactico_Libre
+  fsmTactica: {fileID: 0}
+  cerebro: {fileID: 0}
+--- !u!114 &1848543048
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1848543007}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 988773325cdb43e43b8a00e9e8c41871, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EstadoTactico_Comandante
+  fsmTactica: {fileID: 0}
+  cerebro: {fileID: 0}
 --- !u!1001 &1850274947
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -114629,7 +114926,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3453840741311942035, guid: 003c3c590c145a44fbc5b13e49b99d27, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -231.8
+      value: -347
       objectReference: {fileID: 0}
     - target: {fileID: 3453840741311942035, guid: 003c3c590c145a44fbc5b13e49b99d27, type: 3}
       propertyPath: m_LocalPosition.y
@@ -114637,7 +114934,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3453840741311942035, guid: 003c3c590c145a44fbc5b13e49b99d27, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 332.6
+      value: 314
       objectReference: {fileID: 0}
     - target: {fileID: 3453840741311942035, guid: 003c3c590c145a44fbc5b13e49b99d27, type: 3}
       propertyPath: m_LocalRotation.w
@@ -115969,6 +116266,7 @@ PrefabInstance:
       objectReference: {fileID: 9158451565529013541}
     m_RemovedComponents:
     - {fileID: 2496088815315404855, guid: fee9cbfea39a32d4db945ec3903d5351, type: 3}
+    - {fileID: 1817744945069958410, guid: fee9cbfea39a32d4db945ec3903d5351, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
@@ -115992,7 +116290,16 @@ PrefabInstance:
       addedObject: {fileID: 9158451565529013539}
     - targetCorrespondingSourceObject: {fileID: 4349012345269211501, guid: fee9cbfea39a32d4db945ec3903d5351, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 9158451565529013556}
+      addedObject: {fileID: 9158451565529013561}
+    - targetCorrespondingSourceObject: {fileID: 4349012345269211501, guid: fee9cbfea39a32d4db945ec3903d5351, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 9158451565529013559}
+    - targetCorrespondingSourceObject: {fileID: 4349012345269211501, guid: fee9cbfea39a32d4db945ec3903d5351, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 9158451565529013558}
+    - targetCorrespondingSourceObject: {fileID: 4349012345269211501, guid: fee9cbfea39a32d4db945ec3903d5351, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 9158451565529013557}
   m_SourcePrefab: {fileID: 100100000, guid: fee9cbfea39a32d4db945ec3903d5351, type: 3}
 --- !u!1 &1385938970045944546 stripped
 GameObject:
@@ -116209,7 +116516,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   cerebro: {fileID: 0}
   movimiento: {fileID: 0}
---- !u!114 &9158451565529013556
+--- !u!114 &9158451565529013557
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -116218,9 +116525,54 @@ MonoBehaviour:
   m_GameObject: {fileID: 1385938970045944546}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8b0ccb2f9f90f404bb54cc1c2c8e789c, type: 3}
+  m_Script: {fileID: 11500000, guid: 2f6b1c5355316de478cee7c12bf2751e, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BuzonMensajes
+  m_EditorClassIdentifier: Assembly-CSharp::EstadoTactico_Subordinado
+  fsmTactica: {fileID: 0}
+  cerebro: {fileID: 0}
+--- !u!114 &9158451565529013558
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1385938970045944546}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 988773325cdb43e43b8a00e9e8c41871, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EstadoTactico_Comandante
+  fsmTactica: {fileID: 0}
+  cerebro: {fileID: 0}
+--- !u!114 &9158451565529013559
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1385938970045944546}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efd04b65ff0c6dd42a89250dcfc008e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EstadoTactico_Libre
+  fsmTactica: {fileID: 0}
+  cerebro: {fileID: 0}
+--- !u!114 &9158451565529013561
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1385938970045944546}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a653fcd8b478d14a9afabacde5b9a15, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FSMTactica
+  libre: {fileID: 9158451565529013559}
+  comandante: {fileID: 9158451565529013558}
+  subordinado: {fileID: 9158451565529013557}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
