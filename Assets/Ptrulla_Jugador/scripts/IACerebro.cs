@@ -11,7 +11,6 @@ public class IACerebro : MonoBehaviour
     [Header("Memoria Global")]
     public Transform puntoMeta;
     public Transform puntoObjetivo;
-    public bool enMisionAsignada = false;
     public bool objetivoDetectado = false; 
     public Vector3 ultimaPosJugador;
 
@@ -51,49 +50,63 @@ public class IACerebro : MonoBehaviour
     {
         if (fsm.estadoActual == null) return;
 
-        // --- ¡LA REACCIÓN A LA ALARMA GENERAL! ---
-        if (capaSocial.alarmaGeneralActivada && fsm.estadoActual != fsm.emboscada)
-        {
-            fsm.CambiarEstado(fsm.emboscada);
-            return; // Cortamos el Update aquí para que no haga nada más y corra a la salida
-        }
-
-        // 1. GESTIÓN DE MEMORIA Y ESTADO SOCIAL
-        capaSocial.estaDisponible = (fsm.estadoActual != fsm.persecucion && fsm.estadoActual != fsm.emboscada);
-
+        // 1. ACTUALIZAR MEMORIA VISUAL
         if (objetivoDetectado && sensores.TransformJugador != null)
         {
             ultimaPosJugador = sensores.TransformJugador.position;
         }
 
-        // 2. ÓRDENES DE RADIO (Prioridad Social)
-        if (capaSocial.tieneNuevaOrden && fsm.estadoActual != fsm.persecucion) 
-        {
-            ultimaPosJugador = movimiento.ObtenerPuntoAleatorioCercano(capaSocial.coordenadaOrdenada, 4f);
-            enMisionAsignada = true;
-            capaSocial.tieneNuevaOrden = false; 
-            fsm.CambiarEstado(fsm.busqueda);
-            return; 
-        }
+        // 2. EL PUENTE ENTRE LA MENTE (Social) Y EL CUERPO (FSM)
+        // El cerebro traduce el Rol asignado a un estado físico real.
+        EjecutarRolTactico();
 
-        // 3. DELEGAR EL TRABAJO NORMAL A LA MÁQUINA DE ESTADOS
+        // 3. DELEGAR EL TRABAJO NORMAL A LA MÁQUINA DE ESTADOS (Mover las piernas)
         fsm.ActualizarMaquina();
     }
 
-    // --- RESPUESTA A SENSORES ---
+    private void EjecutarRolTactico()
+    {
+        // Dependiendo de lo que diga el GestorSocial, forzamos un estado físico u otro
+        switch (capaSocial.miRolAsignado)
+        {
+            case RolTactico.PatrullaNormal:
+            case RolTactico.PatrullaSectorAdyacente:
+                if (fsm.estadoActual != fsm.patrulla) fsm.CambiarEstado(fsm.patrulla);
+                break;
+
+            case RolTactico.BloqueoSalida:
+                if (fsm.estadoActual != fsm.emboscada) fsm.CambiarEstado(fsm.emboscada);
+                break;
+
+            case RolTactico.PersecucionActiva:
+                if (fsm.estadoActual != fsm.persecucion) fsm.CambiarEstado(fsm.persecucion);
+                break;
+
+            case RolTactico.ExplorarSectorSospechoso:
+                // Si me mandan a investigar, uso mis estados de búsqueda/exploración
+                if (fsm.estadoActual != fsm.busqueda && fsm.estadoActual != fsm.exploracion) 
+                {
+                    fsm.CambiarEstado(fsm.busqueda);
+                }
+                break;
+        }
+    }
+
+    // --- RESPUESTA INMEDIATA A SENSORES ---
     private void AlDetectar(Vector3 pos)
     {
         objetivoDetectado = true;
         ultimaPosJugador = pos;
 
-        // Avisar a la radio
-        if (fsm.estadoActual != fsm.persecucion && !enMisionAsignada)
+        // REFLEJO: Si veo al jugador con mis propios ojos, por instinto le persigo
+        if (fsm.estadoActual != fsm.persecucion)
         {
-            capaSocial.IniciarSubasta(pos);
+            fsm.CambiarEstado(fsm.persecucion); 
         }
 
-        // Obligar a la máquina a perseguir
-        fsm.CambiarEstado(fsm.persecucion); 
+        // AVISO A LA MENTE: Le digo a mi Gestor Social que tome el mando y avise por radio
+        // (Nota: Crearemos esta función en la Fase 3 dentro de GestorSocial)
+        capaSocial.AsumirMandoYSubastar(pos); 
     }
 
     private void AlPerder()

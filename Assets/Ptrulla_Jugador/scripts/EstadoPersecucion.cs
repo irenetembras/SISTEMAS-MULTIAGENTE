@@ -3,7 +3,6 @@ using UnityEngine;
 public class EstadoPersecucion : EstadoIA
 {
     public float tiempoRecordarPerseguir = 0.5f;
-    private float tiempoDesdePerdido = 0f;
     
     // Guardamos una referencia directa al jugador para este estado
     private Transform jugador; 

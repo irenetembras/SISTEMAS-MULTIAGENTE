@@ -80,9 +80,6 @@ public class MaquinaDeEstados : MonoBehaviour
     {
         if (nuevoEstado == null) return;
 
-        // Si volvemos a patrullar, le avisamos al cerebro de que estamos libres
-        if (nuevoEstado == patrulla) cerebro.enMisionAsignada = false; 
-
         if (estadoActual != null) estadoActual.AlSalir(); 
         estadoActual = nuevoEstado;
         estadoActual.AlEntrar(); 

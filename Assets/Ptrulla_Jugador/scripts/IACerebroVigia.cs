@@ -31,7 +31,7 @@ public class IACerebroVigia : MonoBehaviour
         miBuzon = GetComponent<BuzonMensajes>();
         
         // Fichamos a todos los guardias "de a pie" del mapa
-        guardiasTerrestres = FindObjectsOfType<IACerebro>(); 
+        guardiasTerrestres = FindObjectsByType<IACerebro>(FindObjectsInactive.Exclude, FindObjectsSortMode.None); 
     }
 
     void OnEnable()

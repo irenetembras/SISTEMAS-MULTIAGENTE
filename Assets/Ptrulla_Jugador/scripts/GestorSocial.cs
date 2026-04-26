@@ -7,13 +7,15 @@ public class GestorSocial : MonoBehaviour
 {
     private BuzonMensajes miBuzon;
     private GestorSocial[] todosLosSociales; 
-    private Transform miTransform;
+    private IACerebro miCerebro;
 
-    [Header("Comunicación con el Cerebro")]
-    public bool alarmaGeneralActivada = false;
-    public bool estaDisponible = true;   
-    public bool tieneNuevaOrden = false; 
-    public Vector3 coordenadaOrdenada;   
+    [Header("FSM Superior (Táctica)")]
+    public EstadoTactico estadoTacticoActual = EstadoTactico.Libre;
+    public RolTactico miRolAsignado = RolTactico.PatrullaNormal;
+
+    [Header("Planificador Táctico")]
+    public FaseAlerta faseActual = FaseAlerta.Tranquilidad;
+    private float tiempoDesdePerdido = 0f;
 
     private struct Oferta { public GameObject guardia; public float distancia; }
     private List<Oferta> listaDeOfertas = new List<Oferta>();
@@ -21,8 +23,7 @@ public class GestorSocial : MonoBehaviour
     void Awake()
     {
         miBuzon = GetComponent<BuzonMensajes>();
-        miTransform = transform;
-        todosLosSociales = FindObjectsOfType<GestorSocial>();
+        todosLosSociales = FindObjectsByType<GestorSocial>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
     }
 
     void Update()
@@ -33,30 +34,44 @@ public class GestorSocial : MonoBehaviour
             ProcesarBuzon();
             mensajesLeidos++;
         }
+        // 2. Lógica del Planificador (Solo si soy el líder temporal de la situación)
+        if (estadoTacticoActual == EstadoTactico.Comandante)
+        {
+            ActualizarPlanificador();
+        }
     }
 
-    public void IniciarSubasta(Vector3 posLadron)
+    public void AsumirMandoYSubastar(Vector3 posLadron)
+    {
+        if (estadoTacticoActual == EstadoTactico.Comandante) return;
+
+        estadoTacticoActual = EstadoTactico.Comandante;
+        faseActual = FaseAlerta.ContactoVisual;
+        tiempoDesdePerdido = 0f;
+
+        Debug.Log($" [{gameObject.name}] ¡Contacto! Asumo el mando táctico. Abriendo subasta...");
+        IniciarSubasta(posLadron, RolTactico.PersecucionActiva);
+    }
+
+    private void IniciarSubasta(Vector3 posLadron, RolTactico rolPrincipal)
     {
         listaDeOfertas.Clear();
-        string contenido = posLadron.x.ToString(System.Globalization.CultureInfo.InvariantCulture) + "|" + 
-                           posLadron.y.ToString(System.Globalization.CultureInfo.InvariantCulture) + "|" + 
-                           posLadron.z.ToString(System.Globalization.CultureInfo.InvariantCulture);
+        
+        DatosContrato contratoSubasta = new DatosContrato();
+        contratoSubasta.rolOfertado = rolPrincipal;
+        contratoSubasta.coordenadaObjetivo = posLadron;
+        
+        string contenidoJson = JsonUtility.ToJson(contratoSubasta);
 
         foreach (GestorSocial compañero in todosLosSociales)
         {
-            if (compañero != this)
+            if (compañero != this && compañero.miBuzon != null)
             {
-                // Escudo antierrores
-                BuzonMensajes suBuzon = compañero.GetComponent<BuzonMensajes>();
-                if (suBuzon != null)
-                {
-                    MensajeFIPA aviso = new MensajeFIPA(PerformativaFIPA.CFP, this.gameObject, compañero.gameObject, contenido);
-                    suBuzon.RecibirMensaje(aviso);
-                }
+                MensajeFIPA cfp = new MensajeFIPA(PerformativaFIPA.CFP, this.gameObject, compañero.gameObject, contenidoJson);
+                compañero.miBuzon.RecibirMensaje(cfp);
             }
         }
         
-        Debug.Log(" [" + gameObject.name + "] ¡INICIO LA SUBASTA! 0.5 segundos para recibir ofertas...");
         StartCoroutine(CerrarSubastaYAsignar(posLadron));
     }
 
@@ -65,117 +80,202 @@ public class GestorSocial : MonoBehaviour
         MensajeFIPA mensaje = miBuzon.ExtraerSiguienteMensaje();
         if (mensaje == null) return;
 
-        if (mensaje.performativa == PerformativaFIPA.CFP)
+        switch (mensaje.performativa)
         {
-            if (!estaDisponible) 
-            {
-                Debug.Log("[" + gameObject.name + "] Ignoro el aviso porque estoy ocupado.");
-                return; 
-            }
+            case PerformativaFIPA.CFP:
+                ResponderACFP(mensaje);
+                break;
 
-            Vector3 posLadron = ParsearCoordenadas(mensaje.contenido);
-            float miDistancia = Vector3.Distance(miTransform.position, posLadron);
-            
-            MensajeFIPA oferta = new MensajeFIPA(PerformativaFIPA.PROPOSE, this.gameObject, mensaje.emisor, miDistancia.ToString(System.Globalization.CultureInfo.InvariantCulture));
-            mensaje.emisor.GetComponent<BuzonMensajes>().RecibirMensaje(oferta);
-            
-            Debug.Log(" [" + gameObject.name + "] Mando oferta: ¡Estoy a " + miDistancia + " metros!");
-        }
-        else if (mensaje.performativa == PerformativaFIPA.PROPOSE)
-        {
-            float distancia = float.Parse(mensaje.contenido, System.Globalization.CultureInfo.InvariantCulture);
-            listaDeOfertas.Add(new Oferta { guardia = mensaje.emisor, distancia = distancia });
-        }
-        else if (mensaje.performativa == PerformativaFIPA.INFORM && mensaje.contenido == "ALARMA_ROBO")
-        {
-            alarmaGeneralActivada = true; 
-            Debug.Log(" [" + gameObject.name + "] ¡CÓDIGO ROJO por radio! Voy a la emboscada.");
-        }
-        else if (mensaje.performativa == PerformativaFIPA.ACCEPT_PROPOSAL || (mensaje.performativa == PerformativaFIPA.INFORM && mensaje.contenido != "ALARMA_ROBO"))
-        {
-            coordenadaOrdenada = ParsearCoordenadas(mensaje.contenido);
-            tieneNuevaOrden = true; 
-            Debug.Log(" [" + gameObject.name + "] ¡Fui aceptado en el equipo! Voy a cortar el paso.");
-        }
-        else if (mensaje.performativa == PerformativaFIPA.REJECT_PROPOSAL)
-        {
-            Debug.Log(" [" + gameObject.name + "] El líder me rechazó. Sigo patrullando.");
+            case PerformativaFIPA.PROPOSE:
+                if (estadoTacticoActual == EstadoTactico.Comandante)
+                {
+                    float dist = float.Parse(mensaje.contenido, System.Globalization.CultureInfo.InvariantCulture);
+                    listaDeOfertas.Add(new Oferta { guardia = mensaje.emisor, distancia = dist });
+                }
+                break;
+
+            case PerformativaFIPA.ACCEPT_PROPOSAL:
+                DatosContrato contrato = JsonUtility.FromJson<DatosContrato>(mensaje.contenido);
+                miRolAsignado = contrato.rolOfertado;
+                estadoTacticoActual = EstadoTactico.Subordinado;
+                
+                // LA MAGIA: Si me mandan a patrullar adyacentes, le paso los puntos al cuerpo
+                if (miRolAsignado == RolTactico.PatrullaSectorAdyacente && contrato.puntosDeRuta.Count > 0)
+                {
+                    GetComponent<IAMovimiento>().AsignarRutaDinamicaPorPuntos(contrato.puntosDeRuta);
+                }
+                
+                Debug.Log($" [{gameObject.name}] He recibido órdenes: Mi rol ahora es {miRolAsignado}.");
+                break;
+
+            case PerformativaFIPA.REJECT_PROPOSAL:
+                if (estadoTacticoActual == EstadoTactico.Subordinado)
+                {
+                    estadoTacticoActual = EstadoTactico.Libre;
+                    miRolAsignado = RolTactico.PatrullaNormal;
+                }
+                break;
+                
+            case PerformativaFIPA.INFORM:
+                if (mensaje.contenido == "ALARMA_ROBO")
+                {
+                    faseActual = FaseAlerta.ContactoVisual;
+                    miRolAsignado = RolTactico.BloqueoSalida;
+                    Debug.Log($" [{gameObject.name}] ¡CÓDIGO ROJO! El botín ha sido robado. Corriendo a las salidas.");
+                }
+                break;
         }
     }
 
-    private Vector3 ParsearCoordenadas(string contenido)
+    private void ResponderACFP(MensajeFIPA mensaje)
     {
-        string[] coord = contenido.Split('|');
-        float x = float.Parse(coord[0], System.Globalization.CultureInfo.InvariantCulture);
-        float y = float.Parse(coord[1], System.Globalization.CultureInfo.InvariantCulture);
-        float z = float.Parse(coord[2], System.Globalization.CultureInfo.InvariantCulture);
-        return new Vector3(x, y, z);
+        // Solo respondemos si no estamos ocupados tapando puertas u otras cosas vitales
+        if (estadoTacticoActual == EstadoTactico.Libre || miRolAsignado == RolTactico.PatrullaNormal || miRolAsignado == RolTactico.PatrullaSectorAdyacente)
+        {
+            DatosContrato datos = JsonUtility.FromJson<DatosContrato>(mensaje.contenido);
+            float miDist = Vector3.Distance(transform.position, datos.coordenadaObjetivo);
+
+            MensajeFIPA propuesta = new MensajeFIPA(PerformativaFIPA.PROPOSE, this.gameObject, mensaje.emisor, miDist.ToString(System.Globalization.CultureInfo.InvariantCulture));
+            mensaje.emisor.GetComponent<BuzonMensajes>().RecibirMensaje(propuesta);
+        }
     }
+
+    // ==============================================================
+    // REGLAS TÁCTICAS DE REPARTO (La Inteligencia del Escuadrón)
+    // ==============================================================
 
     private IEnumerator CerrarSubastaYAsignar(Vector3 posLadron)
     {
-        yield return new WaitForSeconds(0.5f);
-        
-        Debug.Log(" [SUBASTA] Fin de tiempo para " + gameObject.name + ". Ofertas sobre la mesa: " + listaDeOfertas.Count);
+        yield return new WaitForSeconds(0.4f); // Simula el tiempo de red
 
+        // Ordenamos del que está más cerca al que está más lejos
         listaDeOfertas.Sort((a, b) => a.distancia.CompareTo(b.distancia));
 
-        int guardiasAceptados = 0;
-        int maxGuardias = 2; 
-
-        GestorSensores sensores = GetComponent<GestorSensores>();
-        if(sensores == null || sensores.TransformJugador == null) 
+        // 1. ¿Qué hago yo, el Comandante?
+        bool soyVigia = (GetComponent<IACerebroVigia>() != null); 
+        if (!soyVigia) 
         {
-            Debug.LogError(" [ERROR TÁCTICO] " + gameObject.name + " perdió al jugador de vista demasiado rápido. Aborto subasta.");
-            yield break;
+            miRolAsignado = RolTactico.PersecucionActiva; // El de a pie persigue por instinto
         }
 
-        Transform jugador = sensores.TransformJugador;
-        Vector3 adelante = jugador.forward;
-        Vector3 derecha = jugador.right;
-        Vector3 izquierda = -jugador.right;
+        int puertasBloqueadas = 0;
 
-        Vector3[] puntosEstrategicos = new Vector3[] {
-            posLadron + (derecha * 10f) + (adelante * 5f),  
-            posLadron + (izquierda * 10f) + (adelante * 5f) 
-        };
+        // --- AÑADE ESTAS DOS LÍNEAS AQUÍ ---
+        SectorTactico miSector = GetComponent<IAMovimiento>().sectorActual;
+        int indiceAdyacente = 0;
+        // -----------------------------------
 
-        foreach (Oferta oferta in listaDeOfertas)
+        // 2. Repartimos a los demás según su cercanía
+        for (int i = 0; i < listaDeOfertas.Count; i++)
         {
-            if (guardiasAceptados < maxGuardias)
+            DatosContrato respuesta = new DatosContrato();
+            
+            // REGLA 1: Si soy el Vigía y no puedo correr, mando al guardia más cercano (i == 0)
+            if (soyVigia && i == 0)
             {
-                Vector3 punto = puntosEstrategicos[guardiasAceptados];
-                string contAceptar = punto.x.ToString(System.Globalization.CultureInfo.InvariantCulture) + "|" + 
-                                     punto.y.ToString(System.Globalization.CultureInfo.InvariantCulture) + "|" + 
-                                     punto.z.ToString(System.Globalization.CultureInfo.InvariantCulture);
-
-                MensajeFIPA respuesta = new MensajeFIPA(PerformativaFIPA.ACCEPT_PROPOSAL, this.gameObject, oferta.guardia, contAceptar);
-                oferta.guardia.GetComponent<BuzonMensajes>().RecibirMensaje(respuesta);
-                guardiasAceptados++;
+                respuesta.rolOfertado = RolTactico.PersecucionActiva;
+                respuesta.coordenadaObjetivo = posLadron;
+            }
+            // REGLA 2: Los siguientes 2 más cercanos bloquean salidas
+            else if (puertasBloqueadas < 2)
+            {
+                respuesta.rolOfertado = RolTactico.BloqueoSalida;
+                // Si tienes punto de meta, les mandamos ahí. (Mejoraremos esto luego con el mapa real)
+                respuesta.coordenadaObjetivo = (miCerebro.puntoMeta != null) ? miCerebro.puntoMeta.position : posLadron;
+                puertasBloqueadas++;
+            }
+            // REGLA 3: El penúltimo (o el cuarto) peina el sector donde vimos al ladrón
+            else if (i == listaDeOfertas.Count - 2 || i == 3) 
+            {
+                respuesta.rolOfertado = RolTactico.ExplorarSectorSospechoso;
+                respuesta.coordenadaObjetivo = posLadron; 
+            }
+            // REGLA 4: Los que pillen más lejos, cierran la red por fuera (sectores adyacentes)
+            // REGLA 4: Asignar Sectores Adyacentes Reales
+            else 
+            {
+                respuesta.rolOfertado = RolTactico.PatrullaSectorAdyacente;
                 
-                Debug.Log(" [EL LÍDER " + gameObject.name + "] ASIGNA A: " + oferta.guardia.name + " al flanco de interceptación!");
+                // Si mi sector tiene sectores conectados en el mapa...
+                if (miSector != null && miSector.sectoresAdyacentes != null && miSector.sectoresAdyacentes.Length > 0)
+                {
+                    // Elegimos uno (y si hay varios guardias de sobra, se los vamos rotando)
+                    SectorTactico sectorDestino = miSector.sectoresAdyacentes[indiceAdyacente % miSector.sectoresAdyacentes.Length];
+                    
+                    // Extraemos los Vector3 y los metemos en el paquete
+                    foreach (Transform t in sectorDestino.puntosDeInteres)
+                    {
+                        respuesta.puntosDeRuta.Add(t.position);
+                    }
+                    indiceAdyacente++;
+                }
             }
-            else
+
+            string json = JsonUtility.ToJson(respuesta);
+            MensajeFIPA accept = new MensajeFIPA(PerformativaFIPA.ACCEPT_PROPOSAL, this.gameObject, listaDeOfertas[i].guardia, json);
+            listaDeOfertas[i].guardia.GetComponent<BuzonMensajes>().RecibirMensaje(accept);
+        }
+    }
+
+    private void ActualizarPlanificador()
+    {
+        if (miCerebro.objetivoDetectado)
+        {
+            tiempoDesdePerdido = 0f;
+            faseActual = FaseAlerta.ContactoVisual;
+        }
+        else
+        {
+            tiempoDesdePerdido += Time.deltaTime;
+
+            // FASE 2: Recién perdido. Pasamos de Perseguir a Buscar.
+            if (faseActual == FaseAlerta.ContactoVisual && tiempoDesdePerdido > 2f)
             {
-                MensajeFIPA respuesta = new MensajeFIPA(PerformativaFIPA.REJECT_PROPOSAL, this.gameObject, oferta.guardia, "Sigue");
-                oferta.guardia.GetComponent<BuzonMensajes>().RecibirMensaje(respuesta);
+                faseActual = FaseAlerta.BusquedaActiva;
+                if (miRolAsignado == RolTactico.PersecucionActiva) 
+                    miRolAsignado = RolTactico.ExplorarSectorSospechoso; 
             }
+            
+            // FASE 3: ASEDIO. Llevamos 15s. Las salidas están bloqueadas, así que sigue dentro.
+            else if (faseActual == FaseAlerta.BusquedaActiva && tiempoDesdePerdido > 15f)
+            {
+                faseActual = FaseAlerta.Contencion;
+                Debug.Log($" [{gameObject.name}] Asedio: ¡Las puertas están bloqueadas, seguid buscando, no ha salido!");
+            }
+
+            // FASE 4: ABORTO. Llevamos 45s. Confirmamos que ha huido de alguna forma.
+            else if (faseActual == FaseAlerta.Contencion && tiempoDesdePerdido > 45f)
+            {
+                Debug.Log($" [{gameObject.name}] Sector despejado. Desmontando escuadrón.");
+                TerminarMando();
+            }
+        }
+    }
+
+    private void TerminarMando()
+    {
+        estadoTacticoActual = EstadoTactico.Libre;
+        miRolAsignado = RolTactico.PatrullaNormal;
+        faseActual = FaseAlerta.Tranquilidad;
+        
+        foreach (GestorSocial compañero in todosLosSociales)
+        {
+             if (compañero != this && compañero.miBuzon != null)
+             {
+                 MensajeFIPA fin = new MensajeFIPA(PerformativaFIPA.REJECT_PROPOSAL, this.gameObject, compañero.gameObject, "Vuelta a patrulla.");
+                 compañero.miBuzon.RecibirMensaje(fin);
+             }
         }
     }
 
     public void DarAlarmaRobo()
     {
-        alarmaGeneralActivada = true; 
         foreach (GestorSocial compañero in todosLosSociales)
         {
-            if (compañero != this)
+            if (compañero != this && compañero.miBuzon != null)
             {
-                BuzonMensajes suBuzon = compañero.GetComponent<BuzonMensajes>();
-                if (suBuzon != null)
-                {
-                    MensajeFIPA aviso = new MensajeFIPA(PerformativaFIPA.INFORM, this.gameObject, compañero.gameObject, "ALARMA_ROBO");
-                    suBuzon.RecibirMensaje(aviso);
-                }
+                MensajeFIPA aviso = new MensajeFIPA(PerformativaFIPA.INFORM, this.gameObject, compañero.gameObject, "ALARMA_ROBO");
+                compañero.miBuzon.RecibirMensaje(aviso);
             }
         }
     }
