@@ -43,7 +43,7 @@ public class EstadoTactico_Comandante : EstadoTacticoBase
         {
             float dist = float.Parse(mensaje.contenido, System.Globalization.CultureInfo.InvariantCulture);
             Debug.Log($"[COMANDANTE {gameObject.name}] Oferta recibida de {mensaje.emisor.name}: {dist:F1}m al objetivo.");
-            planificador.RegistrarOferta(mensaje.emisor, dist);
+            planificador.RecibirOferta(mensaje.emisor, dist);
         }
         else
         {

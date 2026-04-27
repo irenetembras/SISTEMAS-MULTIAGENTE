@@ -87,6 +87,7 @@ public class EstadoTactico_Libre : EstadoTacticoBase
         {
             DatosContrato contrato = JsonUtility.FromJson<DatosContrato>(accept.contenido);
             cerebro.capaSocial.miRolAsignado = contrato.rolOfertado;
+            cerebro.coordenadaTactica = contrato.coordenadaObjetivo;
             Debug.Log($"[LIBRE {gameObject.name}] Contrato del Comandante aceptado. Rol asignado: {contrato.rolOfertado}");
 
             if (contrato.rolOfertado == RolTactico.PatrullaSectorAdyacente && contrato.puntosDeRuta.Count > 0)

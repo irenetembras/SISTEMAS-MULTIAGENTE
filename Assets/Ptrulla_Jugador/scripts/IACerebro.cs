@@ -10,6 +10,7 @@ public class IACerebro : MonoBehaviour
     [Header("Memoria Global")]
     public Transform puntoMeta;
     public Transform puntoObjetivo;
+    public Vector3 coordenadaTactica;
     public bool objetivoDetectado = false;
     public Vector3 ultimaPosJugador;
 
@@ -71,7 +72,6 @@ public class IACerebro : MonoBehaviour
         RolTactico rolActual = capaSocial.miRolAsignado;
         if (rolActual != ultimoRolEjecutado)
         {
-            Debug.Log($"[CEREBRO {gameObject.name}] Rol cambiado: {ultimoRolEjecutado} → {rolActual}. Actualizando FSM Ejecutora.");
             ultimoRolEjecutado = rolActual;
         }
 
@@ -87,16 +87,17 @@ public class IACerebro : MonoBehaviour
                 break;
 
             case RolTactico.PersecucionActiva:
+                // ARREGLO: Ya no exige 'objetivoDetectado'. Si le ordenan perseguir, persigue.
                 if (fsm.estadoActual != fsm.persecucion) fsm.CambiarEstado(fsm.persecucion);
                 break;
 
             case RolTactico.ExplorarSectorSospechoso:
-                if (fsm.estadoActual != fsm.busqueda && fsm.estadoActual != fsm.exploracion)
+                if (fsm.estadoActual != fsm.busqueda && fsm.estadoActual != fsm.exploracion && fsm.estadoActual != fsm.comprobandoObjetivo)
                     fsm.CambiarEstado(fsm.busqueda);
                 break;
         }
     }
-
+   
     private void AlDetectar(Vector3 pos)
     {
         objetivoDetectado = true;
