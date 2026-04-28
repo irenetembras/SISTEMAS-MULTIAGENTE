@@ -16,6 +16,7 @@ public class IAMovimiento : MonoBehaviour
     [Header("Velocidades")]
     public float velocidadPatrulla = 3.5f;
     public float velocidadPersecucion = 8f;
+    public float velocidadExploracion = 6f;
 
     [Header("Animador (opcional)")]
     public Animator animator;

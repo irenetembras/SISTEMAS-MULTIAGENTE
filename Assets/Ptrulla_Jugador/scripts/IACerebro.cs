@@ -11,6 +11,7 @@ public class IACerebro : MonoBehaviour
     public Transform puntoMeta;
     public Transform puntoObjetivo;
     public Vector3 coordenadaTactica;
+    public System.Collections.Generic.List<Vector3> rutaExploracion = new System.Collections.Generic.List<Vector3>();
     public bool objetivoDetectado = false;
     public Vector3 ultimaPosJugador;
 

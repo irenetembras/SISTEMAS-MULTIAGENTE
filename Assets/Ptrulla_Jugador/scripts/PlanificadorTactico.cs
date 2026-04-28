@@ -120,26 +120,51 @@ public class PlanificadorTactico : MonoBehaviour
         if (faseActual == FaseAlerta.ContactoVisual)
         {
             faseActual = FaseAlerta.BusquedaActiva;
-            Debug.Log($"[PLAN] {gameObject.name}: Objetivo perdido. Iniciando cerco permanente.");
+            Debug.Log($"[PLAN] {gameObject.name}: Objetivo perdido. Iniciando cerco permanente y repartiendo puntos.");
 
-            foreach (GameObject p in perseguidoresGPS)
+            // 1. Buscamos en qué SectorTactico desapareciste
+            SectorTactico sectorLadron = null;
+            SectorTactico[] todosSectores = FindObjectsByType<SectorTactico>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
+            float minD = float.MaxValue;
+            foreach(var s in todosSectores) { 
+                float d = Vector3.Distance(s.transform.position, ultimaPosConocida); 
+                if(d < minD) { minD = d; sectorLadron = s; } 
+            }
+
+            // 2. Sacamos todos los puntos de ese sector a una lista
+            System.Collections.Generic.List<Vector3> puntosDelSector = new System.Collections.Generic.List<Vector3>();
+            if (sectorLadron != null && sectorLadron.puntosDeInteres != null) {
+                foreach(Transform t in sectorLadron.puntosDeInteres) puntosDelSector.Add(t.position);
+            }
+
+            // 3. Repartimos los contratos
+            for (int i = 0; i < perseguidoresGPS.Count; i++)
             {
-                // Ordenamos a los perseguidores que inicien la búsqueda
-                // Esto les llevará eventualmente a comprobar el tesoro
+                GameObject p = perseguidoresGPS[i];
                 DatosContrato d = new DatosContrato { 
                     rolOfertado = RolTactico.ExplorarSectorSospechoso, 
-                    coordenadaObjetivo = ultimaPosConocida,
+                    coordenadaObjetivo = ultimaPosConocida // Destino inicial (dónde le vimos por última vez)
                 };
+
+                // EL TRUCO: Le damos la lista completa a cada guardia, pero 
+                // hacemos que cada uno empiece por un índice distinto (i)
+                if (puntosDelSector.Count > 0) {
+                    d.puntosDeRuta = new System.Collections.Generic.List<Vector3>();
+                    int indiceInicio = i % puntosDelSector.Count;
+                    for (int j = 0; j < puntosDelSector.Count; j++) {
+                        d.puntosDeRuta.Add(puntosDelSector[(indiceInicio + j) % puntosDelSector.Count]);
+                    }
+                }
+
                 p.GetComponent<BuzonMensajes>().RecibirMensaje(new MensajeFIPA(PerformativaFIPA.ACCEPT_PROPOSAL, gameObject, p, JsonUtility.ToJson(d)));
             }
 
-            debeTerminar = true;
+            debeTerminar = true; // El Comandante dimite y vuelve a patrullar
         }
         
         // NOTA: Se han eliminado las fases de "Contención" por tiempo y "Disolución". 
         // El estado de alerta ahora es permanente.
     }
-        
 
     // HEMOS BORRADO: 
     // - El paso a Contención a los 15s (porque ya están bloqueando).

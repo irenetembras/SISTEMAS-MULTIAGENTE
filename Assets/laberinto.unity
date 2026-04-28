@@ -31993,9 +31993,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   cerebro: {fileID: 0}
   movimiento: {fileID: 0}
-  radioExploracion: 15
-  puntosAExplorar: 3
-  tiempoMaximoBuscandoUnPunto: 10
+  radioExploracion: 30
+  puntosAExplorarPorZona: 5
+  tiempoMaximoBuscandoUnPunto: 15
   exploracionTerminada: 0
 --- !u!114 &513322204
 MonoBehaviour:
@@ -32686,9 +32686,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EstadoExploracion
   cerebro: {fileID: 0}
   movimiento: {fileID: 0}
-  radioExploracion: 15
-  puntosAExplorar: 3
-  tiempoMaximoBuscandoUnPunto: 10
+  radioExploracion: 30
+  puntosAExplorarPorZona: 5
+  tiempoMaximoBuscandoUnPunto: 15
   exploracionTerminada: 0
 --- !u!114 &535698032
 MonoBehaviour:
@@ -46089,9 +46089,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   cerebro: {fileID: 0}
   movimiento: {fileID: 0}
-  radioExploracion: 15
-  puntosAExplorar: 3
-  tiempoMaximoBuscandoUnPunto: 10
+  radioExploracion: 30
+  puntosAExplorarPorZona: 5
+  tiempoMaximoBuscandoUnPunto: 15
   exploracionTerminada: 0
 --- !u!114 &792034257
 MonoBehaviour:
@@ -48933,9 +48933,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   cerebro: {fileID: 0}
   movimiento: {fileID: 0}
-  radioExploracion: 15
-  puntosAExplorar: 3
-  tiempoMaximoBuscandoUnPunto: 10
+  radioExploracion: 30
+  puntosAExplorarPorZona: 5
+  tiempoMaximoBuscandoUnPunto: 15
   exploracionTerminada: 0
 --- !u!114 &847249453
 MonoBehaviour:
@@ -115791,9 +115791,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   cerebro: {fileID: 0}
   movimiento: {fileID: 0}
-  radioExploracion: 15
-  puntosAExplorar: 3
-  tiempoMaximoBuscandoUnPunto: 10
+  radioExploracion: 30
+  puntosAExplorarPorZona: 5
+  tiempoMaximoBuscandoUnPunto: 15
   exploracionTerminada: 0
 --- !u!114 &9158451565529013541
 MonoBehaviour:
