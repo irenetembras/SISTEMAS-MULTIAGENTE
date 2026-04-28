@@ -8,6 +8,8 @@ public class EstadoEmboscada : EstadoIA
 
         // Ya no hace matemáticas raras. Va directo a la coordenada de la trampa
         // que le chivó el Vigía por la radio.
+        // ---> AÑADE ESTE CHIVATO AQUÍ <---
+        Debug.Log($"[PIERNAS] {gameObject.name} entra en EMBOSCADA. Corriendo a: {cerebro.coordenadaTactica}");
         movimiento.MoverA(cerebro.coordenadaTactica, movimiento.velocidadPersecucion);
     }
 

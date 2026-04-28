@@ -14,7 +14,7 @@ public class GestorSensores : MonoBehaviour
 
     // Mantenemos esta variable pública para que el oído y el Cerebro puedan leerla
     public Transform TransformJugador { get; private set; }
-    private bool estabaDetectadoPreviamente = false;
+    public bool EnContactoConJugador {get ; private set;} = false; //estado prolongado en el tiempo 
 
     void Awake()
     {
@@ -43,14 +43,14 @@ public class GestorSensores : MonoBehaviour
         bool detectadoAhora = loVeo || loOigo;
 
         // SISTEMA DE EVENTOS PUSH: Solo hablamos si hay un CAMBIO en el mundo
-        if (detectadoAhora && !estabaDetectadoPreviamente)
+        if (detectadoAhora && !EnContactoConJugador)
         {
-            estabaDetectadoPreviamente = true;
+            EnContactoConJugador = true;
             OnJugadorDetectado?.Invoke(TransformJugador.position); // ¡Gritamos que lo hemos visto!
         }
-        else if (!detectadoAhora && estabaDetectadoPreviamente)
+        else if (!detectadoAhora && EnContactoConJugador)
         {
-            estabaDetectadoPreviamente = false;
+            EnContactoConJugador= false;
             OnJugadorPerdido?.Invoke(); // ¡Gritamos que lo hemos perdido!
         }
     }

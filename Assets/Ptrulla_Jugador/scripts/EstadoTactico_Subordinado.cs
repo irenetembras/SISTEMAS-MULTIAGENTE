@@ -17,6 +17,16 @@ public class EstadoTactico_Subordinado : EstadoTacticoBase
                 ProcesarInform(mensaje);
                 break;
 
+            
+            case PerformativaFIPA.ACCEPT_PROPOSAL:
+                DatosContrato nuevaOrden = JsonUtility.FromJson<DatosContrato>(mensaje.contenido);
+                cerebro.capaSocial.miRolAsignado = nuevaOrden.rolOfertado;
+                cerebro.coordenadaTactica = nuevaOrden.coordenadaObjetivo;
+                cerebro.ultimaPosJugador = nuevaOrden.coordenadaObjetivo; // ¡AQUÍ ACTUALIZA SU MEMORIA!
+                Debug.Log($"[SUBORDINADO {gameObject.name}] Cambio de orden recibido: {nuevaOrden.rolOfertado} en {nuevaOrden.coordenadaObjetivo}");
+                break;
+        
+
             case PerformativaFIPA.REJECT_PROPOSAL:
                 Debug.Log($"[SUBORDINADO {gameObject.name}] Escuadron disuelto por {mensaje.emisor.name}. Volviendo a patrulla.");
                 cerebro.capaSocial.miRolAsignado = RolTactico.PatrullaNormal;
@@ -47,6 +57,10 @@ public class EstadoTactico_Subordinado : EstadoTacticoBase
                 float.Parse(p[1], System.Globalization.CultureInfo.InvariantCulture),
                 float.Parse(p[2], System.Globalization.CultureInfo.InvariantCulture)
             );
+
+            cerebro.coordenadaTactica = nuevoPunto;
+            cerebro.ultimaPosJugador = nuevoPunto; 
+
             Debug.Log($"[SUBORDINADO {gameObject.name}] Actualizacion GPS recibida. Nuevo destino: {nuevoPunto}");
             GetComponent<IAMovimiento>().MoverA(nuevoPunto, GetComponent<IAMovimiento>().velocidadPersecucion);
         }

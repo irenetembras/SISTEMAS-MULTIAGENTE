@@ -1,5 +1,5 @@
 using UnityEngine;
-
+using UnityEngine.AI;
 // Estado: el guardia patrulla por su cuenta, escucha la radio y puede ser reclutado.
 public class EstadoTactico_Libre : EstadoTacticoBase
 {
@@ -55,7 +55,7 @@ public class EstadoTactico_Libre : EstadoTacticoBase
             objetivo = datos.coordenadaObjetivo;
         }
 
-        float distancia = Vector3.Distance(transform.position, objetivo);
+        float distancia = CalcularDistanciaNavMesh(transform.position, objetivo);
         Debug.Log($"[LIBRE {gameObject.name}] Respondiendo a CFP de {cfp.emisor.name}. Mi distancia al objetivo: {distancia:F1}m");
 
         MensajeFIPA propuesta = new MensajeFIPA(
@@ -65,6 +65,29 @@ public class EstadoTactico_Libre : EstadoTacticoBase
             distancia.ToString(System.Globalization.CultureInfo.InvariantCulture)
         );
         cfp.emisor.GetComponent<BuzonMensajes>().RecibirMensaje(propuesta);
+    }
+
+    // NUEVA FUNCIÓN: Dibuja un camino mental por el mapa y mide lo largo que es
+    private float CalcularDistanciaNavMesh(Vector3 origen, Vector3 destino)
+    {
+        NavMeshPath path = new NavMeshPath();
+        
+        // Si el NavMesh logra trazar un camino por el suelo hasta el destino...
+        if (NavMesh.CalculatePath(origen, destino, NavMesh.AllAreas, path))
+        {
+            float distanciaTotal = 0f;
+            
+            // Sumamos la distancia de cada esquina del camino
+            for (int i = 1; i < path.corners.Length; i++)
+            {
+                distanciaTotal += Vector3.Distance(path.corners[i - 1], path.corners[i]);
+            }
+            return distanciaTotal;
+        }
+        
+        // CORTAFUEGOS: Si no hay ruta posible (ej: el jugador está saltando o fuera del mapa), 
+        // usamos la línea recta como plan B para que el código no falle.
+        return Vector3.Distance(origen, destino);
     }
 
     // Aplica el contrato ganado y pasa a estado Subordinado
@@ -80,6 +103,8 @@ public class EstadoTactico_Libre : EstadoTacticoBase
                 float.Parse(p[2], System.Globalization.CultureInfo.InvariantCulture)
             );
             cerebro.capaSocial.miRolAsignado = RolTactico.PersecucionActiva;
+            cerebro.coordenadaTactica = destino; 
+            cerebro.ultimaPosJugador = destino;
             Debug.Log($"[LIBRE {gameObject.name}] Contrato del Vigia aceptado. Rol: PersecucionActiva. Yendo a {destino}");
             GetComponent<IAMovimiento>().MoverA(destino, GetComponent<IAMovimiento>().velocidadPersecucion);
         }
@@ -88,8 +113,12 @@ public class EstadoTactico_Libre : EstadoTacticoBase
             DatosContrato contrato = JsonUtility.FromJson<DatosContrato>(accept.contenido);
             cerebro.capaSocial.miRolAsignado = contrato.rolOfertado;
             cerebro.coordenadaTactica = contrato.coordenadaObjetivo;
+            cerebro.ultimaPosJugador = contrato.coordenadaObjetivo;
             Debug.Log($"[LIBRE {gameObject.name}] Contrato del Comandante aceptado. Rol asignado: {contrato.rolOfertado}");
 
+            // ---> AÑADE ESTE CHIVATO AQUÍ <---
+            Debug.Log($"[RADIO] {gameObject.name} recibe contrato: {contrato.rolOfertado}. Destino: {contrato.coordenadaObjetivo}. Mi puntoMeta está en: {cerebro.puntoMeta.position}");
+            
             if (contrato.rolOfertado == RolTactico.PatrullaSectorAdyacente && contrato.puntosDeRuta.Count > 0)
             {
                 Debug.Log($"[LIBRE {gameObject.name}] Ruta dinamica asignada con {contrato.puntosDeRuta.Count} puntos.");

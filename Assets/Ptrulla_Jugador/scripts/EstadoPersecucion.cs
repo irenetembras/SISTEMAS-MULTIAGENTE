@@ -19,9 +19,9 @@ public class EstadoPersecucion : EstadoIA
             movimiento.Perseguir(jugador.position);
         }
         // 2. Si NO lo veo, pero mi rol es perseguir, sigo el GPS que me manda el líder
-        else 
+        else if (cerebro.coordenadaTactica != Vector3.zero)
         {
-            movimiento.Perseguir(cerebro.ultimaPosJugador);
+            movimiento.Perseguir(cerebro.coordenadaTactica);
         }
     }
 }
