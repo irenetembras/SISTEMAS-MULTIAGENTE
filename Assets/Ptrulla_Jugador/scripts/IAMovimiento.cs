@@ -62,7 +62,16 @@ public class IAMovimiento : MonoBehaviour
     public bool HaLlegadoAlDestino()
     {
         if (agent.pathPending) return false;
-        if (!agent.hasPath) return false;
+        if (!agent.hasPath)
+        { 
+        // Si no hay ruta, comprobamos a la fuerza bruta si ya estamos sobre la meta
+            if (Vector3.Distance(transform.position, agent.destination) <= Mathf.Max(agent.stoppingDistance, radioLlegada))
+            {
+                return true; // Ya estoy aquí, no necesito ruta.
+            }
+
+        return false;
+        }
 
         // LA MAGIA ANTI-ATASCOS DE PUERTAS
         if (agent.pathStatus == NavMeshPathStatus.PathPartial) return false;

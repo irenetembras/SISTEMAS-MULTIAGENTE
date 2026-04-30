@@ -9,59 +9,72 @@ public class EstadoExploracion : EstadoIA
 
     [HideInInspector] public bool exploracionTerminada = false;
 
-    private int puntosExploradosEnZonaActual = 0;
-    private float tiempoEnExploracionActual = 0f;
-    private int indiceZonaActual = 0;
+    private int indiceZonaActual = -1;
 
     public override void AlEntrar()
     {
         base.AlEntrar();
-        puntosExploradosEnZonaActual = 0;
-        indiceZonaActual = 0; // Empezamos por el primer punto de nuestra lista personal
+        indiceZonaActual = -1; 
         exploracionTerminada = false;
-        GenerarNuevoPunto(); 
+        IrAlSiguientePunto(); 
     }
 
     void Update()
     {
-        tiempoEnExploracionActual += Time.deltaTime;
-        
-        bool haLlegado = movimiento.HaLlegadoAlDestino();
-        bool seAcaboElTiempo = (tiempoEnExploracionActual >= tiempoMaximoBuscandoUnPunto);
+        if (exploracionTerminada) return;
 
-        if (haLlegado || seAcaboElTiempo)
+        // Si hemos llegado a la baldosa exacta...
+        if (movimiento.HaLlegadoAlDestino())
         {
-            puntosExploradosEnZonaActual++;
-
-            if (puntosExploradosEnZonaActual >= puntosAExplorarPorZona)
-            {
-                // ¡Hemos terminado de limpiar este Punto de Interés! 
-                puntosExploradosEnZonaActual = 0; // Reseteamos el contador
-
-                // Pasamos al siguiente Punto de Interés de la habitación
-                if (cerebro.rutaExploracion != null && cerebro.rutaExploracion.Count > 0)
-                {
-                    indiceZonaActual = (indiceZonaActual + 1) % cerebro.rutaExploracion.Count;
-                    Debug.Log($"[{gameObject.name}] Zona limpia. Moviéndome al siguiente Punto de Interés.");
-                }
-            }
+            indiceZonaActual++;
             
-            GenerarNuevoPunto();
+            // Si nos quedan puntos en la lista que nos dio el jefe, vamos al siguiente
+            if (cerebro.rutaExploracion != null && indiceZonaActual < cerebro.rutaExploracion.Count)
+            {
+                IrAlSiguientePunto();
+            }
+            else // Si ya no hay más puntos, terminamos el barrido
+            {
+                Debug.Log($"[{gameObject.name}] Zona peinada. Barajando los puntos para seguir buscando...");
+                
+                // Mezclamos la lista de puntos aleatoriamente (Algoritmo Fisher-Yates)
+                if (cerebro.rutaExploracion != null && cerebro.rutaExploracion.Count > 1) 
+                {
+                    for (int i = 0; i < cerebro.rutaExploracion.Count; i++)
+                    {
+                        Vector3 temp = cerebro.rutaExploracion[i];
+                        int randomIndex = Random.Range(i, cerebro.rutaExploracion.Count);
+                        cerebro.rutaExploracion[i] = cerebro.rutaExploracion[randomIndex];
+                        cerebro.rutaExploracion[randomIndex] = temp;
+                    }
+                }
+
+                // Volvemos a empezar a caminar desde el nuevo punto 0, SIN reiniciar el estado
+                indiceZonaActual = 0;
+                IrAlSiguientePunto();
+            }
         }
     }
 
-    private void GenerarNuevoPunto()
+
+    private void IrAlSiguientePunto()
     {
-        // Vemos cuál es el centro de la zona que nos toca limpiar ahora
-        Vector3 centroDeZona = cerebro.ultimaPosJugador; // Por defecto
-        if (cerebro.rutaExploracion != null && cerebro.rutaExploracion.Count > 0)
+        if (indiceZonaActual == -1)
         {
-            centroDeZona = cerebro.rutaExploracion[indiceZonaActual];
+            // FASE 1: Corremos a toda leche al punto exacto donde vimos al ladrón por última vez
+            movimiento.MoverA(cerebro.ultimaPosJugador, movimiento.velocidadPersecucion);
         }
 
-        // Generamos un punto aleatorio alrededor de ese centro
-        Vector3 puntoExploracionActual = movimiento.ObtenerPuntoAleatorioCercano(centroDeZona, radioExploracion);
-        movimiento.MoverA(puntoExploracionActual, movimiento.velocidadExploracion);
-        tiempoEnExploracionActual = 0f; 
+        else if (cerebro.rutaExploracion != null && cerebro.rutaExploracion.Count > 0)
+        {   
+            movimiento.MoverA(cerebro.rutaExploracion[indiceZonaActual], movimiento.velocidadExploracion);
+        }
+        else
+        {
+            // Plan B por si le mandan explorar sin darle lista de puntos: 
+            // Va a la última posición conocida y termina.
+            movimiento.MoverA(cerebro.ultimaPosJugador, movimiento.velocidadExploracion);
+            if (movimiento.HaLlegadoAlDestino()) exploracionTerminada = true;
+        }
     }
 }

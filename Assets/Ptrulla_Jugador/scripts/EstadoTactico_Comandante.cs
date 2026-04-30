@@ -27,7 +27,17 @@ public class EstadoTactico_Comandante : EstadoTacticoBase
         planificador.ActualizarFase();
 
         if (planificador.DebeTerminarMando())
-            fsmTactica.CambiarEstado(fsmTactica.libre);
+        {
+            // ARREGLO: Si me he auto-asignado explorar, paso a Subordinado para no borrar mi memoria.
+            if (cerebro != null && cerebro.capaSocial.miRolAsignado == RolTactico.ExplorarSectorSospechoso)
+            {
+                fsmTactica.CambiarEstado(fsmTactica.subordinado);
+            }
+            else
+            {
+                fsmTactica.CambiarEstado(fsmTactica.libre);
+            }
+        }
     }
 
     public override void AlSalir()

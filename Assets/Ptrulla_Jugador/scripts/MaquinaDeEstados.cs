@@ -88,10 +88,10 @@ public class MaquinaDeEstados : MonoBehaviour
         { 
             /* No hacemos nada, el GPS o la vista nos guía */ 
         }
-        else if (estadoActual == busqueda)
-        {
-            if (((EstadoBusqueda)busqueda).busquedaTerminada) CambiarEstado(exploracion);
-        }
+        // else if (estadoActual == busqueda)
+        // {
+        //     if (((EstadoBusqueda)busqueda).busquedaTerminada) CambiarEstado(exploracion);
+        // }
         else if (estadoActual == exploracion)
         {
             // ARREGLO 2: Bucle infinito de exploración. Nunca vuelven a la normalidad.

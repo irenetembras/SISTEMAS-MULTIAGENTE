@@ -137,30 +137,74 @@ public class PlanificadorTactico : MonoBehaviour
                 foreach(Transform t in sectorLadron.puntosDeInteres) puntosDelSector.Add(t.position);
             }
 
-            // 3. Repartimos los contratos
-            for (int i = 0; i < perseguidoresGPS.Count; i++)
+            // 3. REPARTO INTELIGENTE: Repartimos los puntos a todos los que estaban persiguiendo
+            List<GameObject> exploradoresDisponibles = new List<GameObject>(perseguidoresGPS);
+
+            // ¡NUEVO!: Me añado a mí mismo a la lista de exploradores (si tengo cuerpo físico)
+            if (cerebro != null && !exploradoresDisponibles.Contains(gameObject))
             {
-                GameObject p = perseguidoresGPS[i];
-                DatosContrato d = new DatosContrato { 
-                    rolOfertado = RolTactico.ExplorarSectorSospechoso, 
-                    coordenadaObjetivo = ultimaPosConocida // Destino inicial (dónde le vimos por última vez)
-                };
-
-                // EL TRUCO: Le damos la lista completa a cada guardia, pero 
-                // hacemos que cada uno empiece por un índice distinto (i)
-                if (puntosDelSector.Count > 0) {
-                    d.puntosDeRuta = new System.Collections.Generic.List<Vector3>();
-                    int indiceInicio = i % puntosDelSector.Count;
-                    for (int j = 0; j < puntosDelSector.Count; j++) {
-                        d.puntosDeRuta.Add(puntosDelSector[(indiceInicio + j) % puntosDelSector.Count]);
-                    }
-                }
-
-                p.GetComponent<BuzonMensajes>().RecibirMensaje(new MensajeFIPA(PerformativaFIPA.ACCEPT_PROPOSAL, gameObject, p, JsonUtility.ToJson(d)));
+                exploradoresDisponibles.Add(gameObject);
             }
 
-            debeTerminar = true; // El Comandante dimite y vuelve a patrullar
+            int indiceExplorador = 0;
+
+            while (exploradoresDisponibles.Count > 0)
+
+            {
+                GameObject p = exploradoresDisponibles[0];
+                exploradoresDisponibles.RemoveAt(0);
+                if (p == null) continue;
+
+                Vector3 puntoLlegada = ultimaPosConocida;
+                // El Guardia 0 (Jefe) usa la coordenada exacta. El Guardia 1 usa un radio de seguridad de 1.5m.
+                if (indiceExplorador == 1) puntoLlegada += new Vector3(1.5f, 0f, 1.5f);
+
+                DatosContrato d = new DatosContrato { 
+                    rolOfertado = RolTactico.ExplorarSectorSospechoso, 
+                    coordenadaObjetivo = ultimaPosConocida 
+                };
+
+                //   --- EL REPARTO PERFECTO ---
+                if (puntosDelSector.Count > 0)
+                {
+                    // Ordenamos todos los puntos por cercanía a donde desapareció el ladrón
+                    puntosDelSector.Sort((a, b) => Vector3.Distance(ultimaPosConocida, a).CompareTo(Vector3.Distance(ultimaPosConocida, b)));
+
+                    int mitad = puntosDelSector.Count / 2;
+
+                    if (indiceExplorador == 0)
+                    {
+                        // Guardia 1 (ej. Jefe): Empieza por el punto más cercano (Barrido normal frontal)
+                        d.puntosDeRuta = puntosDelSector.GetRange(0, mitad);
+                    }
+                    else
+                    {
+                        // Guardia 2 (ej. Apoyo): Empieza por el punto más LEJANO (Corre al fondo y barre en reversa)
+                        d.puntosDeRuta = puntosDelSector.GetRange(mitad, puntosDelSector.Count - mitad);
+                    }
+                }
+                
+                // Si la orden es para mí mismo, me la inyecto en el cerebro sin usar el buzón de radio
+                if (p == gameObject && cerebro != null)
+                {
+                    cerebro.capaSocial.miRolAsignado = RolTactico.ExplorarSectorSospechoso;
+                    cerebro.coordenadaTactica = ultimaPosConocida;
+                    cerebro.ultimaPosJugador = ultimaPosConocida;
+                    if (d.puntosDeRuta != null) cerebro.rutaExploracion = d.puntosDeRuta; // Guardamos la ruta en el jefe
+                }
+                else
+                {
+                    p.GetComponent<BuzonMensajes>().RecibirMensaje(new MensajeFIPA(PerformativaFIPA.ACCEPT_PROPOSAL, gameObject, p, JsonUtility.ToJson(d)));
+                }
+
+                indiceExplorador++;
+            }
+
+            // El Comandante dimite y vuelve a ser un soldado normal que seguirá la ruta que se acaba de auto-asignar
+            debeTerminar = true; 
         }
+
+
         
         // NOTA: Se han eliminado las fases de "Contención" por tiempo y "Disolución". 
         // El estado de alerta ahora es permanente.
@@ -230,7 +274,7 @@ public class PlanificadorTactico : MonoBehaviour
         foreach (var o in ofertas) guardiasDisponibles.Add(o.guardia);
         // TAREA 1: EL CAZADOR PRINCIPAL (El más cercano al jugador)
         // Si el jefe es el Vigía, necesita un perro de presa. Si es un patrulla, le mandamos apoyo.
-        if (guardiasDisponibles.Count > 0)
+        if (guardiasDisponibles.Count > 0 && cerebro == null )
         {
             GameObject cazador1 = guardiasDisponibles[0]; 
             MandarContrato(cazador1, RolTactico.PersecucionActiva, posLadron);
@@ -341,17 +385,34 @@ public class PlanificadorTactico : MonoBehaviour
     private float CalcularDistanciaNavMesh(Vector3 origen, Vector3 destino)
     {
         NavMeshPath path = new NavMeshPath();
+        
+        // EL IMÁN: Forzamos que el origen y el destino sean puntos válidos pegados al suelo del NavMesh
+        NavMeshHit hit;
+        if (NavMesh.SamplePosition(origen, out hit, 2.0f, NavMesh.AllAreas)) origen = hit.position;
+        if (NavMesh.SamplePosition(destino, out hit, 2.0f, NavMesh.AllAreas)) destino = hit.position;
+
+        // Si logra trazar la ruta...
         if (NavMesh.CalculatePath(origen, destino, NavMesh.AllAreas, path))
         {
+            // OJO: Si el camino está incompleto (ej. el jugador está en una zona inalcanzable)
+            if (path.status == NavMeshPathStatus.PathPartial)
+            {
+                return 9999f; // Le ponemos una distancia gigante para que pierda la subasta
+            }
+
             float distanciaTotal = 0f;
+            // Sumamos la distancia real caminando por las esquinas
             for (int i = 1; i < path.corners.Length; i++)
             {
                 distanciaTotal += Vector3.Distance(path.corners[i - 1], path.corners[i]);
             }
             return distanciaTotal;
         }
-        return Vector3.Distance(origen, destino); // Fallback si no hay ruta
+        
+        // Solo si todo falla estrepitosamente usamos la línea recta
+        return Vector3.Distance(origen, destino); 
     }
+    
 
     // Tarea de cobertura para guardias sin plaza asignada
     private DatosContrato TareaPatrullaAdyacente(int indice, SectorTactico sectorL)

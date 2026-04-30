@@ -103,18 +103,43 @@ public class EstadoTactico_Subordinado : EstadoTacticoBase
         cfp.emisor.GetComponent<BuzonMensajes>().RecibirMensaje(propuesta);
     }
 
+    
     private float CalcularDistanciaNavMesh(Vector3 origen, Vector3 destino)
     {
         NavMeshPath path = new NavMeshPath();
+        
+        // EL IMÁN: Forzamos que el origen y el destino sean puntos válidos pegados al suelo del NavMesh
+        NavMeshHit hit;
+        if (NavMesh.SamplePosition(origen, out hit, 10.0f, NavMesh.AllAreas)) origen = hit.position;
+        if (NavMesh.SamplePosition(destino, out hit, 10.0f, NavMesh.AllAreas)) destino = hit.position;
+
+        Debug.DrawRay(origen, Vector3.up * 10f, Color.yellow, 10f); // Palo amarillo en el guardia
+        Debug.DrawRay(destino, Vector3.up * 10f, Color.blue, 10f);  // Palo azul en el destino
+
+        // Si logra trazar la ruta...
         if (NavMesh.CalculatePath(origen, destino, NavMesh.AllAreas, path))
         {
+            // OJO: Si el camino está incompleto (ej. el jugador está en una zona inalcanzable)
+            if (path.status == NavMeshPathStatus.PathPartial)
+            {
+                return 9999f; // Le ponemos una distancia gigante para que pierda la subasta
+            }
+
             float distanciaTotal = 0f;
+            // Sumamos la distancia real caminando por las esquinas
             for (int i = 1; i < path.corners.Length; i++)
             {
                 distanciaTotal += Vector3.Distance(path.corners[i - 1], path.corners[i]);
+            
+                // LA PRUEBA DEL DELITO: Dibuja una línea roja en la pestaña 'Scene' que dura 10 segundos
+                Debug.DrawLine(path.corners[i - 1], path.corners[i], Color.red, 10f); 
             }
             return distanciaTotal;
         }
-        return Vector3.Distance(origen, destino);
+        
+        // Solo si todo falla estrepitosamente usamos la línea recta
+        Debug.LogError($"[TRAMPA] {gameObject.name} no pudo usar NavMesh. Castigo de 9999m.");
+        return 9999f; // ¡NUNCA MÁS LÍNEA RECTA!Debug.LogError($"[TRAMPA] {gameObject.name} no pudo usar NavMesh. Calculando línea recta atravesando paredes.");
+        //return Vector3.Distance(origen, destino); 
     }
 }
