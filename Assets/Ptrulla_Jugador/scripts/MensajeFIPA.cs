@@ -48,6 +48,7 @@ public class DatosContrato
     
     // Punto único para persecuciones o emboscadas
     public Vector3 coordenadaObjetivo; 
+    public string nombreSectorDestino;
 }
 
 

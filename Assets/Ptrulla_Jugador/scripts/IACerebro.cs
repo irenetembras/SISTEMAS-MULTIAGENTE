@@ -93,7 +93,7 @@ public class IACerebro : MonoBehaviour
                 break;
 
             case RolTactico.ExplorarSectorSospechoso:
-                if (fsm.estadoActual != fsm.exploracion ) 
+                if (fsm.estadoActual != fsm.exploracion) 
                     fsm.CambiarEstado(fsm.exploracion);
                 break;
         }

@@ -16,6 +16,15 @@ public class EstadoExploracion : EstadoIA
         base.AlEntrar();
         indiceZonaActual = -1; 
         exploracionTerminada = false;
+        // --- Ordenar mi lista asignada por cercanía a MIS PIES ---
+        if (cerebro.rutaExploracion != null && cerebro.rutaExploracion.Count > 1)
+        {
+            // Ordenamos los puntos de la ruta desde el más cercano al guardia hasta el más lejano
+            cerebro.rutaExploracion.Sort((a, b) => 
+                CalcularDistanciaCaminando(transform.position, a).CompareTo(Vector3.Distance(transform.position, b))
+            );
+        }
+
         IrAlSiguientePunto(); 
     }
 
@@ -77,4 +86,26 @@ public class EstadoExploracion : EstadoIA
             if (movimiento.HaLlegadoAlDestino()) exploracionTerminada = true;
         }
     }
+
+    private float CalcularDistanciaCaminando(Vector3 origen, Vector3 destino)
+    {
+        UnityEngine.AI.NavMeshPath path = new UnityEngine.AI.NavMeshPath();
+        
+        // Si logra trazar la ruta por el suelo...
+        if (UnityEngine.AI.NavMesh.CalculatePath(origen, destino, UnityEngine.AI.NavMesh.AllAreas, path))
+        {
+            // Ojo a los caminos cortados
+            if (path.status == UnityEngine.AI.NavMeshPathStatus.PathPartial) return 9999f;
+
+            float distanciaTotal = 0f;
+            for (int i = 1; i < path.corners.Length; i++)
+            {
+                distanciaTotal += Vector3.Distance(path.corners[i - 1], path.corners[i]);
+            }
+            return distanciaTotal;
+        }
+        
+        return 9999f; // Si es inalcanzable, lo mandamos al final de la lista
+    }
+
 }

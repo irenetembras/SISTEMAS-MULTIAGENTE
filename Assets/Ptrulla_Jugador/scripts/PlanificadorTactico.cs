@@ -140,10 +140,14 @@ public class PlanificadorTactico : MonoBehaviour
             // 3. REPARTO INTELIGENTE: Repartimos los puntos a todos los que estaban persiguiendo
             List<GameObject> exploradoresDisponibles = new List<GameObject>(perseguidoresGPS);
 
-            // ¡NUEVO!: Me añado a mí mismo a la lista de exploradores (si tengo cuerpo físico)
-            if (cerebro != null && !exploradoresDisponibles.Contains(gameObject))
+            // Me añado a mí mismo a la lista de exploradores (si tengo cuerpo físico)
+            if (cerebro != null) exploradoresDisponibles.Add(gameObject);
+            
+            // LOS APOYOS DESPUÉS
+            foreach(GameObject p in perseguidoresGPS)
             {
-                exploradoresDisponibles.Add(gameObject);
+                if (p != gameObject && !exploradoresDisponibles.Contains(p)) 
+                    exploradoresDisponibles.Add(p);
             }
 
             int indiceExplorador = 0;
@@ -168,7 +172,7 @@ public class PlanificadorTactico : MonoBehaviour
                 if (puntosDelSector.Count > 0)
                 {
                     // Ordenamos todos los puntos por cercanía a donde desapareció el ladrón
-                    puntosDelSector.Sort((a, b) => Vector3.Distance(ultimaPosConocida, a).CompareTo(Vector3.Distance(ultimaPosConocida, b)));
+                    puntosDelSector.Sort((a, b) => CalcularDistanciaNavMesh(ultimaPosConocida, a).CompareTo(CalcularDistanciaNavMesh(ultimaPosConocida, b)));
 
                     int mitad = puntosDelSector.Count / 2;
 
@@ -284,9 +288,11 @@ public class PlanificadorTactico : MonoBehaviour
 
         // TAREA 2: LOS BLOQUEADORES (Los más cercanos a cada trampa)
         int bloqueadoresAsignados = 0;
+        int indiceTrampa = 0;
         while (trampasLibres.Count > 0 && guardiasDisponibles.Count > 0 && bloqueadoresAsignados < 2)
         {
-            Transform trampa = trampasLibres[0]; 
+            // El truco matemático: Si hay 1 trampa, siempre dará 0. Si hay 2, alternará entre 0 y 1.
+            Transform trampa = trampasLibres[indiceTrampa % trampasLibres.Count];
             
             GameObject mejorGuardia = guardiasDisponibles[0];
             float mejorDistancia = CalcularDistanciaNavMesh(mejorGuardia.transform.position, trampa.position);
@@ -302,9 +308,9 @@ public class PlanificadorTactico : MonoBehaviour
             }
 
             MandarContrato(mejorGuardia, RolTactico.BloqueoSalida, trampa.position);
-            trampasLibres.RemoveAt(0);
             guardiasDisponibles.Remove(mejorGuardia); // Sacamos al bloqueador de la lista
             bloqueadoresAsignados++;
+            indiceTrampa++;
         }
 
         // TAREA 3: EL EXPLORADOR DE APOYO (El que quedó más cerca del sector)
@@ -325,7 +331,8 @@ public class PlanificadorTactico : MonoBehaviour
         {
             DatosContrato c = TareaPatrullaAdyacente(indiceAdyacente, sectorLadron);
             
-            if (c.puntosDeRuta == null || c.puntosDeRuta.Count == 0)
+            // Ahora comprobamos si tiene nombre de sector asignado, ya no miramos la lista de puntos
+            if (string.IsNullOrEmpty(c.nombreSectorDestino))
             {
                 MandarContrato(g, RolTactico.PersecucionActiva, posLadron);
                 perseguidoresGPS.Add(g);
@@ -425,8 +432,7 @@ public class PlanificadorTactico : MonoBehaviour
         if (sectorL != null && sectorL.sectoresAdyacentes != null && sectorL.sectoresAdyacentes.Length > 0)
         {
             SectorTactico destino = sectorL.sectoresAdyacentes[indice % sectorL.sectoresAdyacentes.Length];
-            foreach (Transform t in destino.puntosDeInteres)
-                r.puntosDeRuta.Add(t.position);
+            r.nombreSectorDestino = destino.gameObject.name;
         }
         return r;
     }

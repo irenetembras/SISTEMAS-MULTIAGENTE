@@ -137,10 +137,15 @@ public class EstadoTactico_Libre : EstadoTacticoBase
             // ---> AÑADE ESTE CHIVATO AQUÍ <---
             Debug.Log($"[RADIO] {gameObject.name} recibe contrato: {contrato.rolOfertado}. Destino: {contrato.coordenadaObjetivo}. Mi puntoMeta está en: {cerebro.puntoMeta.position}");
             
-            if (contrato.rolOfertado == RolTactico.PatrullaSectorAdyacente && contrato.puntosDeRuta.Count > 0)
+            if (contrato.rolOfertado == RolTactico.PatrullaSectorAdyacente && !string.IsNullOrEmpty(contrato.nombreSectorDestino))
             {
-                Debug.Log($"[LIBRE {gameObject.name}] Ruta dinamica asignada con {contrato.puntosDeRuta.Count} puntos.");
-                GetComponent<IAMovimiento>().AsignarRutaDinamicaPorPuntos(contrato.puntosDeRuta);
+                GameObject sectorObj = GameObject.Find(contrato.nombreSectorDestino);
+                if (sectorObj != null)
+                {
+                    Debug.Log($"[LIBRE {gameObject.name}] Asignando sector adyacente REAL: {contrato.nombreSectorDestino}");
+                    SectorTactico nuevoSector = sectorObj.GetComponent<SectorTactico>();
+                    GetComponent<IAMovimiento>().AsignarNuevaRutaDesdeSector(nuevoSector);
+                }
             }
         }
 

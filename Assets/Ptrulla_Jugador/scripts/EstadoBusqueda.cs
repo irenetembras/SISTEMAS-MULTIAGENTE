@@ -2,36 +2,63 @@ using UnityEngine;
 
 public class EstadoBusqueda : EstadoIA
 {
-    [Header("Ajustes")]
-    public float tiempoMirandoElSitio = 2.0f; 
-    [HideInInspector] public bool busquedaTerminada = false;
+    [Header("Ajustes de Búsqueda Local")]
+    public float radioBusqueda = 5f; 
+    public int puntosAleatoriosABuscar = 3;
+    public float tiempoPausaEnPunto = 1.0f; // Breve pausa al llegar para "mirar" a los lados
 
-    private bool yaHaLlegado = false;
+    [HideInInspector] public bool busquedaTerminada = false;
+    
+    private int puntosVisitados = 0;
+    private bool esperandoEnPunto = false;
     private float cronometro = 0f;
 
     public override void AlEntrar()
     {
         base.AlEntrar();
         busquedaTerminada = false;
-        yaHaLlegado = false;
+        puntosVisitados = 0;
+        esperandoEnPunto = false;
         cronometro = 0f;
+        
+        // 1. Primero, corremos a la coordenada exacta donde se esfumó
         movimiento.MoverA(cerebro.ultimaPosJugador, movimiento.velocidadPersecucion);
     }
 
     void Update()
     {
-        if (!yaHaLlegado && movimiento.HaLlegadoAlDestino())
-        {
-            yaHaLlegado = true;
-            movimiento.Detener(); 
-        }
+        if (busquedaTerminada) return;
 
-        if (yaHaLlegado)
+        if (movimiento.HaLlegadoAlDestino())
         {
-            cronometro += Time.deltaTime;
-            if (cronometro >= tiempoMirandoElSitio)
+            if (!esperandoEnPunto)
             {
-                busquedaTerminada = true; 
+                // Acabamos de llegar a un punto. Nos paramos a mirar.
+                esperandoEnPunto = true;
+                cronometro = 0f;
+                movimiento.Detener();
+            }
+            else
+            {
+                cronometro += Time.deltaTime;
+                if (cronometro >= tiempoPausaEnPunto)
+                {
+                    // Terminamos de mirar. ¿Seguimos buscando o nos rendimos?
+                    puntosVisitados++;
+                    
+                    if (puntosVisitados <= puntosAleatoriosABuscar)
+                    {
+                        // Pedimos a tu función un punto aleatorio cercano en el NavMesh
+                        Vector3 nuevoPunto = movimiento.ObtenerPuntoAleatorioCercano(cerebro.ultimaPosJugador, radioBusqueda);
+                        movimiento.MoverA(nuevoPunto, movimiento.velocidadExploracion);
+                        esperandoEnPunto = false; // Volvemos a caminar
+                    }
+                    else
+                    {
+                        // Ya hemos mirado en varios sitios y no está. Búsqueda local terminada.
+                        busquedaTerminada = true;
+                    }
+                }
             }
         }
     }

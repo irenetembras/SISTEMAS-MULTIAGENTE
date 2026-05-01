@@ -85,13 +85,10 @@ public class MaquinaDeEstados : MonoBehaviour
 
         // ARREGLO 1: En persecución ya no hay cronómetro. Se persigue hasta que el líder diga basta.
         if (estadoActual == persecucion) 
-        { 
-            /* No hacemos nada, el GPS o la vista nos guía */ 
+        {
+            // No hacemos nada, el GPS o la vista nos guía 
         }
-        // else if (estadoActual == busqueda)
-        // {
-        //     if (((EstadoBusqueda)busqueda).busquedaTerminada) CambiarEstado(exploracion);
-        // }
+        
         else if (estadoActual == exploracion)
         {
             // ARREGLO 2: Bucle infinito de exploración. Nunca vuelven a la normalidad.

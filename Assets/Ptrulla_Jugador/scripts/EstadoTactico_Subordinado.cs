@@ -23,9 +23,21 @@ public class EstadoTactico_Subordinado : EstadoTacticoBase
                 cerebro.capaSocial.miRolAsignado = nuevaOrden.rolOfertado;
                 cerebro.coordenadaTactica = nuevaOrden.coordenadaObjetivo;
                 cerebro.ultimaPosJugador = nuevaOrden.coordenadaObjetivo; 
+
                 
                 if (nuevaOrden.puntosDeRuta != null && nuevaOrden.puntosDeRuta.Count > 0) {
                     cerebro.rutaExploracion = nuevaOrden.puntosDeRuta;
+                }
+
+                if (nuevaOrden.rolOfertado == RolTactico.PatrullaSectorAdyacente && !string.IsNullOrEmpty(nuevaOrden.nombreSectorDestino))
+                {
+                    GameObject sectorObj = GameObject.Find(nuevaOrden.nombreSectorDestino);
+                    if (sectorObj != null)
+                    {
+                        Debug.Log($"[SUBORDINADO {gameObject.name}] Reasignado a patrullar el sector: {nuevaOrden.nombreSectorDestino}");
+                        SectorTactico nuevoSector = sectorObj.GetComponent<SectorTactico>();
+                        GetComponent<IAMovimiento>().AsignarNuevaRutaDesdeSector(nuevoSector);
+                    }
                 }
 
                 Debug.Log($"[SUBORDINADO {gameObject.name}] Cambio de orden recibido: {nuevaOrden.rolOfertado}");

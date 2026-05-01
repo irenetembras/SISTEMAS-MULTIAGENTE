@@ -26,6 +26,7 @@ public class IAMovimiento : MonoBehaviour
 
     // Variables Internas
     private NavMeshAgent agent;
+    private bool sprintHaciaSector = false;
 
 
     void Awake()
@@ -91,21 +92,29 @@ public class IAMovimiento : MonoBehaviour
         agent.SetDestination(destino);
     }
 
-    // Genera un punto aleatorio en el NavMesh cerca de un centro (para buscar)
-    public Vector3 ObtenerPuntoAleatorioCercano(Vector3 centro, float radio)
+   public Vector3 ObtenerPuntoAleatorioCercano(Vector3 centro, float radio)
     {
-        Vector3 direccionAleatoria = Random.insideUnitSphere * radio;
-        direccionAleatoria += centro;
-        
-        NavMeshHit hit;
-        // Busca el punto válido más cercano en el NavMesh
-        if (NavMesh.SamplePosition(direccionAleatoria, out hit, radio, NavMesh.AllAreas))
+        // Le damos 5 intentos para encontrar un punto que no esté al otro lado de un muro
+        for (int i = 0; i < 5; i++)
         {
-            return hit.position;
-        }
-        return centro; // Si falla, se queda en el centro
-    }
+            Vector2 circulo = Random.insideUnitCircle * radio;
+            Vector3 direccionAleatoria = centro + new Vector3(circulo.x, 0f, circulo.y);
 
+            NavMeshHit hit;
+            if (NavMesh.SamplePosition(direccionAleatoria, out hit, 2.0f, NavMesh.AllAreas))
+            {
+                // LA CLAVE: Comprobamos si podemos llegar caminando
+                NavMeshPath path = new NavMeshPath();
+                if (agent.CalculatePath(hit.position, path) && path.status == NavMeshPathStatus.PathComplete)
+                {
+                    return hit.position; // ¡Punto válido y accesible!
+                }
+            }
+        }
+
+        // Si todos caen mal, devolvemos nuestra posición actual para no congelarnos
+        return transform.position; 
+    }
     // Función para perseguir al jugador
     public void Perseguir(Vector3 destino)
     {
@@ -139,11 +148,24 @@ public class IAMovimiento : MonoBehaviour
     public void Patrullar()
     {
         agent.isStopped = false;
-        agent.speed = velocidadPatrulla;
 
         if (puntosPatrulla == null || puntosPatrulla.Length == 0) return;
         if (puntosPatrulla[indicePatrulla] == null) return;
 
+        if (sprintHaciaSector)
+        {
+            agent.speed = velocidadPersecucion;
+            // si ya llegamos al sector, releajamos la marcha
+            if (HaLlegadoAlDestino())
+            {
+                sprintHaciaSector = false;
+            }
+        }
+        else 
+        {
+            // Caminar normal mientras hacen la ronda
+            agent.speed = velocidadPatrulla;
+        }
         // Usamos TU función original para saber si hemos llegado
         if (HaLlegadoAlDestino())
         {
@@ -163,6 +185,15 @@ public class IAMovimiento : MonoBehaviour
         if (nuevoSector == null || nuevoSector.puntosDeInteres == null || nuevoSector.puntosDeInteres.Length == 0) 
             return;
 
+        if (sectorBase != null && nuevoSector != sectorBase)
+        {
+            sprintHaciaSector = true;
+        }
+        else
+        {
+            sprintHaciaSector = false;
+        }
+
         sectorActual = nuevoSector;
         puntosPatrulla = nuevoSector.puntosDeInteres;
         
@@ -174,21 +205,6 @@ public class IAMovimiento : MonoBehaviour
         }
     }
 
-    public void AsignarRutaDinamicaPorPuntos(System.Collections.Generic.List<Vector3> puntos)
-    {
-        if (puntos == null || puntos.Count == 0) return;
-        
-        puntosPatrulla = new Transform[puntos.Count];
-        for (int i = 0; i < puntos.Count; i++)
-        {
-            GameObject pt = new GameObject("PuntoVirtual_Temporal");
-            pt.transform.position = puntos[i];
-            puntosPatrulla[i] = pt.transform;
-            Destroy(pt, 60f); // Destruimos la basura a los 60 segundos para no saturar la memoria
-        }
-        indicePatrulla = 0; 
-        if (agent.isOnNavMesh) agent.SetDestination(puntosPatrulla[0].position);
-    }
 
     public void VolverAlPuestoBase()
     {
