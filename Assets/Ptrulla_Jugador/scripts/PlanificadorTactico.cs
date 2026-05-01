@@ -86,6 +86,14 @@ public class PlanificadorTactico : MonoBehaviour
        // Si soy un patrulla, yo mismo me pongo a perseguir
         if (cerebro != null) cerebro.capaSocial.miRolAsignado = RolTactico.PersecucionActiva;
 
+        if (RecogerObjetivo.tieneElBotin)
+        {
+            Debug.Log("[PLAN] ¡Alarma Activa! No hay subasta, todos a la salida.");
+            
+            planDesplegado = true; 
+            return; // Aquí salimos: ya no se ejecuta la subasta
+        }
+
         EnviarCFP(posLadron);
         StartCoroutine(CerrarSubastaYAsignar(posLadron));
     }
@@ -120,6 +128,20 @@ public class PlanificadorTactico : MonoBehaviour
         if (faseActual == FaseAlerta.ContactoVisual)
         {
             faseActual = FaseAlerta.BusquedaActiva;
+            // --- CORTAFUEGOS 2: ¡NADIE ABANDONA LA PUERTA! ---
+            if (RecogerObjetivo.tieneElBotin)
+            {
+                
+                // Si soy un guardia físico, me pongo a explorar yo solo. Los demás ni los toco.
+                if (cerebro != null)
+                {
+                    cerebro.capaSocial.miRolAsignado = RolTactico.BloqueoSalida;
+                    if (cerebro.puntoMeta != null) cerebro.coordenadaTactica = cerebro.puntoMeta.position;
+                }
+                
+                debeTerminar = true; // El jefe dimite para no dar más órdenes
+                return; // <--- ¡ESTE RETURN ES VITAL! Evita que se repartan puntos de búsqueda.
+            }
             Debug.Log($"[PLAN] {gameObject.name}: Objetivo perdido. Iniciando cerco permanente y repartiendo puntos.");
 
             // 1. Buscamos en qué SectorTactico desapareciste
@@ -254,6 +276,15 @@ public class PlanificadorTactico : MonoBehaviour
     private IEnumerator CerrarSubastaYAsignar(Vector3 posLadron)
     {
         yield return new WaitForSeconds(0.5f);
+
+        // --- CORTAFUEGOS 3: CANCELAR SUBASTA SI ROBARON MIENTRAS DORMÍA ---
+        if (RecogerObjetivo.tieneElBotin) {
+
+        Debug.Log($"[PLAN] Subasta cancelada. El ladrón pilló el botín.");
+        
+        planDesplegado = true;
+        yield break;
+        }
         ofertas.Sort((a, b) => a.distancia.CompareTo(b.distancia));
 
         SectorTactico sectorLadron = null;

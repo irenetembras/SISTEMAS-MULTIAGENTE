@@ -25,18 +25,16 @@ public class EstadoComprobandoObjetivo : EstadoIA
             if (RecogerObjetivo.tieneElBotin) 
             {
                 seDioCuenta = true;
-                Debug.Log("🧐 ¡El guardia ha visto el pedestal vacío! Dando la alarma...");
+                Debug.Log("¡El guardia ha visto el pedestal vacío! Dando la alarma...");
                 
                 // Le decimos a nuestra radio que avise a los demás
-                cerebro.capaSocial.DarAlarmaRobo(); 
-            }
-            else
-            {
-                // Si ha llegado y el botín SÍ está, se da la vuelta y sigue patrullando
-                if (movimiento.HaLlegadoAlDestino())
-                {
-                    cerebro.fsm.CambiarEstado(cerebro.fsm.patrulla);
-                }
+                cerebro.capaSocial.DarAlarmaRobo();
+                
+                // --- NUEVO: Yo también salgo corriendo a bloquear ---
+                cerebro.capaSocial.miRolAsignado = RolTactico.BloqueoSalida;
+                if (cerebro.puntoMeta != null) cerebro.coordenadaTactica = cerebro.puntoMeta.position;
+                
+                cerebro.fsm.CambiarEstado(cerebro.fsm.emboscada);
             }
         }
     }

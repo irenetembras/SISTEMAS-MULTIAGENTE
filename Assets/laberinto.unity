@@ -24362,6 +24362,8 @@ MonoBehaviour:
   - {fileID: 733944313}
   - {fileID: 1527311328}
   - {fileID: 1524771080}
+  - {fileID: 737894318}
+  - {fileID: 375298540}
   puntosDeTrampa:
   - {fileID: 199120752}
   - {fileID: 953162583}
@@ -57289,12 +57291,14 @@ MonoBehaviour:
   - {fileID: 2086742092}
   - {fileID: 1718439399}
   - {fileID: 234992907}
+  - {fileID: 1953573908}
+  - {fileID: 586063170}
   puntosDeTrampa:
   - {fileID: 100290619}
   - {fileID: 1617429678}
   sectoresAdyacentes:
-  - {fileID: 122477471}
   - {fileID: 1515330032}
+  - {fileID: 122477471}
 --- !u!1001 &992164245
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -106124,7 +106128,7 @@ Transform:
   m_GameObject: {fileID: 1929225539}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -114.1, y: 0, z: 377.3}
+  m_LocalPosition: {x: -136.7, y: 0, z: 384.4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -108400,7 +108404,7 @@ GameObject:
   - component: {fileID: 1987047909}
   m_Layer: 0
   m_Name: ZonaEscape
-  m_TagString: Untagged
+  m_TagString: Finish
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -108414,7 +108418,7 @@ Transform:
   m_GameObject: {fileID: 1987047907}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.0022789564, y: 0.25, z: 1.0267712}
+  m_LocalPosition: {x: 0.0022789862, y: -1, z: 1.01}
   m_LocalScale: {x: 0.051793724, y: 1, z: 0.4479283}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -114863,7 +114867,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2491025045643569940, guid: 003c3c590c145a44fbc5b13e49b99d27, type: 3}
       propertyPath: velocidadCorrer
-      value: 25
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 2491025045643569940, guid: 003c3c590c145a44fbc5b13e49b99d27, type: 3}
       propertyPath: velocidadCaminar
@@ -114947,7 +114951,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3453840741311942035, guid: 003c3c590c145a44fbc5b13e49b99d27, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 74.7
+      value: -288.8
       objectReference: {fileID: 0}
     - target: {fileID: 3453840741311942035, guid: 003c3c590c145a44fbc5b13e49b99d27, type: 3}
       propertyPath: m_LocalPosition.y
@@ -114955,7 +114959,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3453840741311942035, guid: 003c3c590c145a44fbc5b13e49b99d27, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -16
+      value: 345.3
       objectReference: {fileID: 0}
     - target: {fileID: 3453840741311942035, guid: 003c3c590c145a44fbc5b13e49b99d27, type: 3}
       propertyPath: m_LocalRotation.w

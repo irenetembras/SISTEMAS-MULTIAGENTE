@@ -28,8 +28,11 @@ public class EstadoTactico_Comandante : EstadoTacticoBase
 
         if (planificador.DebeTerminarMando())
         {
-            // ARREGLO: Si me he auto-asignado explorar, paso a Subordinado para no borrar mi memoria.
-            if (cerebro != null && cerebro.capaSocial.miRolAsignado == RolTactico.ExplorarSectorSospechoso)
+        // EXCEPCIÓN: Si me he auto-asignado explorar O BLOQUEAR LA SALIDA, 
+        // paso a Subordinado para no olvidar lo que iba a hacer.
+            if (cerebro != null && 
+                (cerebro.capaSocial.miRolAsignado == RolTactico.ExplorarSectorSospechoso || 
+                cerebro.capaSocial.miRolAsignado == RolTactico.BloqueoSalida))
             {
                 fsmTactica.CambiarEstado(fsmTactica.subordinado);
             }
@@ -49,6 +52,18 @@ public class EstadoTactico_Comandante : EstadoTacticoBase
     // Solo el comandante recibe y registra las ofertas (PROPOSE) del resto del escuadrón
     public override void ProcesarMensaje(MensajeFIPA mensaje)
     {
+        if (mensaje.performativa == PerformativaFIPA.INFORM && mensaje.contenido == "ALARMA_ROBO")
+        {
+            Debug.Log($"[COMANDANTE {gameObject.name}] ¡Alarma de robo! Abortando mando y corriendo a la salida.");
+            cerebro.capaSocial.miRolAsignado = RolTactico.BloqueoSalida;
+            
+            
+            if (cerebro.puntoMeta != null) cerebro.coordenadaTactica = cerebro.puntoMeta.position;
+            
+            fsmTactica.CambiarEstado(fsmTactica.subordinado); 
+            return;
+        }
+
         if (mensaje.performativa == PerformativaFIPA.PROPOSE)
         {
             float dist = float.Parse(mensaje.contenido, System.Globalization.CultureInfo.InvariantCulture);

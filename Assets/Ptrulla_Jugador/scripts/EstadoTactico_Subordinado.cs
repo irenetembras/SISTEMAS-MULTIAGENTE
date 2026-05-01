@@ -58,12 +58,20 @@ public class EstadoTactico_Subordinado : EstadoTacticoBase
     }
 
     private void ProcesarInform(MensajeFIPA inform)
-    {
+    {   
+        // 1. ESCUCHAR LA ALARMA (¡Esto se había borrado!)
         if (inform.contenido == "ALARMA_ROBO")
         {
             cerebro.capaSocial.miRolAsignado = RolTactico.BloqueoSalida;
+            
+            if (cerebro.puntoMeta != null) 
+            {
+                cerebro.coordenadaTactica = cerebro.puntoMeta.position;
+                GetComponent<IAMovimiento>().MoverA(cerebro.puntoMeta.position, GetComponent<IAMovimiento>().velocidadPersecucion);
+            }
             return;
         }
+
 
         if (inform.contenido.Contains('|'))
         {
@@ -74,12 +82,13 @@ public class EstadoTactico_Subordinado : EstadoTacticoBase
                 float.Parse(p[2], System.Globalization.CultureInfo.InvariantCulture)
             );
 
-            cerebro.coordenadaTactica = nuevoPunto;
             cerebro.ultimaPosJugador = nuevoPunto; 
 
             // Solo nos movemos al GPS si nuestra misión actual es perseguir
             if (cerebro.capaSocial.miRolAsignado == RolTactico.PersecucionActiva)
-            {
+            {   
+                cerebro.coordenadaTactica = nuevoPunto;
+                
                 GetComponent<IAMovimiento>().MoverA(nuevoPunto, GetComponent<IAMovimiento>().velocidadPersecucion);
             }
         }

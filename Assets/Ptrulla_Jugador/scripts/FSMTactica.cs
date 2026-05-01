@@ -39,7 +39,7 @@ public class FSMTactica : MonoBehaviour
                 if (estadoActual == null)
                     Debug.LogWarning($"[FSM-T {gameObject.name}] Mensaje {msg.performativa} recibido pero estadoActual es NULL. Comprueba que libre/comandante/subordinado estan asignados en el Inspector.");
                 else
-                    Debug.Log($"[FSM-T {gameObject.name}] Mensaje recibido: {msg.performativa} de {msg.emisor.name} | Estado actual: {estadoActual.GetType().Name}");
+                    // Debug.Log($"[FSM-T {gameObject.name}] Mensaje recibido: {msg.performativa} de {msg.emisor.name} | Estado actual: {estadoActual.GetType().Name}");
                 estadoActual?.ProcesarMensaje(msg);
             }
             leidos++;

@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 
 // Gestiona la recogida del botín y sirve como memoria global del juego 
 // para que la IA (emboscada) y la Zona de Escape sepan si el jugador lo ha robado.
@@ -8,6 +9,8 @@ public class RecogerObjetivo : MonoBehaviour
     public GameObject objetoParaOcultar;
 
     public static bool tieneElBotin = false; 
+
+    public static event Action OnBotinRobado;
 
     void Start()
     {
@@ -19,9 +22,12 @@ public class RecogerObjetivo : MonoBehaviour
     {
         if (other.CompareTag("Player") && !tieneElBotin)
         {
-            Debug.Log("¡Botín recogido! ¡Corre a la salida!");
             
             tieneElBotin = true;
+            Debug.Log("¡Botín recogido! ¡Corre a la salida!");
+
+            // Disparamos el evento a quien quiera escucharlo
+            OnBotinRobado?.Invoke();
 
             if (objetoParaOcultar != null)
             {

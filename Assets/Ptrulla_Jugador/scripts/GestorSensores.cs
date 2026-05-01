@@ -15,6 +15,7 @@ public class GestorSensores : MonoBehaviour
     // Mantenemos esta variable pública para que el oído y el Cerebro puedan leerla
     public Transform TransformJugador { get; private set; }
     public bool EnContactoConJugador {get ; private set;} = false; //estado prolongado en el tiempo 
+    public bool LoVeo { get; private set; } = false;
 
     void Awake()
     {
@@ -35,12 +36,12 @@ public class GestorSensores : MonoBehaviour
 
         // VISIÓN "CIEGA": Ya no le pasamos el TransformJugador. Busca solo.
         Transform jugadorVisto = vision.EvaluarVision();
-        bool loVeo = (jugadorVisto != null);
+        LoVeo = (jugadorVisto != null);
         
         // EL OÍDO: Sigue usando el Transform como lo tenías
         bool loOigo = oido.EvaluarOido(TransformJugador);
         
-        bool detectadoAhora = loVeo || loOigo;
+        bool detectadoAhora = LoVeo || loOigo;
 
         // SISTEMA DE EVENTOS PUSH: Solo hablamos si hay un CAMBIO en el mundo
         if (detectadoAhora && !EnContactoConJugador)

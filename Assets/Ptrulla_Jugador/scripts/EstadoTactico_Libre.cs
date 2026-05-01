@@ -29,6 +29,8 @@ public class EstadoTactico_Libre : EstadoTacticoBase
                 if (mensaje.contenido == "ALARMA_ROBO")
                 {
                     cerebro.capaSocial.miRolAsignado = RolTactico.BloqueoSalida;
+
+                    if (cerebro.puntoMeta != null) cerebro.coordenadaTactica = cerebro.puntoMeta.position;
                     fsmTactica.CambiarEstado(fsmTactica.subordinado);
                 }
                 break;
@@ -134,7 +136,7 @@ public class EstadoTactico_Libre : EstadoTacticoBase
             cerebro.ultimaPosJugador = contrato.coordenadaObjetivo;
             Debug.Log($"[LIBRE {gameObject.name}] Contrato del Comandante aceptado. Rol asignado: {contrato.rolOfertado}");
 
-            // ---> AÑADE ESTE CHIVATO AQUÍ <---
+            
             Debug.Log($"[RADIO] {gameObject.name} recibe contrato: {contrato.rolOfertado}. Destino: {contrato.coordenadaObjetivo}. Mi puntoMeta está en: {cerebro.puntoMeta.position}");
             
             if (contrato.rolOfertado == RolTactico.PatrullaSectorAdyacente && !string.IsNullOrEmpty(contrato.nombreSectorDestino))
