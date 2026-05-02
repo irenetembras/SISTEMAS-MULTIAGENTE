@@ -342,7 +342,8 @@ public class PlanificadorTactico : MonoBehaviour
             {
                 foreach (Transform punto in s.puntosDeInteres)
                 {
-                    float d = Vector3.Distance(punto.position, posicion);
+                    float d = UtilidadesNavMesh.CalcularDistancia(punto.position, posicion);
+                    
                     if (d < minD)
                     {
                         minD = d;
@@ -352,8 +353,8 @@ public class PlanificadorTactico : MonoBehaviour
             }
             else
             {
-                // Fallback si el sector no tiene puntos asignados en el inspector
-                float dCentro = Vector3.Distance(s.transform.position, posicion);
+                float dCentro = UtilidadesNavMesh.CalcularDistancia(s.transform.position, posicion);
+                
                 if (dCentro < minD)
                 {
                     minD = dCentro;
@@ -361,7 +362,6 @@ public class PlanificadorTactico : MonoBehaviour
                 }
             }
         }
-
         return mejorSector;
     }
 }
