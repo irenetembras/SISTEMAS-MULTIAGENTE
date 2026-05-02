@@ -6,17 +6,15 @@ public class MaquinaDeEstados : MonoBehaviour
     public EstadoIA patrulla;
     public EstadoIA persecucion;
     public EstadoIA emboscada;
-    public EstadoIA busqueda;              
-    public EstadoIA exploracion;           
-    public EstadoIA comprobandoObjetivo;   
+    public EstadoIA busqueda;
+    public EstadoIA exploracion;
+    public EstadoIA comprobandoObjetivo;
 
     public EstadoIA estadoActual { get; private set; }
 
-    // Referencias para poder leer la memoria y movernos
     private IACerebro cerebro;
     private IAMovimiento movimiento;
 
-    // El cerebro llama a esto al despertar
     public void Inicializar(IACerebro cerebroRef, IAMovimiento movRef)
     {
         cerebro = cerebroRef;
@@ -34,13 +32,10 @@ public class MaquinaDeEstados : MonoBehaviour
     {
         if (estadoActual == null) return;
 
-        // Se persigue hasta que el líder diga basta.
-        // No hacemos nada, el GPS o la vista nos guía 
-
         if (estadoActual == exploracion)
         {
-            // Bucle infinito de exploración.
-            if (((EstadoExploracion)exploracion).exploracionTerminada) CambiarEstado(exploracion); 
+            // Al terminar el barrido, reiniciamos el estado para seguir explorando
+            if (((EstadoExploracion)exploracion).exploracionTerminada) CambiarEstado(exploracion);
         }
     }
 

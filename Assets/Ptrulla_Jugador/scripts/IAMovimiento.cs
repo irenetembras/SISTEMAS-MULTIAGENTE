@@ -2,13 +2,11 @@ using UnityEngine;
 using UnityEngine.AI;
 
 [RequireComponent(typeof(NavMeshAgent))]
-
-// Esta clase se encarga de mover al agente, ya sea patrullando, persiguiendo o buscando
 public class IAMovimiento : MonoBehaviour
-{   
+{
     [Header("El Turno de Guardia (Ruta Default)")]
-    public SectorTactico sectorBase; // ARRASTRA AQUÍ EL SECTOR DESDE EL INSPECTOR DE UNITY
-    public SectorTactico sectorActual; // El sector en el que está trabajando AHORA
+    public SectorTactico sectorBase;
+    public SectorTactico sectorActual;
 
     [Header("Ruta de Patrulla")]
     public float radioLlegada = 0.5f;
@@ -24,10 +22,8 @@ public class IAMovimiento : MonoBehaviour
     private Transform[] puntosPatrulla;
     private int indicePatrulla = 0;
 
-    // Variables Internas
     private NavMeshAgent agent;
     private bool sprintHaciaSector = false;
-
 
     void Awake()
     {
@@ -35,10 +31,8 @@ public class IAMovimiento : MonoBehaviour
         if (animator == null) animator = GetComponentInChildren<Animator>();
     }
 
-    // Inicializamos el agente para que empiece patrullando
     void Start()
     {
-        // Al empezar el juego, el guardia asume su puesto por defecto
         if (sectorBase != null)
         {
             AsignarNuevaRutaDesdeSector(sectorBase);
@@ -49,7 +43,6 @@ public class IAMovimiento : MonoBehaviour
         }
     }
 
-    // Actualizamos el parámetro de velocidad en el animador para que las animaciones respondan al movimiento
     void Update()
     {
         if (animator != null)
@@ -58,33 +51,21 @@ public class IAMovimiento : MonoBehaviour
         }
     }
 
-
-    // Nos dice si el agente ya ha llegado a su destino
     public bool HaLlegadoAlDestino()
     {
         if (agent.pathPending) return false;
         if (!agent.hasPath)
-        { 
-        // Si no hay ruta, comprobamos a la fuerza bruta si ya estamos sobre la meta
+        {
             if (Vector3.Distance(transform.position, agent.destination) <= Mathf.Max(agent.stoppingDistance, radioLlegada))
-            {
-                return true; // Ya estoy aquí, no necesito ruta.
-            }
-
-        return false;
+                return true;
+            return false;
         }
 
-        // LA MAGIA ANTI-ATASCOS DE PUERTAS
         if (agent.pathStatus == NavMeshPathStatus.PathPartial) return false;
 
-        if (agent.remainingDistance <= Mathf.Max(agent.stoppingDistance, radioLlegada))
-        {
-            return true;
-        }
-        return false;
+        return agent.remainingDistance <= Mathf.Max(agent.stoppingDistance, radioLlegada);
     }
-    
-    // Va a un punto a la velocidad que le mande el cerebro
+
     public void MoverA(Vector3 destino, float velocidad)
     {
         agent.isStopped = false;
@@ -92,9 +73,9 @@ public class IAMovimiento : MonoBehaviour
         agent.SetDestination(destino);
     }
 
-   public Vector3 ObtenerPuntoAleatorioCercano(Vector3 centro, float radio)
+    public Vector3 ObtenerPuntoAleatorioCercano(Vector3 centro, float radio)
     {
-        // Le damos 5 intentos para encontrar un punto que no esté al otro lado de un muro
+        // Intentamos hasta 5 veces encontrar un punto accesible por NavMesh
         for (int i = 0; i < 5; i++)
         {
             Vector2 circulo = Random.insideUnitCircle * radio;
@@ -103,25 +84,22 @@ public class IAMovimiento : MonoBehaviour
             NavMeshHit hit;
             if (NavMesh.SamplePosition(direccionAleatoria, out hit, 2.0f, NavMesh.AllAreas))
             {
-                // LA CLAVE: Comprobamos si podemos llegar caminando
                 NavMeshPath path = new NavMeshPath();
                 if (agent.CalculatePath(hit.position, path) && path.status == NavMeshPathStatus.PathComplete)
                 {
-                    return hit.position; // ¡Punto válido y accesible!
+                    return hit.position;
                 }
             }
         }
 
-        // Si todos caen mal, devolvemos nuestra posición actual para no congelarnos
-        return transform.position; 
+        return transform.position;
     }
-    // Función para perseguir al jugador
+
     public void Perseguir(Vector3 destino)
     {
         MoverA(destino, velocidadPersecucion);
     }
 
-    // Función para ir al punto de patrulla más cercano (usada al perder al jugador por completo)
     public void IrAlPuntoMasCercano()
     {
         if (puntosPatrulla == null || puntosPatrulla.Length == 0) return;
@@ -140,11 +118,11 @@ public class IAMovimiento : MonoBehaviour
         agent.SetDestination(puntosPatrulla[indicePatrulla].position);
     }
 
-    // Función para detener al agente (usada al morir o al desactivar)
     public void Detener()
     {
         agent.isStopped = true;
     }
+
     public void Patrullar()
     {
         agent.isStopped = false;
@@ -155,21 +133,16 @@ public class IAMovimiento : MonoBehaviour
         if (sprintHaciaSector)
         {
             agent.speed = velocidadPersecucion;
-            // si ya llegamos al sector, releajamos la marcha
-            if (HaLlegadoAlDestino())
-            {
-                sprintHaciaSector = false;
-            }
+            // Al llegar al nuevo sector, volvemos a paso de patrulla
+            if (HaLlegadoAlDestino()) sprintHaciaSector = false;
         }
-        else 
+        else
         {
-            // Caminar normal mientras hacen la ronda
             agent.speed = velocidadPatrulla;
         }
-        // Usamos TU función original para saber si hemos llegado
+
         if (HaLlegadoAlDestino())
         {
-            // Transición instantánea al siguiente punto
             indicePatrulla = (indicePatrulla + 1) % puntosPatrulla.Length;
             agent.SetDestination(puntosPatrulla[indicePatrulla].position);
         }
@@ -179,32 +152,22 @@ public class IAMovimiento : MonoBehaviour
         }
     }
 
-    // Conexión con el Planificador Táctico
     public void AsignarNuevaRutaDesdeSector(SectorTactico nuevoSector)
     {
-        if (nuevoSector == null || nuevoSector.puntosDeInteres == null || nuevoSector.puntosDeInteres.Length == 0) 
+        if (nuevoSector == null || nuevoSector.puntosDeInteres == null || nuevoSector.puntosDeInteres.Length == 0)
             return;
 
-        if (sectorBase != null && nuevoSector != sectorBase)
-        {
-            sprintHaciaSector = true;
-        }
-        else
-        {
-            sprintHaciaSector = false;
-        }
+        sprintHaciaSector = (sectorBase != null && nuevoSector != sectorBase);
 
         sectorActual = nuevoSector;
         puntosPatrulla = nuevoSector.puntosDeInteres;
-        
-        indicePatrulla = 0; 
+        indicePatrulla = 0;
 
         if (agent.isOnNavMesh)
         {
             agent.SetDestination(puntosPatrulla[0].position);
         }
     }
-
 
     public void VolverAlPuestoBase()
     {

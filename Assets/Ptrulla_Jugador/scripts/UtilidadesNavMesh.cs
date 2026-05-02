@@ -3,7 +3,7 @@ using UnityEngine.AI;
 
 public static class UtilidadesNavMesh
 {
-    // Extraído y estandarizado para evitar cálculos en línea recta a través de paredes
+    // Calcula la distancia real por NavMesh, no en línea recta
     public static float CalcularDistancia(Vector3 origen, Vector3 destino)
     {
         NavMeshPath path = new NavMeshPath();
@@ -16,7 +16,7 @@ public static class UtilidadesNavMesh
         {
             if (path.status == NavMeshPathStatus.PathPartial)
             {
-                return 9999f; // Distancia gigante para perder subastas si es inalcanzable
+                return 9999f; // Distancia muy alta para que este guardia pierda la subasta
             }
             
             float distanciaTotal = 0f;

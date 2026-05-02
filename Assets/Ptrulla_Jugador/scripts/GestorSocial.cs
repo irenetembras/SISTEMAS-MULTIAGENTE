@@ -1,7 +1,6 @@
 using UnityEngine;
 
 // Capa social simplificada: almacena el rol táctico actual del guardia.
-// Toda la lógica de mensajería y contratos vive ahora en FSMTactica y PlanificadorTactico.
 public class GestorSocial : MonoBehaviour
 {
     [Header("Rol Táctico Actual")]

@@ -1,7 +1,7 @@
 using UnityEngine;
 
-// FSM JERÁRQUICA: gestiona el rol social del guardia (Libre / Comandante / Subordinado).
-// Corre en paralelo con MaquinaDeEstados (FSM Ejecutora) en el mismo GameObject.
+// FSM jerárquica: gestiona el rol social del guardia (Libre / Comandante / Subordinado).
+// Corre en paralelo con MaquinaDeEstados en el mismo GameObject.
 [RequireComponent(typeof(BuzonMensajes))]
 [RequireComponent(typeof(PlanificadorTactico))]
 public class FSMTactica : MonoBehaviour
@@ -15,7 +15,6 @@ public class FSMTactica : MonoBehaviour
 
     private BuzonMensajes buzon;
 
-    // IACerebro llama a esto en su Awake
     public void Inicializar(IACerebro cerebro)
     {
         buzon = GetComponent<BuzonMensajes>();
@@ -39,8 +38,7 @@ public class FSMTactica : MonoBehaviour
                 if (estadoActual == null)
                     Debug.LogWarning($"[FSM-T {gameObject.name}] Mensaje {msg.performativa} recibido pero estadoActual es NULL. Comprueba que libre/comandante/subordinado estan asignados en el Inspector.");
                 else
-                    // Debug.Log($"[FSM-T {gameObject.name}] Mensaje recibido: {msg.performativa} de {msg.emisor.name} | Estado actual: {estadoActual.GetType().Name}");
-                estadoActual?.ProcesarMensaje(msg);
+                    estadoActual?.ProcesarMensaje(msg);
             }
             leidos++;
         }
@@ -54,7 +52,6 @@ public class FSMTactica : MonoBehaviour
         estadoActual.AlEntrar();
     }
 
-    // Llamado por IACerebro al detectar al jugador con los propios sensores
     public void AsumirMando(Vector3 posLadron)
     {
         if (estadoActual == comandante) return;

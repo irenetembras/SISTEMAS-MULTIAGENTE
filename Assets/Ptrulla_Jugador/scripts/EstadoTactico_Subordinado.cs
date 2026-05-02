@@ -1,8 +1,8 @@
 using UnityEngine;
-using UnityEngine.AI; // Necesario para el cálculo de rutas (NavMeshPath)
+using UnityEngine.AI;
 
 // Estado: el guardia ejecuta el rol asignado por el Comandante.
-// ¡NUEVO!: Ahora atiende a la radio y responde a subastas nuevas si lo detectan en otro lado.
+// También responde a nuevas subastas si surge una emergencia distinta.
 public class EstadoTactico_Subordinado : EstadoTacticoBase
 {
     public override void AlEntrar()
@@ -22,10 +22,10 @@ public class EstadoTactico_Subordinado : EstadoTacticoBase
                 DatosContrato nuevaOrden = JsonUtility.FromJson<DatosContrato>(mensaje.contenido);
                 cerebro.capaSocial.miRolAsignado = nuevaOrden.rolOfertado;
                 cerebro.coordenadaTactica = nuevaOrden.coordenadaObjetivo;
-                cerebro.ultimaPosJugador = nuevaOrden.coordenadaObjetivo; 
+                cerebro.ultimaPosJugador = nuevaOrden.coordenadaObjetivo;
 
-                
-                if (nuevaOrden.puntosDeRuta != null && nuevaOrden.puntosDeRuta.Count > 0) {
+                if (nuevaOrden.puntosDeRuta != null && nuevaOrden.puntosDeRuta.Count > 0)
+                {
                     cerebro.rutaExploracion = nuevaOrden.puntosDeRuta;
                 }
 
@@ -50,28 +50,25 @@ public class EstadoTactico_Subordinado : EstadoTacticoBase
                 break;
 
             case PerformativaFIPA.CFP:
-                // ¡EL ARREGLO ESTÁ AQUÍ! 
-                // Ya no dicen "Estoy ocupado", ahora evalúan la nueva emergencia.
+                // Los subordinados también pujan en nuevas subastas para permitir reasignaciones
                 ResponderCFP(mensaje);
                 break;
         }
     }
 
     private void ProcesarInform(MensajeFIPA inform)
-    {   
-        // 1. ESCUCHAR LA ALARMA (¡Esto se había borrado!)
+    {
         if (inform.contenido == "ALARMA_ROBO")
         {
             cerebro.capaSocial.miRolAsignado = RolTactico.BloqueoSalida;
-            
-            if (cerebro.puntoMeta != null) 
+
+            if (cerebro.puntoMeta != null)
             {
                 cerebro.coordenadaTactica = cerebro.puntoMeta.position;
                 GetComponent<IAMovimiento>().MoverA(cerebro.puntoMeta.position, GetComponent<IAMovimiento>().velocidadPersecucion);
             }
             return;
         }
-
 
         if (inform.contenido.Contains('|'))
         {
@@ -82,19 +79,17 @@ public class EstadoTactico_Subordinado : EstadoTacticoBase
                 float.Parse(p[2], System.Globalization.CultureInfo.InvariantCulture)
             );
 
-            cerebro.ultimaPosJugador = nuevoPunto; 
+            cerebro.ultimaPosJugador = nuevoPunto;
 
-            // Solo nos movemos al GPS si nuestra misión actual es perseguir
+            // Solo actualizamos el movimiento si nuestra misión es perseguir
             if (cerebro.capaSocial.miRolAsignado == RolTactico.PersecucionActiva)
-            {   
+            {
                 cerebro.coordenadaTactica = nuevoPunto;
-                
                 GetComponent<IAMovimiento>().MoverA(nuevoPunto, GetComponent<IAMovimiento>().velocidadPersecucion);
             }
         }
     }
 
-    // Funciones copiadas del Guardia Libre para que el Subordinado sepa pujar
     private void ResponderCFP(MensajeFIPA cfp)
     {
         Vector3 objetivo;
@@ -113,7 +108,7 @@ public class EstadoTactico_Subordinado : EstadoTacticoBase
             objetivo = datos.coordenadaObjetivo;
         }
 
-       float distancia = UtilidadesNavMesh.CalcularDistancia(transform.position, objetivo);
+        float distancia = UtilidadesNavMesh.CalcularDistancia(transform.position, objetivo);
 
         MensajeFIPA propuesta = new MensajeFIPA(
             PerformativaFIPA.PROPOSE,

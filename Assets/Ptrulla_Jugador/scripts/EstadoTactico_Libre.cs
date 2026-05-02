@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.AI;
+
 // Estado: el guardia patrulla por su cuenta, escucha la radio y puede ser reclutado.
 public class EstadoTactico_Libre : EstadoTacticoBase
 {
@@ -22,7 +23,6 @@ public class EstadoTactico_Libre : EstadoTacticoBase
                 break;
 
             case PerformativaFIPA.REJECT_PROPOSAL:
-                // Ya estamos libres, no hay nada que hacer
                 break;
 
             case PerformativaFIPA.INFORM:
@@ -37,10 +37,10 @@ public class EstadoTactico_Libre : EstadoTacticoBase
         }
     }
 
-    // Responde a una convocatoria de subasta con nuestra distancia al objetivo
+    // Responde a una convocatoria de subasta con nuestra distancia NavMesh al objetivo
     private void ResponderCFP(MensajeFIPA cfp)
     {
-        // El Vigía envía "x|y|z"; el Comandante envía JSON con DatosContrato
+        // El vigía envía "x|y|z"; el comandante envía JSON con DatosContrato
         Vector3 objetivo;
         if (cfp.contenido.Contains('|'))
         {
@@ -72,7 +72,7 @@ public class EstadoTactico_Libre : EstadoTacticoBase
     // Aplica el contrato ganado y pasa a estado Subordinado
     private void AceptarContrato(MensajeFIPA accept)
     {
-        // El Vigía envía coordenadas en formato "x|y|z"; el Comandante envía JSON
+        // El vigía envía coordenadas en "x|y|z"; el comandante envía JSON
         if (accept.contenido.Contains('|'))
         {
             string[] p = accept.contenido.Split('|');
@@ -82,7 +82,7 @@ public class EstadoTactico_Libre : EstadoTacticoBase
                 float.Parse(p[2], System.Globalization.CultureInfo.InvariantCulture)
             );
             cerebro.capaSocial.miRolAsignado = RolTactico.PersecucionActiva;
-            cerebro.coordenadaTactica = destino; 
+            cerebro.coordenadaTactica = destino;
             cerebro.ultimaPosJugador = destino;
             Debug.Log($"[LIBRE {gameObject.name}] Contrato del Vigia aceptado. Rol: PersecucionActiva. Yendo a {destino}");
             GetComponent<IAMovimiento>().MoverA(destino, GetComponent<IAMovimiento>().velocidadPersecucion);
@@ -94,10 +94,8 @@ public class EstadoTactico_Libre : EstadoTacticoBase
             cerebro.coordenadaTactica = contrato.coordenadaObjetivo;
             cerebro.ultimaPosJugador = contrato.coordenadaObjetivo;
             Debug.Log($"[LIBRE {gameObject.name}] Contrato del Comandante aceptado. Rol asignado: {contrato.rolOfertado}");
-
-            
             Debug.Log($"[RADIO] {gameObject.name} recibe contrato: {contrato.rolOfertado}. Destino: {contrato.coordenadaObjetivo}. Mi puntoMeta está en: {cerebro.puntoMeta.position}");
-            
+
             if (contrato.rolOfertado == RolTactico.PatrullaSectorAdyacente && !string.IsNullOrEmpty(contrato.nombreSectorDestino))
             {
                 GameObject sectorObj = GameObject.Find(contrato.nombreSectorDestino);

@@ -5,16 +5,14 @@ using System;
 [RequireComponent(typeof(SensorOido))]
 public class GestorSensores : MonoBehaviour
 {
-    // EVENTOS: Los "megáfonos" que gritan al resto del juego
     public event Action<Vector3> OnJugadorDetectado;
     public event Action OnJugadorPerdido;
 
     private SensorVision vision;
     private SensorOido oido;
 
-    // Mantenemos esta variable pública para que el oído y el Cerebro puedan leerla
     public Transform TransformJugador { get; private set; }
-    public bool EnContactoConJugador {get ; private set;} = false; //estado prolongado en el tiempo 
+    public bool EnContactoConJugador { get; private set; } = false;
     public bool LoVeo { get; private set; } = false;
 
     void Awake()
@@ -25,7 +23,6 @@ public class GestorSensores : MonoBehaviour
 
     void Start()
     {
-        // Buscamos al jugador una vez para tener su referencia
         GameObject go = GameObject.FindGameObjectWithTag("Player");
         if (go != null) TransformJugador = go.transform;
     }
@@ -34,25 +31,23 @@ public class GestorSensores : MonoBehaviour
     {
         if (TransformJugador == null) return;
 
-        // VISIÓN "CIEGA": Ya no le pasamos el TransformJugador. Busca solo.
         Transform jugadorVisto = vision.EvaluarVision();
         LoVeo = (jugadorVisto != null);
-        
-        // EL OÍDO: Sigue usando el Transform como lo tenías
+
         bool loOigo = oido.EvaluarOido(TransformJugador);
-        
+
         bool detectadoAhora = LoVeo || loOigo;
 
-        // SISTEMA DE EVENTOS PUSH: Solo hablamos si hay un CAMBIO en el mundo
+        // Solo lanzamos eventos cuando cambia el estado de detección
         if (detectadoAhora && !EnContactoConJugador)
         {
             EnContactoConJugador = true;
-            OnJugadorDetectado?.Invoke(TransformJugador.position); // ¡Gritamos que lo hemos visto!
+            OnJugadorDetectado?.Invoke(TransformJugador.position);
         }
         else if (!detectadoAhora && EnContactoConJugador)
         {
-            EnContactoConJugador= false;
-            OnJugadorPerdido?.Invoke(); // ¡Gritamos que lo hemos perdido!
+            EnContactoConJugador = false;
+            OnJugadorPerdido?.Invoke();
         }
     }
 }

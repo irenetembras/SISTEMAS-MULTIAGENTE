@@ -17,7 +17,6 @@ public class TransmisorGPS : MonoBehaviour
     {
         if (perseguidoresGPS.Count == 0 || sensores.TransformJugador == null) return;
 
-        // Solo transmitimos si el sensor lo está detectando AHORA
         if (!sensores.EnContactoConJugador) return;
 
         relojGPS += Time.deltaTime;
@@ -35,13 +34,11 @@ public class TransmisorGPS : MonoBehaviour
         }
     }
 
-    // Funciones públicas para que el Planificador añada o quite perseguidores
     public void RegistrarPerseguidor(GameObject guardia)
     {
         if (!perseguidoresGPS.Contains(guardia)) perseguidoresGPS.Add(guardia);
     }
 
-    // Permite que otros scripts consulten quién está persiguiendo actualmente
     public List<GameObject> ObtenerPerseguidores()
     {
         return perseguidoresGPS;

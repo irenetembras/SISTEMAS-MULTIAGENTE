@@ -13,12 +13,12 @@ public class EstadoPersecucion : EstadoIA
 
     void Update()
     {
-        // 1. Si lo veo con mis propios ojos, voy a su posición exacta real
+        // Si lo vemos directamente, vamos a su posición real
         if (cerebro.objetivoDetectado && jugador != null)
         {
             movimiento.Perseguir(jugador.position);
         }
-        // 2. Si NO lo veo, pero mi rol es perseguir, sigo el GPS que me manda el líder
+        // Si no lo vemos, seguimos las coordenadas GPS del líder
         else if (cerebro.coordenadaTactica != Vector3.zero)
         {
             movimiento.Perseguir(cerebro.coordenadaTactica);
