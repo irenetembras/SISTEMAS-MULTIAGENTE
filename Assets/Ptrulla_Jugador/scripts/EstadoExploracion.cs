@@ -2,10 +2,6 @@ using UnityEngine;
 
 public class EstadoExploracion : EstadoIA
 {
-    [Header("Configuración Búsqueda")]
-    public float radioExploracion = 10f; 
-    public int puntosAExplorarPorZona = 5;     
-    public float tiempoMaximoBuscandoUnPunto = 10f;
 
     [HideInInspector] public bool exploracionTerminada = false;
 
@@ -21,7 +17,7 @@ public class EstadoExploracion : EstadoIA
         {
             // Ordenamos los puntos de la ruta desde el más cercano al guardia hasta el más lejano
             cerebro.rutaExploracion.Sort((a, b) => 
-                CalcularDistanciaCaminando(transform.position, a).CompareTo(Vector3.Distance(transform.position, b))
+                UtilidadesNavMesh.CalcularDistancia(transform.position, a).CompareTo(UtilidadesNavMesh.CalcularDistancia(transform.position, b))
             );
         }
 
@@ -85,27 +81,6 @@ public class EstadoExploracion : EstadoIA
             movimiento.MoverA(cerebro.ultimaPosJugador, movimiento.velocidadExploracion);
             if (movimiento.HaLlegadoAlDestino()) exploracionTerminada = true;
         }
-    }
-
-    private float CalcularDistanciaCaminando(Vector3 origen, Vector3 destino)
-    {
-        UnityEngine.AI.NavMeshPath path = new UnityEngine.AI.NavMeshPath();
-        
-        // Si logra trazar la ruta por el suelo...
-        if (UnityEngine.AI.NavMesh.CalculatePath(origen, destino, UnityEngine.AI.NavMesh.AllAreas, path))
-        {
-            // Ojo a los caminos cortados
-            if (path.status == UnityEngine.AI.NavMeshPathStatus.PathPartial) return 9999f;
-
-            float distanciaTotal = 0f;
-            for (int i = 1; i < path.corners.Length; i++)
-            {
-                distanciaTotal += Vector3.Distance(path.corners[i - 1], path.corners[i]);
-            }
-            return distanciaTotal;
-        }
-        
-        return 9999f; // Si es inalcanzable, lo mandamos al final de la lista
     }
 
 }

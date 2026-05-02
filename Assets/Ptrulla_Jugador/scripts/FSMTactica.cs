@@ -31,7 +31,7 @@ public class FSMTactica : MonoBehaviour
     void Update()
     {
         int leidos = 0;
-        while (buzon != null && buzon.HayMensajesNuevos() && leidos < 3)
+        while (buzon != null && buzon.HayMensajesNuevos() && leidos < 2)
         {
             MensajeFIPA msg = buzon.ExtraerSiguienteMensaje();
             if (msg != null)
