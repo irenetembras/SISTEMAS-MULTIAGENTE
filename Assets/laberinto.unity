@@ -7757,11 +7757,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4437977737712431239, guid: fee9cbfea39a32d4db945ec3903d5351, type: 3}
       propertyPath: distanciaOidoAndar
-      value: 15
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 4437977737712431239, guid: fee9cbfea39a32d4db945ec3903d5351, type: 3}
       propertyPath: distanciaOidoCorrer
-      value: 30
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 4437977737712431239, guid: fee9cbfea39a32d4db945ec3903d5351, type: 3}
       propertyPath: umbralVelocidadCorrer
@@ -29015,11 +29015,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4437977737712431239, guid: fee9cbfea39a32d4db945ec3903d5351, type: 3}
       propertyPath: distanciaOidoAndar
-      value: 15
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 4437977737712431239, guid: fee9cbfea39a32d4db945ec3903d5351, type: 3}
       propertyPath: distanciaOidoCorrer
-      value: 30
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 4437977737712431239, guid: fee9cbfea39a32d4db945ec3903d5351, type: 3}
       propertyPath: umbralVelocidadCorrer
@@ -33369,11 +33369,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4437977737712431239, guid: fee9cbfea39a32d4db945ec3903d5351, type: 3}
       propertyPath: distanciaOidoAndar
-      value: 15
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 4437977737712431239, guid: fee9cbfea39a32d4db945ec3903d5351, type: 3}
       propertyPath: distanciaOidoCorrer
-      value: 30
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 4437977737712431239, guid: fee9cbfea39a32d4db945ec3903d5351, type: 3}
       propertyPath: umbralVelocidadCorrer
@@ -90053,11 +90053,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4437977737712431239, guid: fee9cbfea39a32d4db945ec3903d5351, type: 3}
       propertyPath: distanciaOidoAndar
-      value: 15
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 4437977737712431239, guid: fee9cbfea39a32d4db945ec3903d5351, type: 3}
       propertyPath: distanciaOidoCorrer
-      value: 30
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 4437977737712431239, guid: fee9cbfea39a32d4db945ec3903d5351, type: 3}
       propertyPath: umbralVelocidadCorrer
@@ -114936,7 +114936,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2491025045643569940, guid: 003c3c590c145a44fbc5b13e49b99d27, type: 3}
       propertyPath: velocidadCorrer
-      value: 30
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 2491025045643569940, guid: 003c3c590c145a44fbc5b13e49b99d27, type: 3}
       propertyPath: velocidadCaminar
@@ -116224,11 +116224,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4437977737712431239, guid: fee9cbfea39a32d4db945ec3903d5351, type: 3}
       propertyPath: distanciaOidoAndar
-      value: 15
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 4437977737712431239, guid: fee9cbfea39a32d4db945ec3903d5351, type: 3}
       propertyPath: distanciaOidoCorrer
-      value: 30
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 4437977737712431239, guid: fee9cbfea39a32d4db945ec3903d5351, type: 3}
       propertyPath: umbralVelocidadCorrer
