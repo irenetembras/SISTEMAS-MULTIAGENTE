@@ -13,8 +13,6 @@ public enum FaseAlerta
     Tranquilidad,
     ContactoVisual,
     BusquedaActiva,
-    Contencion,
-    Reorganizacion
 }
 
 public enum RolTactico

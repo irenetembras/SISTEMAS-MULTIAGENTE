@@ -6,7 +6,6 @@ public class MaquinaDeEstados : MonoBehaviour
     public EstadoIA patrulla;
     public EstadoIA persecucion;
     public EstadoIA emboscada;
-    public EstadoIA busqueda;
     public EstadoIA exploracion;
     public EstadoIA comprobandoObjetivo;
 
